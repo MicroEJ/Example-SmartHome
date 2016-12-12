@@ -1,0 +1,42 @@
+/*
+ * Java
+ *
+ * Copyright 2016 IS2T. All rights reserved.
+ * IS2T PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
+package com.microej.demo.smarthome.page;
+
+import com.microej.demo.smarthome.style.ClassSelectors;
+import com.microej.demo.smarthome.util.Images;
+import com.microej.demo.smarthome.widget.ImageMenuButton;
+import com.microej.demo.smarthome.widget.Menu;
+import com.microej.demo.smarthome.widget.MenuButton;
+
+import ej.widget.container.Dock;
+
+/**
+ *
+ */
+public class DashBoard extends MenuNavigatorPage {
+
+	private static final String[] pagesURL = { GraphPage.class.getName(), InformationPage.class.getName() };
+
+	/**
+	 *
+	 */
+	public DashBoard() {
+		super(pagesURL);
+
+		Dock mainDock = new Dock();
+		mainDock.setCenter(navigator);
+		Menu menu = createMenu();
+		menu.addClassSelector(ClassSelectors.DASHBOARD_MENU);
+		mainDock.addTop(menu);
+		setWidget(mainDock);
+	}
+
+	@Override
+	protected MenuButton createMenuButton() {
+		return new ImageMenuButton(Images.DASHBOARD);
+	}
+}
