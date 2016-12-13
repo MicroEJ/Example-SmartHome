@@ -42,7 +42,10 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 		listener = new OnValueChangeListener(){
 			@Override
 			public void onValueChange(int newValue) {
+				target = newValue;
 				updateAngle();
+				notifyListeners();
+
 
 			}
 
