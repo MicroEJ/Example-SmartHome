@@ -6,8 +6,13 @@
  */
 package com.microej.demo.smarthome.data.fake.thermostat;
 
+import java.util.Random;
+
 import com.microej.demo.smarthome.data.fake.Device;
+import com.microej.demo.smarthome.data.fake.Provider;
 import com.microej.demo.smarthome.data.thermostat.ThermostatEventListener;
+
+import ej.bon.TimerTask;
 
 /**
  *
@@ -19,11 +24,48 @@ implements com.microej.demo.smarthome.data.thermostat.Thermostat {
 	private static final int MIN = 50;
 	private int temperature = 220;
 	private int target = 240;
+
+	/**
+	 *
+	 */
+	public Thermostat() {
+		this("Thermostat");
+	}
+
 	/**
 	 * @param name
 	 */
 	public Thermostat(String name) {
 		super(name);
+
+		Provider.timer.schedule(new TimerTask() {
+
+			@Override
+			public void run() {
+				int temperature = getTemperature();
+				temperature--;
+				if (temperature < getMinTemperature()) {
+					temperature = getMaxTemperature();
+				}
+				setTemperature(temperature);
+			}
+		}, 1_000, 10_000);
+
+		Provider.timer.schedule(new TimerTask() {
+			Random rand = new Random();
+
+			@Override
+			public void run() {
+				// int target = thermostat.getTargetTemperature();
+				// target--;
+				// if (target < thermostat.getMinTemperature()) {
+				// target = thermostat.getMaxTemperature();
+				// }
+				int dif = getMaxTemperature() - getMinTemperature();
+				int target = rand.nextInt(dif);
+				setTargetTemperature(target + getMinTemperature());
+			}
+		}, 1_500, 20_000);
 	}
 
 	@Override

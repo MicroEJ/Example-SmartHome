@@ -55,6 +55,7 @@ public class DoorDashboard extends DeviceDashboard {
 		super.showNotify();
 		DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class);
 		Door[] list = provider.list();
+		doorOpen = 0;
 		for (Door door : list) {
 			if (door.isOpen()) {
 				doorOpen++;
@@ -68,7 +69,7 @@ public class DoorDashboard extends DeviceDashboard {
 	 *
 	 */
 	private void updateDoors() {
-		if (doorOpen == 0) {
+		if (doorOpen > 0) {
 			lockLabel.setText(Strings.LOCKS_ARE_OPENED);
 			setActive(false);
 		} else {

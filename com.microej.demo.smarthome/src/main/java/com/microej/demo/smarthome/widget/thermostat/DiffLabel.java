@@ -40,6 +40,7 @@ public class DiffLabel extends Wrapper {
 		degree = new Label(Strings.DEGREE);
 		degree.addClassSelector(ClassSelectors.THERMOSTAT_DIFF_VALUE_DEGREE);
 		setDif(0);
+		value.setText(String.valueOf(getDif()));
 		labels.add(value);
 		labels.add(degree);
 		setAdjustedToChild(false);

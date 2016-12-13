@@ -7,7 +7,6 @@
 package com.microej.demo.smarthome.page;
 
 import com.microej.demo.smarthome.data.thermostat.Thermostat;
-import com.microej.demo.smarthome.data.thermostat.ThermostatProvider;
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Images;
 import com.microej.demo.smarthome.widget.ImageMenuButton;
@@ -27,12 +26,8 @@ public class ThermostatPage extends DevicePage {
 	 */
 	public ThermostatPage() {
 		super();
-		ThermostatProvider provider = ServiceLoaderFactory.getServiceLoader().getService(ThermostatProvider.class);
-		Thermostat[] list = provider.list();
-		for (Thermostat thermostat : list) {
-			addDevice(new ThermostatWidget(thermostat));
-		}
-
+		Thermostat thermostat = ServiceLoaderFactory.getServiceLoader().getService(Thermostat.class);
+		addDevice(new ThermostatWidget(thermostat));
 	}
 
 
