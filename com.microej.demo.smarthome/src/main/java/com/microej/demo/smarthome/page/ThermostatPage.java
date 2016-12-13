@@ -8,6 +8,7 @@ package com.microej.demo.smarthome.page;
 
 import com.microej.demo.smarthome.data.thermostat.Thermostat;
 import com.microej.demo.smarthome.data.thermostat.ThermostatProvider;
+import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Images;
 import com.microej.demo.smarthome.widget.ImageMenuButton;
 import com.microej.demo.smarthome.widget.MenuButton;
@@ -37,7 +38,9 @@ public class ThermostatPage extends DevicePage {
 
 	@Override
 	protected MenuButton createMenuButton() {
-		return new ImageMenuButton(Images.AIRCONDITIONNER);
+		ImageMenuButton imageMenuButton = new ImageMenuButton(Images.AIRCONDITIONNER);
+		imageMenuButton.addClassSelector(ClassSelectors.FOOTER_MENU_BUTTON);
+		return imageMenuButton;
 	}
 
 	@Override

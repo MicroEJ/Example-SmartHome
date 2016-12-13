@@ -37,6 +37,7 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	 */
 	public ThermostatCircularProgress(ThermostatBoundedRangeModel model) {
 		super(model);
+		setThickness(8);
 		this.model = model;
 		listener = new OnValueChangeListener(){
 			@Override

@@ -17,7 +17,7 @@ import ej.widget.StyledComposite;
  */
 public class OverlapingComposite extends StyledComposite {
 
-	private static int EVENT_RATE = 80;
+	private static int EVENT_RATE = 30;
 
 	private long nextEvent;
 

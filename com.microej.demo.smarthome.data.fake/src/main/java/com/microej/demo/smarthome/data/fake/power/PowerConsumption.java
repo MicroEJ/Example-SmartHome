@@ -24,7 +24,7 @@ public class PowerConsumption extends Device<PowerEventListener>
 implements com.microej.demo.smarthome.data.power.PowerConsumption {
 
 	private static final int MIN_PC = 0;
-	private static final int MAX_PC = 4000;
+	private static final int MAX_PC = 6000;
 	private static final int MAX_POWER_AT_A_TIME = 24;
 	private static final long HOUR_IN_MS = 1000 * 60 * 60;
 	private long lastPower;
@@ -52,7 +52,7 @@ implements com.microej.demo.smarthome.data.power.PowerConsumption {
 				addInstantPower();
 
 			}
-		}, 5_000, 5_000);
+		}, 2_000, 2_000);
 	}
 
 	@Override

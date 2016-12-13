@@ -8,6 +8,7 @@ package com.microej.demo.smarthome.page;
 
 import com.microej.demo.smarthome.data.light.Light;
 import com.microej.demo.smarthome.data.light.LightProvider;
+import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Images;
 import com.microej.demo.smarthome.widget.ImageMenuButton;
 import com.microej.demo.smarthome.widget.LightWidget;
@@ -35,6 +36,8 @@ public class LightPage extends DevicePage {
 
 	@Override
 	protected MenuButton createMenuButton() {
-		return new ImageMenuButton(Images.LIGHTS);
+		ImageMenuButton imageMenuButton = new ImageMenuButton(Images.LIGHTS);
+		imageMenuButton.addClassSelector(ClassSelectors.FOOTER_MENU_BUTTON);
+		return imageMenuButton;
 	}
 }

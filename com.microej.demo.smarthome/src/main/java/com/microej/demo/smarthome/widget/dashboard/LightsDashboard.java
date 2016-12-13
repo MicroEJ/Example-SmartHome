@@ -32,6 +32,7 @@ public class LightsDashboard extends DeviceDashboard {
 		super(Images.LIGHTS);
 		number = new Label();
 		number.addClassSelector(ClassSelectors.DASHBOARD_HUGE_TEXT);
+		number.addClassSelector(ClassSelectors.DASHBOARD_LIGHT_COUNT);
 		lightLabel = new Label();
 		lightLabel.addClassSelector(ClassSelectors.DASHBOARD_ITEM_TEXT);
 
@@ -94,6 +95,12 @@ public class LightsDashboard extends DeviceDashboard {
 			setActive(true);
 		}
 		repaint();
+	}
+
+	@Override
+	public void setActive(boolean active) {
+		super.setActive(active);
+		number.setEnabled(active);
 	}
 
 	@Override

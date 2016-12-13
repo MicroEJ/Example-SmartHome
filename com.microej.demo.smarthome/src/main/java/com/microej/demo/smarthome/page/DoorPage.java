@@ -8,6 +8,7 @@ package com.microej.demo.smarthome.page;
 
 import com.microej.demo.smarthome.data.door.Door;
 import com.microej.demo.smarthome.data.door.DoorProvider;
+import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Images;
 import com.microej.demo.smarthome.widget.DoorWidget;
 import com.microej.demo.smarthome.widget.ImageMenuButton;
@@ -34,6 +35,8 @@ public class DoorPage extends DevicePage {
 
 	@Override
 	protected MenuButton createMenuButton() {
-		return new ImageMenuButton(Images.SECURITY);
+		ImageMenuButton imageMenuButton = new ImageMenuButton(Images.SECURITY);
+		imageMenuButton.addClassSelector(ClassSelectors.FOOTER_MENU_BUTTON);
+		return imageMenuButton;
 	}
 }

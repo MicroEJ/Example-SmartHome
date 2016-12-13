@@ -6,8 +6,7 @@
  */
 package com.microej.demo.smarthome.page;
 
-import com.microej.demo.smarthome.navigator.DirectNavigator;
-import com.microej.demo.smarthome.style.ClassSelectors;
+import com.microej.demo.smarthome.widget.Menu;
 import com.microej.demo.smarthome.widget.MenuButton;
 
 import ej.widget.listener.OnClickListener;
@@ -18,20 +17,19 @@ import ej.widget.navigation.page.Page;
  */
 public abstract class MenuPage extends Page {
 
-	private DirectNavigator navigator;
 	private final MenuButton button;
+	private Menu menu;
 
 	public MenuPage() {
 		super();
 
 		button = createMenuButton();
 		if (button != null) {
-			button.addClassSelector(ClassSelectors.FOOTER_MENU_BUTTON);
 			button.addOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick() {
-					getNavigator().show(MenuPage.this, true);
+					menu.show(MenuPage.this);
 				}
 			});
 		}
@@ -46,12 +44,23 @@ public abstract class MenuPage extends Page {
 		return button;
 	}
 
-	public DirectNavigator getNavigator() {
-		return navigator;
+	/**
+	 * Gets the menu.
+	 *
+	 * @return the menu.
+	 */
+	public Menu getMenu() {
+		return menu;
 	}
 
-	public void setNavigator(DirectNavigator navigator) {
-		this.navigator = navigator;
+	/**
+	 * Sets the menu.
+	 *
+	 * @param menu
+	 *            the menu to set.
+	 */
+	public void setMenu(Menu menu) {
+		this.menu = menu;
 	}
 
 	/**

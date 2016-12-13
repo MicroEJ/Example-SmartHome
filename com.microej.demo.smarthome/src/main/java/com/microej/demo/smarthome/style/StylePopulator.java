@@ -16,7 +16,7 @@ import ej.style.State;
 import ej.style.Stylesheet;
 import ej.style.background.NoBackground;
 import ej.style.background.PlainBackground;
-import ej.style.border.ComplexRectangularBorder;
+import ej.style.background.SimpleRoundedPlainBackground;
 import ej.style.font.FontProfile;
 import ej.style.font.FontProfile.FontSize;
 import ej.style.outline.ComplexOutline;
@@ -35,6 +35,7 @@ import ej.style.util.StyleHelper;
 public class StylePopulator {
 
 	private static final int SIMPLE_OUTLINE = 8;
+	private static final int HALF_OUTLINE = SIMPLE_OUTLINE >> 1;
 	private static final int DOUBLE_OUTLINE = SIMPLE_OUTLINE << 1;
 
 	public static void initializeStylesheet() {
@@ -114,6 +115,7 @@ public class StylePopulator {
 			bodyStyle.setBackground(plainBackground);
 			bodyStyle.setBackgroundColor(Colors.CONCRETE_90);
 			bodyStyle.setForegroundColor(Colors.CONCRETE_25);
+			bodyStyle.setPadding(new ComplexOutline(0, 0, DOUBLE_OUTLINE, 0));
 			stylesheet.addRule(new ClassSelector(ClassSelectors.BODY), bodyStyle);
 		}
 
@@ -161,7 +163,6 @@ public class StylePopulator {
 				EditableStyle thermostatTargetStyle = new EditableStyle();
 				thermostatTargetStyle.setBackgroundColor(Colors.CORAL); // When "hoter"
 				thermostatTargetStyle.setForegroundColor(Colors.LIGHT_BLUE); // When "colder"
-				// thermostatTargetStyle.setForegroundColor(Colors.CORAL); // When "colder"
 				stylesheet.addRule(new ClassSelector(ClassSelectors.THERMOSTAT_TARGET_COLOR), thermostatTargetStyle);
 			}
 
@@ -171,7 +172,7 @@ public class StylePopulator {
 				thermostatValidateStyle.setForegroundColor(Colors.CORAL);
 				thermostatValidateStyle.setPadding(doubleOutline);
 				thermostatValidateStyle.setBackground(new CircularPlainBackground());
-				thermostatValidateStyle.setFontProfile(fpLarge);
+				thermostatValidateStyle.setFontProfile(fpSmall);
 				stylesheet.addRule(new ClassSelector(ClassSelectors.THERMOSTAT_VALIDATE), thermostatValidateStyle);
 			}
 
@@ -180,7 +181,7 @@ public class StylePopulator {
 				{ // Shared style for the top (Current & Desired)
 					EditableStyle thermostatTopLabel = new EditableStyle();
 					thermostatTopLabel.setAlignment(GraphicsContext.HCENTER | GraphicsContext.BOTTOM);
-					thermostatTopLabel.setFontProfile(fpMedium);
+					thermostatTopLabel.setFontProfile(fpSmall);
 					stylesheet.addRule(new ClassSelector(ClassSelectors.THERMOSTAT_TOP_LABEL), thermostatTopLabel);
 				}
 
@@ -195,6 +196,9 @@ public class StylePopulator {
 					EditableStyle coralLabel = new EditableStyle();
 					coralLabel.setForegroundColor(Colors.CORAL);
 					stylesheet.addRule(new ClassSelector(ClassSelectors.COLOR_CORAL),
+							coralLabel);
+					stylesheet.addRule(new AndCombinator(new ClassSelector(ClassSelectors.DASHBOARD_LIGHT_COUNT),
+							new StateSelector(State.Enabled)),
 							coralLabel);
 				}
 
@@ -230,12 +234,25 @@ public class StylePopulator {
 		}
 
 		{ // Dashboard
+
+			ClassSelector dashBoardMenuSelector = new ClassSelector(ClassSelectors.DASHBOARD_MENU);
 			{ // menu
-				ClassSelector dashBoardMenuSelector = new ClassSelector(ClassSelectors.DASHBOARD_MENU);
 				EditableStyle dashBoardMenuStyle = new EditableStyle();
 				dashBoardMenuStyle.setPadding(defaultOutline);
-				dashBoardMenuStyle.setBorder(new ComplexRectangularBorder(0, 0, 1, 0));
+				dashBoardMenuStyle.setFontProfile(fpXSmall);
 				stylesheet.addRule(dashBoardMenuSelector, dashBoardMenuStyle);
+			}
+
+			{ // menu
+				EditableStyle dashBoardActiveMenuStyle = new EditableStyle();
+				dashBoardActiveMenuStyle.setPadding(new ComplexOutline(HALF_OUTLINE, 0, HALF_OUTLINE, 0));
+				dashBoardActiveMenuStyle.setMargin(new ComplexOutline(0, DOUBLE_OUTLINE, 0, DOUBLE_OUTLINE));
+				dashBoardActiveMenuStyle.setBackground(new SimpleRoundedPlainBackground(11));
+				dashBoardActiveMenuStyle.setBackgroundColor(Colors.CORAL);
+				dashBoardActiveMenuStyle.setForegroundColor(Colors.CONCRETE_90);
+				stylesheet.addRule(new AndCombinator(new ClassSelector(ClassSelectors.DASHBOARD_MENU_BUTTON),
+						new StateSelector(State.Focus)),
+						dashBoardActiveMenuStyle);
 			}
 
 			{ // item icon
@@ -245,10 +262,11 @@ public class StylePopulator {
 			}
 
 			{ // item text
-				EditableStyle dashboardIconValue = new EditableStyle();
-				dashboardIconValue.setAlignment(GraphicsContext.LEFT | GraphicsContext.VCENTER);
-				dashboardIconValue.setTextManager(new ComplexTextManager());
-				stylesheet.addRule(new ClassSelector(ClassSelectors.DASHBOARD_ITEM_TEXT), dashboardIconValue);
+				EditableStyle dashboardTextStyle = new EditableStyle();
+				dashboardTextStyle.setAlignment(GraphicsContext.LEFT | GraphicsContext.VCENTER);
+				// dashboardTextStyle.setPadding(new ComplexOutline(4, 0, 0, 0));
+				dashboardTextStyle.setTextManager(new ComplexTextManager());
+				stylesheet.addRule(new ClassSelector(ClassSelectors.DASHBOARD_ITEM_TEXT), dashboardTextStyle);
 			}
 
 			{ // Lights count text and temperature

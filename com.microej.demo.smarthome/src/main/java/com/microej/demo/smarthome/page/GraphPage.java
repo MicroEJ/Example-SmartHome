@@ -6,6 +6,7 @@
  */
 package com.microej.demo.smarthome.page;
 
+import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Strings;
 import com.microej.demo.smarthome.widget.MenuButton;
 
@@ -25,7 +26,9 @@ public class GraphPage extends MenuPage {
 
 	@Override
 	protected MenuButton createMenuButton() {
-		return new MenuButton(new Label(Strings.MAXPOWERTODAY));
+		MenuButton menuButton = new MenuButton(new Label(Strings.MAXPOWERTODAY));
+		menuButton.addClassSelector(ClassSelectors.DASHBOARD_MENU_BUTTON);
+		return menuButton;
 	}
 
 

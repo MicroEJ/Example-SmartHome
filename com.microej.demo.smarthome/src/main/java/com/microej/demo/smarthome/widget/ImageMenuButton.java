@@ -6,7 +6,6 @@
  */
 package com.microej.demo.smarthome.widget;
 
-import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.style.HomeImageLoader;
 
 import ej.widget.basic.Image;
@@ -27,7 +26,6 @@ public class ImageMenuButton extends MenuButton {
 		super();
 		this.name = name;
 		image = new Image(HomeImageLoader.loadMenu(name));
-		image.addClassSelector(ClassSelectors.FOOTER_MENU_BUTTON);
 		setWidget(image);
 	}
 

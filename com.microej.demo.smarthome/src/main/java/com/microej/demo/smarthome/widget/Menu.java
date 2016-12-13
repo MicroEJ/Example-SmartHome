@@ -6,16 +6,28 @@
  */
 package com.microej.demo.smarthome.widget;
 
+import com.microej.demo.smarthome.navigator.DirectNavigator;
+import com.microej.demo.smarthome.page.MenuPage;
+
 import ej.mwt.Widget;
-import ej.widget.container.List;
+import ej.widget.container.Grid;
 import ej.widget.listener.OnClickListener;
 
 /**
  *
  */
-public class Menu extends List {
+public class Menu extends Grid {
 
 	private MenuButton active;
+	private final DirectNavigator navigator;
+
+	/**
+	 * @param navigator
+	 */
+	public Menu(DirectNavigator navigator) {
+		super(false, 1);
+		this.navigator = navigator;
+	}
 
 	@Override
 	public void add(Widget widget) throws NullPointerException, IllegalArgumentException {
@@ -46,5 +58,25 @@ public class Menu extends List {
 		}
 		active = button;
 		active.setFocus(true);
+	}
+
+	/**
+	 * @param menuPage
+	 */
+	public void show(MenuPage menuPage) {
+		MenuButton button = menuPage.getMenuButton();
+		boolean forward = false;
+
+		for (Widget widget : getWidgets()) {
+			if (widget == button) {
+				forward = false;
+				break;
+			}
+			if (widget == active) {
+				forward = true;
+				break;
+			}
+		}
+		navigator.show(menuPage, forward);
 	}
 }

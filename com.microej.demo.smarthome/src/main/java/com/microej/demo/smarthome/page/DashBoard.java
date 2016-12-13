@@ -29,7 +29,7 @@ public class DashBoard extends MenuNavigatorPage {
 
 		Dock mainDock = new Dock();
 		mainDock.setCenter(navigator);
-		Menu menu = createMenu();
+		Menu menu = initMenu();
 		menu.addClassSelector(ClassSelectors.DASHBOARD_MENU);
 		mainDock.addTop(menu);
 		setWidget(mainDock);
@@ -37,6 +37,8 @@ public class DashBoard extends MenuNavigatorPage {
 
 	@Override
 	protected MenuButton createMenuButton() {
-		return new ImageMenuButton(Images.DASHBOARD);
+		ImageMenuButton imageMenuButton = new ImageMenuButton(Images.DASHBOARD);
+		imageMenuButton.addClassSelector(ClassSelectors.FOOTER_MENU_BUTTON);
+		return imageMenuButton;
 	}
 }

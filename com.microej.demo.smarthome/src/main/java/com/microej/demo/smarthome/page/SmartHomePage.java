@@ -38,7 +38,7 @@ public class SmartHomePage extends MenuNavigatorPage {
 
 		mainDock = new Dock();
 		mainDock.addTop(createHeader());
-		Menu menu = createMenu();
+		Menu menu = initMenu();
 		menu.addClassSelector(ClassSelectors.FOOTER);
 		mainDock.addBottom(menu);
 		mainDock.setCenter(createMainContent());

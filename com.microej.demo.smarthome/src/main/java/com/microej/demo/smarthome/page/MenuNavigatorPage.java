@@ -21,6 +21,7 @@ public class MenuNavigatorPage extends MenuPage {
 
 	private java.util.List<MenuPage> pages;
 	protected final DirectNavigator navigator;
+	protected final Menu menu;
 
 	/**
 	 * @param pagesURL
@@ -28,6 +29,7 @@ public class MenuNavigatorPage extends MenuPage {
 	public MenuNavigatorPage(String[] pagesURL) {
 		super();
 		navigator = new DirectNavigator();
+		menu = new Menu(navigator);
 		initPages(pagesURL);
 
 		navigator.show(pages.get(0), true);
@@ -42,7 +44,7 @@ public class MenuNavigatorPage extends MenuPage {
 		ClassNameURLResolver urlResolver = new ClassNameURLResolver();
 		for (String pageName : pagesURL) {
 			MenuPage p = (MenuPage) urlResolver.resolve(pageName);
-			p.setNavigator(navigator);
+			p.setMenu(menu);
 			pages.add(p);
 		}
 	}
@@ -50,8 +52,7 @@ public class MenuNavigatorPage extends MenuPage {
 	/**
 	 * @return
 	 */
-	protected Menu createMenu() {
-		Menu menu = new Menu();
+	protected Menu initMenu() {
 		for (MenuPage page : pages) {
 			menu.add(page.getMenuButton());
 		}

@@ -66,7 +66,7 @@ public class InstantPowerBar extends BoundedRange {
 		g.drawLine(x, y, endX, y);
 
 		g.setColor(style.getForegroundColor());
-		AntiAliasedShapes.Singleton.setFade(2);
+		AntiAliasedShapes.Singleton.setFade(1);
 		AntiAliasedShapes.Singleton.setThickness(4);
 		float complete = getPercentComplete();
 		AntiAliasedShapes.Singleton.drawLine(g, x, y, (int) (endX * complete), y);

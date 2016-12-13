@@ -6,6 +6,7 @@
  */
 package com.microej.demo.smarthome.page;
 
+import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Strings;
 import com.microej.demo.smarthome.widget.MenuButton;
 import com.microej.demo.smarthome.widget.dashboard.DoorDashboard;
@@ -45,7 +46,9 @@ public class InformationPage extends MenuPage {
 
 	@Override
 	protected MenuButton createMenuButton() {
-		return new MenuButton(new Label(Strings.INFORMATIONS));
+		MenuButton menuButton = new MenuButton(new Label(Strings.INFORMATIONS));
+		menuButton.addClassSelector(ClassSelectors.DASHBOARD_MENU_BUTTON);
+		return menuButton;
 	}
 
 }
