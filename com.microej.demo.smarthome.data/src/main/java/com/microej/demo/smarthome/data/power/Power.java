@@ -11,7 +11,7 @@ import com.microej.demo.smarthome.data.Device;
 /**
  *
  */
-public interface PowerConsumption extends Device<PowerEventListener> {
+public interface Power extends Device<PowerEventListener> {
 
 	public InstantPower getInstantPowerConsumption();
 

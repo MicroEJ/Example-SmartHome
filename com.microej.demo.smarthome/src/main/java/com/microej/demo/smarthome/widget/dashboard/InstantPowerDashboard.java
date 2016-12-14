@@ -7,8 +7,9 @@
 package com.microej.demo.smarthome.widget.dashboard;
 
 import com.microej.demo.smarthome.data.power.InstantPower;
-import com.microej.demo.smarthome.data.power.PowerConsumption;
+import com.microej.demo.smarthome.data.power.Power;
 import com.microej.demo.smarthome.data.power.PowerEventListener;
+import com.microej.demo.smarthome.data.power.PowerProvider;
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Strings;
 import com.microej.demo.smarthome.widget.MaxWidthLabel;
@@ -33,8 +34,9 @@ public class InstantPowerDashboard extends Grid {
 	public InstantPowerDashboard() {
 		super(true, 2);
 		Flow text = new Flow(true);
-		PowerConsumption powerConsumption = ServiceLoaderFactory.getServiceLoader().getService(PowerConsumption.class);
-		power = new MaxWidthLabel(String.valueOf(powerConsumption.getMaxPowerConsumption()));
+		PowerProvider powerProvider = ServiceLoaderFactory.getServiceLoader().getService(PowerProvider.class);
+		Power myPower = powerProvider.list()[0];
+		power = new MaxWidthLabel(String.valueOf(myPower.getMaxPowerConsumption()));
 		power.addClassSelector(ClassSelectors.DASHBOARD_HUGE_TEXT);
 		power.addClassSelector(ClassSelectors.DASHBOARD_POWER_CONSUMPTION);
 		powerEventListener = new PowerEventListener() {
@@ -51,7 +53,7 @@ public class InstantPowerDashboard extends Grid {
 		watt.addClassSelector(ClassSelectors.DASHBOARD_HUGE_TEXT);
 		text.add(watt);
 
-		powerBar = new InstantPowerBar(0, powerConsumption.getMaxPowerConsumption(), 0);
+		powerBar = new InstantPowerBar(0, myPower.getMaxPowerConsumption(), 0);
 		powerBar.addClassSelector(ClassSelectors.DASHBOARD_POWER_CONSUMPTION_BAR);
 
 		add(text);
@@ -62,16 +64,18 @@ public class InstantPowerDashboard extends Grid {
 	@Override
 	public void showNotify() {
 		super.showNotify();
-		PowerConsumption powerConsumption = ServiceLoaderFactory.getServiceLoader().getService(PowerConsumption.class);
-		powerConsumption.addListener(powerEventListener);
-		updateInstantPower(powerConsumption.getInstantPowerConsumption());
+		PowerProvider powerProvider = ServiceLoaderFactory.getServiceLoader().getService(PowerProvider.class);
+		Power myPower = powerProvider.list()[0];
+		myPower.addListener(powerEventListener);
+		updateInstantPower(myPower.getInstantPowerConsumption());
 	}
 
 	@Override
 	public void hideNotify() {
 		super.hideNotify();
-		PowerConsumption powerConsumption = ServiceLoaderFactory.getServiceLoader().getService(PowerConsumption.class);
-		powerConsumption.removeListener(powerEventListener);
+		PowerProvider powerProvider = ServiceLoaderFactory.getServiceLoader().getService(PowerProvider.class);
+		Power myPower = powerProvider.list()[0];
+		myPower.removeListener(powerEventListener);
 	}
 
 	private void updateInstantPower(InstantPower instantPower) {

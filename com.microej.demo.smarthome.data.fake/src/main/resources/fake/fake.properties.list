@@ -1,4 +1,4 @@
 com.microej.demo.smarthome.data.door.DoorProvider=com.microej.demo.smarthome.data.fake.door.DoorProvider
 com.microej.demo.smarthome.data.thermostat.ThermostatProvider=com.microej.demo.smarthome.data.fake.thermostat.ThermostatProvider
 com.microej.demo.smarthome.data.light.LightProvider=com.microej.demo.smarthome.data.fake.light.LightProvider
-com.microej.demo.smarthome.data.power.PowerConsumption=com.microej.demo.smarthome.data.fake.power.PowerConsumption
+com.microej.demo.smarthome.data.power.PowerProvider=com.microej.demo.smarthome.data.fake.power.PowerProvider
