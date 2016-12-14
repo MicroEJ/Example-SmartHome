@@ -9,6 +9,7 @@ package com.microej.demo.smarthome.style;
 import com.microej.demo.smarthome.util.Colors;
 import com.microej.demo.smarthome.util.Constants;
 import com.microej.demo.smarthome.widget.CircularPlainBackground;
+import com.microej.demo.smarthome.widget.chart.BasicChart;
 
 import ej.bon.Util;
 import ej.microui.display.GraphicsContext;
@@ -115,22 +116,27 @@ public class StylePopulator {
 			bodyStyle.setBackground(plainBackground);
 			bodyStyle.setBackgroundColor(Colors.CONCRETE_90);
 			bodyStyle.setForegroundColor(Colors.CONCRETE_25);
-			bodyStyle.setPadding(new ComplexOutline(0, 0, DOUBLE_OUTLINE, 0));
 			stylesheet.addRule(new ClassSelector(ClassSelectors.BODY), bodyStyle);
 		}
 
 		{ // Light
-			EditableStyle lightStyle = new EditableStyle();
-			lightStyle.setBackgroundColor(Colors.CONCRETE_25);
-			lightStyle.setForegroundColor(Colors.CORAL);
-			lightStyle.setMargin(defaultOutline);
-			stylesheet.addRule(new ClassSelector(ClassSelectors.LIGHT), lightStyle);
-		}
-
-		{ // Light percentage value
+			{ // Light widget
+				EditableStyle lightWidgetStyle = new EditableStyle();
+				lightWidgetStyle.setPadding(new ComplexOutline(0, 0, DOUBLE_OUTLINE, 0));
+				stylesheet.addRule(new ClassSelector(ClassSelectors.LIGHT_WIDGET), lightWidgetStyle);
+			}
+	
+			{ // Light progress
+				EditableStyle lightStyle = new EditableStyle();
+				lightStyle.setBackgroundColor(Colors.CONCRETE_25);
+				lightStyle.setForegroundColor(Colors.CORAL);
+				lightStyle.setMargin(defaultOutline);
+				lightStyle.setPadding(new ComplexOutline(0, 0, DOUBLE_OUTLINE, 0));
+				stylesheet.addRule(new ClassSelector(ClassSelectors.LIGHT_PROGRESS), lightStyle);
+			}
 
 			ClassSelector lightValueSelector = new ClassSelector(ClassSelectors.LIGHT_VALUE);
-			{
+			{ // Light percentage value
 				EditableStyle lightPercentageValueStyle = new EditableStyle();
 				lightPercentageValueStyle.setForegroundColor(Colors.CORAL);
 				lightPercentageValueStyle.setFontProfile(fpLarge);
@@ -147,6 +153,12 @@ public class StylePopulator {
 				stylesheet.addRule(new ClassSelector(ClassSelectors.LIGHT_VALUE_OFF), lightPercentageStyle);
 			}
 
+		}
+
+		{ // Door widget
+			EditableStyle doorWidgetStyle = new EditableStyle();
+			doorWidgetStyle.setPadding(new ComplexOutline(0, 0, DOUBLE_OUTLINE, 0));
+			stylesheet.addRule(new ClassSelector(ClassSelectors.DOOR_WIDGET), doorWidgetStyle);
 		}
 
 		{ // Thermostat page
@@ -292,6 +304,55 @@ public class StylePopulator {
 				powerConsumptionStyle.setPadding(defaultOutline);
 				stylesheet.addRule(new ClassSelector(ClassSelectors.DASHBOARD_POWER_CONSUMPTION_BAR),
 						powerConsumptionStyle);
+			}
+
+		}
+
+		{ // Chart page
+
+			{ // Chart scroll
+				EditableStyle chartScrollStyle = new EditableStyle();
+				chartScrollStyle.setBackground(new PlainBackground());
+				chartScrollStyle.setBackgroundColor(Colors.CORAL);
+				stylesheet.addRule(new ClassSelector(ClassSelectors.CHART_SCROLL), chartScrollStyle);
+			}
+
+			{ // Chart
+				EditableStyle chartStyle = new EditableStyle();
+				chartStyle.setFontProfile(fpSmall);
+				chartStyle.setForegroundColor(Colors.CONCRETE_90);
+				chartStyle.setPadding(doubleOutline);
+				stylesheet.addRule(new ClassSelector(ClassSelectors.CHART), chartStyle);
+			}
+
+			{ // Chart point
+				EditableStyle chartPointStyle = new EditableStyle();
+				chartPointStyle.setFontProfile(fpXSmall);
+				chartPointStyle.setForegroundColor(Colors.CONCRETE_75);
+				chartPointStyle.setBackgroundColor(Colors.CORAL);
+				stylesheet.addRule(new ClassSelector(ClassSelectors.CHART_POINT), chartPointStyle);
+			}
+
+			{ // Chart scale
+				EditableStyle chartScaleStyle = new EditableStyle();
+				chartScaleStyle.setFontProfile(fpSmall);
+				chartScaleStyle.setForegroundColor(Colors.LIGHT_CORAL);
+				chartScaleStyle.setBackgroundColor(Colors.DARK_CORAL);
+				stylesheet.addRule(new ClassSelector(BasicChart.CLASS_SELECTOR_SCALE), chartScaleStyle);
+			}
+
+			{ // Chart selected info
+				EditableStyle chartInfoStyle = new EditableStyle();
+				chartInfoStyle.setFontProfile(fpSmall);
+				chartInfoStyle.setForegroundColor(Colors.CONCRETE_25);
+				stylesheet.addRule(new ClassSelector(BasicChart.CLASS_SELECTOR_SELECTED_INFO), chartInfoStyle);
+			}
+
+			{ // Chart selected value
+				EditableStyle chartValueStyle = new EditableStyle();
+				chartValueStyle.setFontProfile(fpSmall);
+				chartValueStyle.setForegroundColor(Colors.DARK_CORAL);
+				stylesheet.addRule(new ClassSelector(BasicChart.CLASS_SELECTOR_SELECTED_VALUE), chartValueStyle);
 			}
 
 		}

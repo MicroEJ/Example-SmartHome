@@ -32,10 +32,11 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 
 	public LightWidget(Light model) {
 		super(model);
+		addClassSelector(ClassSelectors.LIGHT_WIDGET);
 
 		BoundedRangeModel boundedRange = new DefaultBoundedRangeModel(0, 1000, 0);
 		circular = new CircularProgressWidget(boundedRange);
-		circular.addClassSelector(ClassSelectors.LIGHT);
+		circular.addClassSelector(ClassSelectors.LIGHT_PROGRESS);
 
 		OverlapingComposite composite = new OverlapingComposite();
 		composite.add(circular);
