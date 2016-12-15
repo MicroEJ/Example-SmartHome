@@ -38,6 +38,8 @@
 		<dependency org="ej.library.runtime" name="components" rev="[3.0.0-RC,4.0.0-RC["/>
 		<dependency org="ej.library.iot" name="connectivity" rev="[1.0.0-RC,2.0.0-RC["/>
 		
+		<dependency org="org.kxml2" name="kxml2" rev="[2.3.0-RC0,3.0.0-RC0[" />
+		
 		<dependency org="ej.library.iot.basedriver" name="zwave" rev="[1.0.0-RC0,2.0.0-RC0["/>
 		<dependency org="ej.wadapps.basedriver.app" name="zwave"  rev="[1.0.0-RC0,2.0.0-RC0[" conf="microej.launch.standalone->*"/>
 	</dependencies>

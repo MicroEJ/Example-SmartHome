@@ -14,12 +14,11 @@ import com.microej.demo.smarthome.widget.MenuButton;
 import com.microej.demo.smarthome.widget.thermostat.ThermostatWidget;
 
 import ej.components.dependencyinjection.ServiceLoaderFactory;
-import ej.mwt.Widget;
 
 /**
  *
  */
-public class ThermostatPage extends DevicePage {
+public class ThermostatPage extends DevicePage<Thermostat> {
 
 	/**
 	 *
@@ -27,7 +26,7 @@ public class ThermostatPage extends DevicePage {
 	public ThermostatPage() {
 		super();
 		Thermostat thermostat = ServiceLoaderFactory.getServiceLoader().getService(Thermostat.class);
-		addDevice(new ThermostatWidget(thermostat));
+		addDevice(thermostat, new ThermostatWidget(thermostat));
 	}
 
 
@@ -38,9 +37,4 @@ public class ThermostatPage extends DevicePage {
 		return imageMenuButton;
 	}
 
-	@Override
-	public void addDevice(Widget device) {
-		// removeAllWidgets();
-		super.addDevice(device);
-	}
 }

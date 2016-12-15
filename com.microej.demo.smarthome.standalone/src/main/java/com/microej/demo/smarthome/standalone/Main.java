@@ -8,6 +8,7 @@ package com.microej.demo.smarthome.standalone;
 
 import java.net.SocketException;
 
+import com.microej.demo.smarthome.data.philipshue.PhilipsHueBackgroundService;
 import com.microej.demo.smarthome.data.zwave.ZwaveControllerManager;
 
 import ej.components.dependencyinjection.ServiceLoaderFactory;
@@ -28,8 +29,8 @@ public class Main {
 		ZwaveStandaloneBackgroundService bg = new ZwaveStandaloneBackgroundService();
 		bg.onStart();
 
-		// PhilipsHueBackgroundService philipsHueBackgroundService = new PhilipsHueBackgroundService();
-		// philipsHueBackgroundService.onStart();
+		PhilipsHueBackgroundService philipsHueBackgroundService = new PhilipsHueBackgroundService();
+		philipsHueBackgroundService.onStart();
 
 		com.microej.demo.smarthome.Main.main(args);
 	}

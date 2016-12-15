@@ -89,6 +89,8 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 
 			}
 		};
+
+		setState(model.isOn());
 	}
 
 	@Override
@@ -126,8 +128,8 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 		circular.setValue(value);
 	}
 
-	private void toggle() {
-		isEnabled = !isEnabled;
+	private void setState(boolean on) {
+		isEnabled = on;
 		if (isEnabled) {
 			buttonWrapper.setWidget(boundedRangeLabel);
 		} else {
@@ -139,5 +141,10 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 		// Set enable trigers the repaint of the circular and button.
 		circular.setEnabled(isEnabled);
 		// buttonWrapper.revalidate();
+	}
+
+	private void toggle() {
+		isEnabled = !isEnabled;
+		setState(isEnabled);
 	}
 }
