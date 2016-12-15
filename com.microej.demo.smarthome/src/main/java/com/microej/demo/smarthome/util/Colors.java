@@ -23,7 +23,11 @@ public interface Colors {
 
 	public static final int CONCRETE_90 = 0xF2F4F5;
 
+	public static final int LIGHT_CORAL = 0xF7A897;
+
 	public static final int CORAL = 0xEE502E;
+
+	public static final int DARK_CORAL = 0xCF4520;
 
 	public static final int LIGHT_BLUE = 0x0DADC9;
 

@@ -8,6 +8,7 @@ package com.microej.demo.smarthome.widget;
 
 import com.microej.demo.smarthome.data.door.Door;
 import com.microej.demo.smarthome.data.door.DoorEventListener;
+import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.style.HomeImageLoader;
 import com.microej.demo.smarthome.util.Images;
 
@@ -26,6 +27,8 @@ public class DoorWidget extends DeviceWidget<Door> implements DoorEventListener 
 	 */
 	public DoorWidget(Door model) {
 		super(model);
+		addClassSelector(ClassSelectors.DOOR_WIDGET);
+
 		door = new Image();
 
 		// Force change of state see setOpen.
