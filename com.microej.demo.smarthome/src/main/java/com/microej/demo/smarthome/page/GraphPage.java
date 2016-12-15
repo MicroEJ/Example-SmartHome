@@ -19,7 +19,7 @@ import ej.widget.basic.Label;
 /**
  * This class represents the page which shows the power chart
  */
-public class GraphPage extends DevicePage {
+public class GraphPage extends DevicePage<Power> {
 
 	/**
 	 * Constructor
@@ -29,7 +29,7 @@ public class GraphPage extends DevicePage {
 		PowerProvider provider = ServiceLoaderFactory.getServiceLoader().getService(PowerProvider.class);
 		Power[] list = provider.list();
 		for (Power power : list) {
-			addDevice(new PowerWidget(power));
+			addDevice(power, new PowerWidget(power));
 		}
 	}
 
