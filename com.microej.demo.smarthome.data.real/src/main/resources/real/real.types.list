@@ -1,0 +1,3 @@
+com.microej.demo.smarthome.data.zwave.DoorProvider
+com.microej.demo.smarthome.data.zwave.ZwaveThermostatSensor
+com.microej.demo.smarthome.data.philipshue.BridgeStorageFS

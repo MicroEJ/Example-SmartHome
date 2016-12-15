@@ -42,7 +42,9 @@ public class ThermostatBoundedRangeModel extends DefaultBoundedRangeModel implem
 
 	@Override
 	public void onTargetTemperatureChange(int targetTemperature) {
-		setTargetValue(targetTemperature);
+		for (OnValueChangeListener onValueChangeListener : listeners) {
+			onValueChangeListener.onValueChange(targetTemperature);
+		}
 	}
 
 	/**

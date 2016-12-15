@@ -8,7 +8,6 @@ package com.microej.demo.smarthome.widget.dashboard;
 
 import com.microej.demo.smarthome.data.thermostat.Thermostat;
 import com.microej.demo.smarthome.data.thermostat.ThermostatEventListener;
-import com.microej.demo.smarthome.data.thermostat.ThermostatProvider;
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Images;
 import com.microej.demo.smarthome.widget.thermostat.ThermostatLabel;
@@ -20,7 +19,7 @@ import ej.components.dependencyinjection.ServiceLoaderFactory;
  */
 public class ThermostatDashboard extends DeviceDashboard {
 
-	private Thermostat thermostat;
+	private final Thermostat thermostat;
 	private final ThermostatEventListener listener;
 
 	/**
@@ -28,15 +27,13 @@ public class ThermostatDashboard extends DeviceDashboard {
 	 */
 	public ThermostatDashboard() {
 		super(Images.AIRCONDITIONNER);
-		ThermostatProvider provider = ServiceLoaderFactory.getServiceLoader().getService(ThermostatProvider.class);
-		Thermostat[] list = provider.list();
-		if (list.length > 0) {
-			thermostat = list[0];
-			ThermostatLabel thermostatLabel = new ThermostatLabel(thermostat);
-			add(thermostatLabel);
-			thermostatLabel.addClassSelector(ClassSelectors.DASHBOARD_ITEM_TEXT);
-			thermostatLabel.addClassSelector(ClassSelectors.DASHBOARD_HUGE_TEXT);
-		}
+		thermostat = ServiceLoaderFactory.getServiceLoader().getService(Thermostat.class);
+
+		ThermostatLabel thermostatLabel = new ThermostatLabel(thermostat);
+		add(thermostatLabel);
+		thermostatLabel.addClassSelector(ClassSelectors.DASHBOARD_ITEM_TEXT);
+		thermostatLabel.addClassSelector(ClassSelectors.DASHBOARD_HUGE_TEXT);
+
 		listener = new ThermostatEventListener() {
 
 			@Override

@@ -6,6 +6,7 @@
  */
 package com.microej.demo.smarthome.page;
 
+import com.microej.demo.smarthome.data.ProviderListener;
 import com.microej.demo.smarthome.data.door.Door;
 import com.microej.demo.smarthome.data.door.DoorProvider;
 import com.microej.demo.smarthome.style.ClassSelectors;
@@ -19,24 +20,45 @@ import ej.components.dependencyinjection.ServiceLoaderFactory;
 /**
  *
  */
-public class DoorPage extends DevicePage {
-
-	/**
-	 *
-	 */
-	public DoorPage() {
-		super();
-		DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class);
-		Door[] list = provider.list();
-		for (Door door : list) {
-			addDevice(new DoorWidget(door));
-		}
-	}
+public class DoorPage extends DevicePage<com.microej.demo.smarthome.data.door.Door> implements ProviderListener<Door> {
 
 	@Override
 	protected MenuButton createMenuButton() {
 		ImageMenuButton imageMenuButton = new ImageMenuButton(Images.SECURITY);
 		imageMenuButton.addClassSelector(ClassSelectors.FOOTER_MENU_BUTTON);
 		return imageMenuButton;
+	}
+
+	@Override
+	public void showNotify() {
+		super.showNotify();
+		DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class);
+		Door[] list = provider.list();
+		for (Door door : list) {
+			newElement(door);
+		}
+
+		repaint();
+		provider.addListener(this);
+	}
+
+	@Override
+	public void hideNotify() {
+		super.hideNotify();
+		DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class);
+		removeAllWidgets();
+		provider.removeListener(this);
+
+	}
+
+	@Override
+	public void newElement(Door element) {
+		DoorWidget device = new DoorWidget(element);
+		addDevice(element, device);
+	}
+
+	@Override
+	public void removeElement(Door element) {
+		removeDevice(element);
 	}
 }
