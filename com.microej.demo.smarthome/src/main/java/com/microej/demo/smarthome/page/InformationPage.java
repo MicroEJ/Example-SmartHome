@@ -46,7 +46,7 @@ public class InformationPage extends MenuPage {
 
 	@Override
 	protected MenuButton createMenuButton() {
-		MenuButton menuButton = new MenuButton(new Label(Strings.INFORMATIONS));
+		MenuButton menuButton = new MenuButton(new Label(Strings.INFORMATION));
 		menuButton.addClassSelector(ClassSelectors.DASHBOARD_MENU_BUTTON);
 		return menuButton;
 	}

@@ -31,7 +31,7 @@ public interface Strings {
 
 	String MAXPOWERTODAY = "MAX POWER TODAY";
 
-	String INFORMATIONS = "INFORMATIONS";
+	String INFORMATION = "INFORMATION";
 
 	String LIGHTS_ON = "lights\non";
 	String LIGHT_ON = "light\non";
