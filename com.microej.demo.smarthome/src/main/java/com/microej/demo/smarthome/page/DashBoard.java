@@ -13,13 +13,14 @@ import com.microej.demo.smarthome.widget.Menu;
 import com.microej.demo.smarthome.widget.MenuButton;
 
 import ej.widget.container.Dock;
+import ej.widget.navigation.transition.NoTransitionManager;
 
 /**
  *
  */
 public class DashBoard extends MenuNavigatorPage {
 
-	private static final String[] pagesURL = { GraphPage.class.getName(), InformationPage.class.getName() };
+	private static final String[] pagesURL = { InformationPage.class.getName(), GraphPage.class.getName() };
 
 	/**
 	 *
@@ -28,11 +29,15 @@ public class DashBoard extends MenuNavigatorPage {
 		super(pagesURL);
 
 		Dock mainDock = new Dock();
+		NoTransitionManager manager = new NoTransitionManager();
+		navigator.setTransitionManager(manager);
+
 		mainDock.setCenter(navigator);
 		Menu menu = initMenu();
 		menu.addClassSelector(ClassSelectors.DASHBOARD_MENU);
 		mainDock.addTop(menu);
 		setWidget(mainDock);
+
 	}
 
 	@Override

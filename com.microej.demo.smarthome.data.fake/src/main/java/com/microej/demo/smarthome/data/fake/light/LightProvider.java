@@ -6,7 +6,7 @@
  */
 package com.microej.demo.smarthome.data.fake.light;
 
-import com.microej.demo.smarthome.data.fake.Provider;
+import com.microej.demo.smarthome.data.impl.Provider;
 
 /**
  *

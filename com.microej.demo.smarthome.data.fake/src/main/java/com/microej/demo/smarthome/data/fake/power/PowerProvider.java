@@ -8,7 +8,7 @@ package com.microej.demo.smarthome.data.fake.power;
 
 import java.util.Random;
 
-import com.microej.demo.smarthome.data.fake.Provider;
+import com.microej.demo.smarthome.data.impl.Provider;
 import com.microej.demo.smarthome.data.power.InstantPower;
 
 import ej.bon.TimerTask;
@@ -22,7 +22,7 @@ implements com.microej.demo.smarthome.data.power.PowerProvider {
 	private static final long HOUR_IN_MS = 1000 * 60 * 60;
 
 	private long lastPowerTime;
-	private Random rand = new Random();
+	private final Random rand = new Random();
 
 	/**
 	 * Constructor
@@ -34,7 +34,7 @@ implements com.microej.demo.smarthome.data.power.PowerProvider {
 		add(power);
 
 		lastPowerTime = System.currentTimeMillis();
-		for (int i = 0; i < power.getMaxPowerAtATime()/2; i++) {
+		for (int i = 0; i < power.getMaxPowerAtATime(); i++) {
 			addInstantPower(power);
 		}
 
@@ -52,7 +52,7 @@ implements com.microej.demo.smarthome.data.power.PowerProvider {
 	@Override
 	public com.microej.demo.smarthome.data.power.Power[] list() {
 		com.microej.demo.smarthome.data.power.Power[] list = new com.microej.demo.smarthome.data.power.Power[devices
-				.size()];
+		                                                                                                     .size()];
 		list = devices.toArray(list);
 		return list;
 	}

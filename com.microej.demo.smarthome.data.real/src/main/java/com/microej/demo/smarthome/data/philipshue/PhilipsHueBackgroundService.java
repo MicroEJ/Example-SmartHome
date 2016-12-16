@@ -8,6 +8,8 @@ package com.microej.demo.smarthome.data.philipshue;
 
 import java.io.IOException;
 
+import com.microej.demo.smarthome.util.ExecutorUtils;
+
 import android.net.ConnectivityManager;
 import android.net.ConnectivityManager.NetworkCallback;
 import android.net.Network;
@@ -49,13 +51,18 @@ public class PhilipsHueBackgroundService implements BackgroundService {
 	}
 
 	private synchronized void startManager() {
-		if (philipsHueDirectManager == null) {
-			try {
-				philipsHueDirectManager = new PhilipsHueDirectManager("192.168.6.33");
+		ExecutorUtils.getExecutor(ExecutorUtils.LOW_PRIORITY).execute(new Runnable() {
 
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+			@Override
+			public void run() {
+				if (philipsHueDirectManager == null) {
+					try {
+						philipsHueDirectManager = new PhilipsHueDirectManager("192.168.6.33");
+
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}}
+		});
 	}
 }

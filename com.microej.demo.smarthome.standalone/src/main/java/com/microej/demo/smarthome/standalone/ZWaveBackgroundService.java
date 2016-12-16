@@ -8,8 +8,6 @@ package com.microej.demo.smarthome.standalone;
 
 import java.io.IOException;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
 import ej.basedriver.Controller;
 import ej.basedriver.util.AbstractDriverService;
@@ -17,24 +15,15 @@ import ej.basedriver.util.CommPortConnection;
 import ej.basedriver.util.DriverService;
 import ej.basedriver.zwave.ZwaveController;
 import ej.ecom.io.CommPort;
-import ej.ecom.io.Connector;
 import ej.wadapps.app.BackgroundService;
-import ej.wadapps.basedriver.zwave.DefaultZwaveLogger;
 
 /**
  *
  */
-public class ZwaveStandaloneBackgroundService implements BackgroundService {
+public class ZWaveBackgroundService implements BackgroundService {
 
-	static {
-		LogManager.getLogManager();
-		Logger.getLogger("ZWaveLogger");
-		try {
-			Connector.open("comm://aaa");
-		} catch (IOException e) {
-			// e.printStackTrace();
-		}
-	}
+	private static final int ZWAVE_BAUDRATE = 115200;
+
 	private DriverService driver;
 
 	@Override
@@ -43,17 +32,19 @@ public class ZwaveStandaloneBackgroundService implements BackgroundService {
 
 			@Override
 			protected Controller create(CommPort port) {
+				if (!check(port)) {
+					return null;
+				}
 				try {
-					DefaultZwaveLogger logger = new DefaultZwaveLogger();
-					logger.getLogger().setLevel(Level.SEVERE);
-					ZwaveController zwaveController = new ZwaveController(port, new CommPortConnection(port, 115200),
-							logger);
+					ZwaveController zwaveController = new ZwaveController(port,
+							new CommPortConnection(port, ZWAVE_BAUDRATE));
 					return zwaveController;
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 				return null;
 			}
+
 		};
 		driver.start();
 
@@ -64,4 +55,7 @@ public class ZwaveStandaloneBackgroundService implements BackgroundService {
 		driver.stop();
 	}
 
+	protected boolean check(CommPort port) {
+		return true;
+	}
 }

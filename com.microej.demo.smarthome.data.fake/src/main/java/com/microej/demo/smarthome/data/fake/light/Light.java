@@ -6,7 +6,7 @@
  */
 package com.microej.demo.smarthome.data.fake.light;
 
-import com.microej.demo.smarthome.data.fake.Device;
+import com.microej.demo.smarthome.data.impl.Device;
 import com.microej.demo.smarthome.data.light.LightEventListener;
 
 /**

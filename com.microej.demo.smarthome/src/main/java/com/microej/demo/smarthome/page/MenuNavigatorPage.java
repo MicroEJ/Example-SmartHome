@@ -12,6 +12,7 @@ import com.microej.demo.smarthome.navigator.DirectNavigator;
 import com.microej.demo.smarthome.widget.Menu;
 import com.microej.demo.smarthome.widget.MenuButton;
 
+import ej.widget.navigation.Navigator;
 import ej.widget.navigation.page.ClassNameURLResolver;
 
 /**
@@ -62,6 +63,13 @@ public class MenuNavigatorPage extends MenuPage {
 	@Override
 	protected MenuButton createMenuButton() {
 		return null;
+	}
+
+	/**
+	 * @return
+	 */
+	public Navigator getNavigator() {
+		return navigator;
 	}
 
 }

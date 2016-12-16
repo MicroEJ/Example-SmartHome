@@ -4,9 +4,9 @@
 package sew.philipshue;
 
 import java.io.IOException;
-import java.util.concurrent.Executor;
 
-import ej.components.dependencyinjection.ServiceLoaderFactory;
+import com.microej.demo.smarthome.util.ExecutorUtils;
+
 import sew.light.DefaultLight;
 import sew.light.util.Color;
 
@@ -52,8 +52,7 @@ public class PhilipsHueLight extends DefaultLight {
 			return;
 		}
 		this.dirty = true;
-		Executor executor = ServiceLoaderFactory.getServiceLoader().getService(Executor.class);
-		executor.execute(new Runnable() {
+		ExecutorUtils.getExecutor(ExecutorUtils.VERY_LOW_PRIORITY).execute(new Runnable() {
 			@Override
 			public void run() {
 				updateOnDevice();

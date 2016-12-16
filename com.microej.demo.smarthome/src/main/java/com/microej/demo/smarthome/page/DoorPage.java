@@ -22,6 +22,18 @@ import ej.components.dependencyinjection.ServiceLoaderFactory;
  */
 public class DoorPage extends DevicePage<com.microej.demo.smarthome.data.door.Door> implements ProviderListener<Door> {
 
+	/**
+	 *
+	 */
+	public DoorPage() {
+		DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class);
+		Door[] list = provider.list();
+		for (Door door : list) {
+			newElement(door);
+		}
+		provider.addListener(this);
+	}
+
 	@Override
 	protected MenuButton createMenuButton() {
 		ImageMenuButton imageMenuButton = new ImageMenuButton(Images.SECURITY);
@@ -32,22 +44,14 @@ public class DoorPage extends DevicePage<com.microej.demo.smarthome.data.door.Do
 	@Override
 	public void showNotify() {
 		super.showNotify();
-		DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class);
-		Door[] list = provider.list();
-		for (Door door : list) {
-			newElement(door);
-		}
-
-		repaint();
-		provider.addListener(this);
 	}
 
 	@Override
 	public void hideNotify() {
 		super.hideNotify();
-		DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class);
-		removeAllWidgets();
-		provider.removeListener(this);
+		// DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class);
+		// removeAllWidgets();
+		// provider.removeListener(this);
 
 	}
 

@@ -54,6 +54,7 @@ public class SmartHomePage extends MenuNavigatorPage {
 		navigator.addClassSelector(ClassSelectors.BODY);
 		// create navigator
 		navigator.setTransitionManager(new HorizontalTransitionManager() {
+			// navigator.setTransitionManager(new HorizontalScreenshotTransitionManager() {
 			@Override
 			protected void setCurrentPage(Page newPage) {
 				super.setCurrentPage(newPage);
@@ -73,4 +74,6 @@ public class SmartHomePage extends MenuNavigatorPage {
 		dock.addClassSelector(ClassSelectors.HEADER);
 		return dock;
 	}
+
+
 }

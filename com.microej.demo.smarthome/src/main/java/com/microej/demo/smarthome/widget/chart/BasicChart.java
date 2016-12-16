@@ -15,8 +15,8 @@ import ej.microui.display.shape.AntiAliasedShapes;
 import ej.microui.event.Event;
 import ej.microui.event.generator.Pointer;
 import ej.motion.Motion;
-import ej.motion.bounce.BounceEaseOutMotion;
 import ej.motion.back.BackEaseInMotion;
+import ej.motion.bounce.BounceEaseOutMotion;
 import ej.motion.linear.LinearMotion;
 import ej.mwt.MWT;
 import ej.style.Style;
@@ -50,9 +50,9 @@ public abstract class BasicChart extends Chart implements Animation {
 	/**
 	 * Elements
 	 */
-	private ElementAdapter scaleElement;
-	private ElementAdapter selectedInfoElement;
-	private ElementAdapter selectedValueElement;
+	private final ElementAdapter scaleElement;
+	private final ElementAdapter selectedInfoElement;
+	private final ElementAdapter selectedValueElement;
 
 	/**
 	 * Animation
@@ -81,20 +81,28 @@ public abstract class BasicChart extends Chart implements Animation {
 	public void showNotify() {
 		super.showNotify();
 		if (isEnabled()) {
-			this.motion = new LinearMotion(0, APPARITION_STEPS, APPARITION_DURATION);
 			this.currentApparitionStep = 0;
-			Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
-			animator.startAnimation(this);
 		} else {
 			this.currentApparitionStep = APPARITION_STEPS;
 		}
 	}
 
+	public void startAnimation() {
+		this.motion = new LinearMotion(0, APPARITION_STEPS, APPARITION_DURATION);
+		this.currentApparitionStep = 0;
+		Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
+		animator.startAnimation(this);
+	}
+
 	@Override
 	public void hideNotify() {
+		stopAnimation();
+		super.hideNotify();
+	}
+
+	public void stopAnimation() {
 		Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
 		animator.stopAnimation(this);
-		super.hideNotify();
 	}
 
 	@Override
@@ -295,7 +303,7 @@ public abstract class BasicChart extends Chart implements Animation {
 				Font infoFont = StyleHelper.getFont(infoStyle);
 				g.setFont(infoFont);
 				g.setColor(infoStyle.getForegroundColor());
-	
+
 				// draw info string
 				String infoString = selectedPoint.getFullName();
 				g.drawString(infoString, centerX, centerY-bubbleRadius/2, GraphicsContext.HCENTER | GraphicsContext.VCENTER);
@@ -305,7 +313,7 @@ public abstract class BasicChart extends Chart implements Animation {
 				Font valueFont = StyleHelper.getFont(valueStyle);
 				g.setFont(valueFont);
 				g.setColor(valueStyle.getForegroundColor());
-	
+
 				// draw value string
 				float value = selectedPoint.getValue();
 				String valueString = Integer.toString((int) value);

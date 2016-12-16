@@ -6,23 +6,26 @@
  */
 package com.microej.demo.smarthome.widget;
 
-import com.microej.demo.smarthome.data.power.Power;
-
 import java.util.List;
 
 import com.microej.demo.smarthome.data.power.InstantPower;
+import com.microej.demo.smarthome.data.power.Power;
 import com.microej.demo.smarthome.data.power.PowerEventListener;
 import com.microej.demo.smarthome.style.ClassSelectors;
-import com.microej.demo.smarthome.widget.chart.Chart;
+import com.microej.demo.smarthome.widget.chart.BasicChart;
 import com.microej.demo.smarthome.widget.chart.ChartPoint;
 import com.microej.demo.smarthome.widget.chart.LineChart;
 
+import ej.widget.composed.Wrapper;
 import ej.widget.container.Scroll;
+import ej.widget.navigation.TransitionListener;
+import ej.widget.navigation.TransitionManager;
+import ej.widget.navigation.page.Page;
 
 /**
  *
  */
-public class PowerWidget extends DeviceWidget<Power> implements PowerEventListener {
+public class PowerWidget extends Wrapper implements PowerEventListener {
 
 	/**
 	 * Values
@@ -33,14 +36,17 @@ public class PowerWidget extends DeviceWidget<Power> implements PowerEventListen
 	/**
 	 * Attributes
 	 */
-	private Chart chart;
+	private final BasicChart chart;
+	private final Power model;
+	private final TransitionListener listener;
 
 	/**
 	 * Constructor
 	 */
 	public PowerWidget(Power model) {
-		super(model);
-		removeAllWidgets();
+		super();
+
+		this.model = model;
 
 		// create chart
 		this.chart = new LineChart();
@@ -69,7 +75,31 @@ public class PowerWidget extends DeviceWidget<Power> implements PowerEventListen
 		// load chart data
 		reload();
 
-		setCenter(scroll);
+		setWidget(scroll);
+
+		listener = new TransitionListener() {
+
+			@Override
+			public void onTransitionStop() {
+				if (isShown()) {
+					chart.startAnimation();
+				}
+
+			}
+
+			@Override
+			public void onTransitionStep(int step) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onTransitionStart(int transitionsSteps, int transitionsStop, Page from, Page to) {
+				reload();
+				chart.stopAnimation();
+
+			}
+		};
 	}
 
 	/**
@@ -110,14 +140,16 @@ public class PowerWidget extends DeviceWidget<Power> implements PowerEventListen
 
 	@Override
 	public void showNotify() {
+		System.out.println("PowerWidget.showNotify()");
+		TransitionManager.addGlobalTransitionListener(listener);
 		super.showNotify();
-		model.addListener(this);
-		reload();
 	}
 
 	@Override
 	public void hideNotify() {
-		model.removeListener(this);
+		System.out.println("PowerWidget.hideNotify()");
+		super.hideNotify();
+		TransitionManager.removeGlobalTransitionListener(listener);
 	}
 
 }

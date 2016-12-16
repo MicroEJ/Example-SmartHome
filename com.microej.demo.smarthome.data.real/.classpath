@@ -7,9 +7,9 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/sew.lifx"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/sew.light"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/sew.philipshue"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/sew.sonos"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/sew.upnp"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/sew.util"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.microej.demo.smarthome.util"/>
 	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=test2&amp;ivyXmlPath=module.ivy&amp;confs=*"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

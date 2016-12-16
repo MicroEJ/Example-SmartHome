@@ -7,7 +7,7 @@
 package com.microej.demo.smarthome.data.fake.door;
 
 import com.microej.demo.smarthome.data.door.DoorEventListener;
-import com.microej.demo.smarthome.data.fake.Device;
+import com.microej.demo.smarthome.data.impl.Device;
 
 /**
  *

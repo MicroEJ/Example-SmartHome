@@ -9,9 +9,10 @@ package com.microej.demo.smarthome.data.zwave;
 import java.io.IOException;
 import java.util.Iterator;
 
-import com.microej.demo.smarthome.data.fake.Device;
+import com.microej.demo.smarthome.data.impl.Device;
 import com.microej.demo.smarthome.data.thermostat.Thermostat;
 import com.microej.demo.smarthome.data.thermostat.ThermostatEventListener;
+import com.microej.demo.smarthome.util.ExecutorUtils;
 
 import ej.basedriver.EventControllerListener;
 import ej.basedriver.MultilevelSensor;
@@ -145,10 +146,16 @@ public class ZwaveThermostatSensor extends Device<ThermostatEventListener> imple
 			if (thermostat != null) {
 				ThermostatMode mode = thermostat.getLastknownMode();
 				if (mode != null) {
-					try {
-						mode.setValue(toThermostat(temperature));
-					} catch (IOException e) {
-					}
+					ExecutorUtils.getExecutor(ExecutorUtils.LOW_PRIORITY).execute(new Runnable() {
+
+						@Override
+						public void run() {
+							try {
+								mode.setValue(toThermostat(temperature));
+							} catch (IOException e) {
+							}
+						}
+					});
 				}
 			}
 			for (ThermostatEventListener thermostatEventListener : listeners) {

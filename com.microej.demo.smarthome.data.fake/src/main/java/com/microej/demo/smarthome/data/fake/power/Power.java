@@ -9,7 +9,7 @@ package com.microej.demo.smarthome.data.fake.power;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.microej.demo.smarthome.data.fake.Device;
+import com.microej.demo.smarthome.data.impl.Device;
 import com.microej.demo.smarthome.data.power.InstantPower;
 import com.microej.demo.smarthome.data.power.PowerEventListener;
 
@@ -22,7 +22,7 @@ implements com.microej.demo.smarthome.data.power.Power {
 	/**
 	 * Values
 	 */
-	private static final int MAX_POWER_AT_A_TIME = 24;
+	private static final int MAX_POWER_AT_A_TIME = 15;
 	private static final int MAX_PC = 6000;
 
 	/**

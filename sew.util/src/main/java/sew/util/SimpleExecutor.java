@@ -13,6 +13,7 @@ public class SimpleExecutor implements Executor {
 	private final Thread runner;
 
 	public SimpleExecutor() {
+		System.out.println("SimpleExecutor.SimpleExecutor()");
 		this.tasks = new ArrayDeque<Runnable>();
 		this.runner = new Thread("Executor") {
 			@Override

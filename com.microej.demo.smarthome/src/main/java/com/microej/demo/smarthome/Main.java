@@ -6,20 +6,21 @@
  */
 package com.microej.demo.smarthome;
 
+import com.microej.demo.smarthome.data.light.LightProvider;
 import com.microej.demo.smarthome.page.SmartHomePage;
 import com.microej.demo.smarthome.style.StylePopulator;
 
+import ej.components.dependencyinjection.ServiceLoaderFactory;
 import ej.microui.MicroUI;
 import ej.mwt.Desktop;
 import ej.mwt.Panel;
-import ej.widget.navigation.navigator.SimpleNavigator;
 
 /**
  *
  */
 public class Main {
 
-	private static SimpleNavigator navigator;
+	private static SmartHomePage smartHomePage;
 
 	/**
 	 * @param args
@@ -29,13 +30,13 @@ public class Main {
 
 		StylePopulator.initializeStylesheet();
 
-		navigator = new SimpleNavigator();
-		navigator.show(SmartHomePage.class.getName(), true);
+		ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class);
+
 		Desktop desktop = new Desktop();
 		Panel panel = new Panel();
-		panel.setWidget(navigator);
+		smartHomePage = new SmartHomePage();
+		panel.setWidget(smartHomePage);
 		panel.show(desktop, true);
 		desktop.show();
 	}
-
 }

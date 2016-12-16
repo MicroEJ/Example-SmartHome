@@ -43,4 +43,5 @@ public class GraphPage extends DevicePage<Power> {
 		return menuButton;
 	}
 
+
 }

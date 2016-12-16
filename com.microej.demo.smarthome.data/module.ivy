@@ -29,6 +29,7 @@
 			Other regular runtime dependencies are in the "default" configuration  
 		-->
 		<dependency conf="provided->*" org="ej.api" name="edc" rev="[1.2.0-RC0,2.0.0-RC0["/>
+		<dependency conf="provided->*" org="ej.api" name="bon" rev="[1.2.0-RC0,2.0.0-RC0["/>
 		
 		<!-- 
 			Put your project dependencies here. An example of project dependency declaration 

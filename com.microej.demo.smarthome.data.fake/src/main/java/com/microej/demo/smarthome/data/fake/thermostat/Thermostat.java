@@ -8,8 +8,8 @@ package com.microej.demo.smarthome.data.fake.thermostat;
 
 import java.util.Random;
 
-import com.microej.demo.smarthome.data.fake.Device;
-import com.microej.demo.smarthome.data.fake.Provider;
+import com.microej.demo.smarthome.data.impl.Device;
+import com.microej.demo.smarthome.data.impl.Provider;
 import com.microej.demo.smarthome.data.thermostat.ThermostatEventListener;
 
 import ej.bon.TimerTask;

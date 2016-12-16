@@ -8,7 +8,7 @@ package com.microej.demo.smarthome.data.zwave;
 
 import com.microej.demo.smarthome.data.door.Door;
 import com.microej.demo.smarthome.data.door.DoorEventListener;
-import com.microej.demo.smarthome.data.fake.Device;
+import com.microej.demo.smarthome.data.impl.Device;
 
 import ej.basedriver.BinaryState;
 import ej.basedriver.DryContact;

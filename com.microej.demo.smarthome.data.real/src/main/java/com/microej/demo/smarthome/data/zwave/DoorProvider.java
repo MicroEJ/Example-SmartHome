@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import com.microej.demo.smarthome.data.door.Door;
-import com.microej.demo.smarthome.data.fake.Provider;
+import com.microej.demo.smarthome.data.impl.Provider;
 
 import ej.basedriver.Controller;
 import ej.basedriver.ControllerListener;
@@ -36,6 +36,7 @@ implements com.microej.demo.smarthome.data.door.DoorProvider {
 	 */
 	public DoorProvider() {
 		super();
+		System.out.println("DoorProvider.DoorProvider()");
 		sensors = new HashMap<>();
 		listener = new RegistrationListener<DryContact>() {
 

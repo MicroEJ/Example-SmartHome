@@ -9,7 +9,8 @@ package com.microej.demo.smarthome.data.philipshue;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.microej.demo.smarthome.data.fake.Provider;
+import com.microej.demo.smarthome.data.impl.Provider;
+import com.microej.demo.smarthome.util.ExecutorUtils;
 
 import ej.components.dependencyinjection.ServiceLoaderFactory;
 import sew.light.Light;
@@ -49,9 +50,16 @@ implements com.microej.demo.smarthome.data.light.LightProvider {
 
 		});
 
-		for (Light light : lightManager.getLights()) {
-			addLight(light);
-		}
+		ExecutorUtils.getExecutor(ExecutorUtils.LOW_PRIORITY).execute(new Runnable() {
+
+			@Override
+			public void run() {
+				for (Light light : lightManager.getLights()) {
+					addLight(light);
+				}
+			}
+		});
+
 	}
 
 	private void addLight(Light light) {

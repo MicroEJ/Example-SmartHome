@@ -22,6 +22,18 @@ import ej.components.dependencyinjection.ServiceLoaderFactory;
  */
 public class LightPage extends DevicePage<Light> implements ProviderListener<Light> {
 
+	/**
+	 *
+	 */
+	public LightPage() {
+		LightProvider provider = ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class);
+		provider.addListener(this);
+		Light[] list = provider.list();
+		for (Light light : list) {
+			newElement(light);
+		}
+	}
+
 	@Override
 	protected MenuButton createMenuButton() {
 		ImageMenuButton imageMenuButton = new ImageMenuButton(Images.LIGHTS);
@@ -31,12 +43,7 @@ public class LightPage extends DevicePage<Light> implements ProviderListener<Lig
 
 	@Override
 	public void showNotify() {
-		LightProvider provider = ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class);
-		provider.addListener(this);
-		Light[] list = provider.list();
-		for (Light light : list) {
-			newElement(light);
-		}
+
 
 		super.showNotify();
 	}
@@ -44,14 +51,15 @@ public class LightPage extends DevicePage<Light> implements ProviderListener<Lig
 	@Override
 	public void hideNotify() {
 		super.hideNotify();
-		LightProvider provider = ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class);
-		removeAllWidgets();
-		provider.removeListener(this);
+		// LightProvider provider = ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class);
+		// removeAllWidgets();
+		// provider.removeListener(this);
 
 	}
 
 	@Override
 	public void newElement(Light element) {
+		System.out.println("LightPage.newElement()");
 		LightWidget device = new LightWidget(element);
 		addDevice(element, device);
 		if (isShown()) {
