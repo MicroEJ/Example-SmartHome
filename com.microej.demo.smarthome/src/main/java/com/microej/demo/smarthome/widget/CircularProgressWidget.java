@@ -44,6 +44,7 @@ public class CircularProgressWidget extends BoundedRange {
 	protected int diameter;
 	protected int offset;
 	protected int currentArcAngle;
+	protected Integer customColor;
 
 	/**
 	 * @param model
@@ -94,7 +95,12 @@ public class CircularProgressWidget extends BoundedRange {
 		shapes.drawCircleArc(g, x, y, diameter, startAngle, arcAngle);
 
 		if (isEnabled() && currentArcAngle != 0) {
-			g.setColor(style.getForegroundColor());
+			if (customColor != null) {
+				g.setColor(customColor);
+			} else {
+				g.setColor(style.getForegroundColor());
+			}
+
 			shapes.setFade(fade);
 			shapes.setThickness(thickness);
 			shapes.drawCircleArc(g, offset + x, offset + y, (diameter - (offset << 1)), startAngle,
@@ -252,8 +258,10 @@ public class CircularProgressWidget extends BoundedRange {
 				case Pointer.DRAGGED:
 				case Pointer.PRESSED:
 				case Pointer.RELEASED:
-					int pointerX = pointer.getX();
-					int pointerY = pointer.getY();
+					Rectangle rect = new Rectangle();
+					getStyle().getMargin().wrap(rect);
+					int pointerX = pointer.getX() + rect.getX();
+					int pointerY = pointer.getY() + rect.getY();
 					int computeValue = computeValue(this.getRelativeX(pointerX), this.getRelativeY(pointerY));
 					performValueChange(computeValue);
 					return true;

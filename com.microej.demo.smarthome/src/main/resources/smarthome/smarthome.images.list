@@ -16,3 +16,8 @@ images/dashboard/security_active.png:ARGB4444
 
 images/door_open.png:ARGB4444
 images/door_closed.png:ARGB4444
+
+images/toggle_on.png:ARGB4444
+images/toggle_off.png:ARGB4444
+
+images/color_picker.png:ARGB8888
