@@ -120,37 +120,52 @@ public class StylePopulator {
 		}
 
 		{ // Light
+
 			{ // Light widget
 				EditableStyle lightWidgetStyle = new EditableStyle();
-				lightWidgetStyle.setPadding(new ComplexOutline(0, 0, DOUBLE_OUTLINE, 0));
+				lightWidgetStyle.setPadding(new ComplexOutline(SIMPLE_OUTLINE, 0, DOUBLE_OUTLINE, 0));
 				stylesheet.addRule(new ClassSelector(ClassSelectors.LIGHT_WIDGET), lightWidgetStyle);
 			}
 	
 			{ // Light progress
-				EditableStyle lightStyle = new EditableStyle();
-				lightStyle.setBackgroundColor(Colors.CONCRETE_25);
-				lightStyle.setForegroundColor(Colors.CORAL);
-				lightStyle.setMargin(defaultOutline);
-				lightStyle.setPadding(new ComplexOutline(0, 0, DOUBLE_OUTLINE, 0));
-				stylesheet.addRule(new ClassSelector(ClassSelectors.LIGHT_PROGRESS), lightStyle);
+				EditableStyle lightProgressStyle = new EditableStyle();
+				lightProgressStyle.setBackgroundColor(Colors.CONCRETE_25);
+				lightProgressStyle.setForegroundColor(Colors.CORAL);
+				lightProgressStyle.setMargin(new ComplexOutline(SIMPLE_OUTLINE/2, 0, SIMPLE_OUTLINE/2, 0));
+				stylesheet.addRule(new ClassSelector(ClassSelectors.LIGHT_PROGRESS), lightProgressStyle);
+			}
+	
+			{ // Light toggle
+				EditableStyle lightToggleStyle = new EditableStyle();
+				lightToggleStyle.setMargin(new ComplexOutline(0, 0, DOUBLE_OUTLINE, 0));
+				stylesheet.addRule(new ClassSelector(ClassSelectors.LIGHT_TOGGLE), lightToggleStyle);
 			}
 
-			ClassSelector lightValueSelector = new ClassSelector(ClassSelectors.LIGHT_VALUE);
-			{ // Light percentage value
-				EditableStyle lightPercentageValueStyle = new EditableStyle();
-				lightPercentageValueStyle.setForegroundColor(Colors.CORAL);
-				lightPercentageValueStyle.setFontProfile(fpLarge);
-				lightPercentageValueStyle.setAlignment(GraphicsContext.TOP | GraphicsContext.RIGHT);
-				stylesheet.addRule(lightValueSelector, lightPercentageValueStyle);
-			}
+		}
 
-			{ // Light percentage value
-				EditableStyle lightPercentageStyle = new EditableStyle();
-				lightPercentageStyle.setForegroundColor(Colors.CONCRETE_25);
-				lightPercentageStyle.setAlignment(GraphicsContext.TOP | GraphicsContext.LEFT);
-				stylesheet.addRule(new AndCombinator(new ClassSelector(ClassSelectors.TYPE), lightValueSelector),
-						lightPercentageStyle);
-				stylesheet.addRule(new ClassSelector(ClassSelectors.LIGHT_VALUE_OFF), lightPercentageStyle);
+		{ // Color picker
+
+			{ // Picker
+				EditableStyle pickerStyle = new EditableStyle();
+				pickerStyle.setForegroundColor(Colors.BLACK_50);
+				pickerStyle.setBackgroundColor(Colors.WHITE);
+				stylesheet.addRule(new ClassSelector(ClassSelectors.PICKER), pickerStyle);
+			}
+	
+			{ // Title label
+				EditableStyle pickerTitleStyle = new EditableStyle();
+				pickerTitleStyle.setForegroundColor(Colors.CONCRETE_25);
+				pickerTitleStyle.setAlignment(GraphicsContext.LEFT | GraphicsContext.VCENTER);
+				pickerTitleStyle.setPadding(new ComplexOutline(0, 0, 0, DOUBLE_OUTLINE));
+				stylesheet.addRule(new ClassSelector(ClassSelectors.PICKER_TITLE_LABEL), pickerTitleStyle);
+			}
+	
+			{ // Close button
+				EditableStyle pickerCloseStyle = new EditableStyle();
+				pickerCloseStyle.setForegroundColor(Colors.CORAL);
+				pickerCloseStyle.setAlignment(GraphicsContext.RIGHT | GraphicsContext.VCENTER);
+				pickerCloseStyle.setPadding(new ComplexOutline(0, DOUBLE_OUTLINE, 0, 0));
+				stylesheet.addRule(new ClassSelector(ClassSelectors.PICKER_CLOSE_BUTTON), pickerCloseStyle);
 			}
 
 		}
