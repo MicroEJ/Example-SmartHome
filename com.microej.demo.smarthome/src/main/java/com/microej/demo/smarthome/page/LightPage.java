@@ -11,8 +11,8 @@ import com.microej.demo.smarthome.data.light.LightProvider;
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Images;
 import com.microej.demo.smarthome.widget.ImageMenuButton;
-import com.microej.demo.smarthome.widget.LightWidget;
 import com.microej.demo.smarthome.widget.MenuButton;
+import com.microej.demo.smarthome.widget.light.LightWidget;
 
 import ej.components.dependencyinjection.ServiceLoaderFactory;
 

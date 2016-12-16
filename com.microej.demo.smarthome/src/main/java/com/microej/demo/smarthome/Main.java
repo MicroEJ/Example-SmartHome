@@ -19,7 +19,7 @@ import ej.widget.navigation.navigator.SimpleNavigator;
  */
 public class Main {
 
-	private static SimpleNavigator navigator;
+	private static Desktop desktop;
 
 	/**
 	 * @param args
@@ -29,12 +29,17 @@ public class Main {
 
 		StylePopulator.initializeStylesheet();
 
-		navigator = new SimpleNavigator();
+		SimpleNavigator navigator = new SimpleNavigator();
 		navigator.show(SmartHomePage.class.getName(), true);
-		Desktop desktop = new Desktop();
+
+		desktop = new Desktop();
 		Panel panel = new Panel();
 		panel.setWidget(navigator);
 		panel.show(desktop, true);
+		desktop.show();
+	}
+
+	public static void showDesktop() {
 		desktop.show();
 	}
 
