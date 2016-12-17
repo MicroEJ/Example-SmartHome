@@ -24,6 +24,8 @@ import ej.widget.model.DefaultBoundedRangeModel;
  */
 public class CircularProgressWidget extends BoundedRange {
 
+	private static int EVENT_RATE = 80;
+
 	private static final int DEFAULT_START_ANGLE = -120;
 	private static final int DEFAULT_ARC_ANGLE = -300;
 	private static final int DEFAULT_FADE_FULL = 1;
@@ -45,6 +47,8 @@ public class CircularProgressWidget extends BoundedRange {
 	protected int offset;
 	protected int currentArcAngle;
 	protected Integer customColor;
+
+	private long nextEvent;
 
 	/**
 	 * @param model
@@ -251,20 +255,24 @@ public class CircularProgressWidget extends BoundedRange {
 	@Override
 	public boolean handleEvent(int event) {
 		if (isEnabled()) {
-			if(Event.getType(event)==Event.POINTER){
-				Pointer pointer = (Pointer) Event.getGenerator(event);
-				int action = Pointer.getAction(event);
-				switch (action) {
-				case Pointer.DRAGGED:
-				case Pointer.PRESSED:
-				case Pointer.RELEASED:
-					Rectangle rect = new Rectangle();
-					getStyle().getMargin().wrap(rect);
-					int pointerX = pointer.getX() + rect.getX();
-					int pointerY = pointer.getY() + rect.getY();
-					int computeValue = computeValue(this.getRelativeX(pointerX), this.getRelativeY(pointerY));
-					performValueChange(computeValue);
-					return true;
+			long currentTime = System.currentTimeMillis();
+			if (currentTime > nextEvent) {
+				nextEvent = currentTime + EVENT_RATE;
+				if(Event.getType(event)==Event.POINTER){
+					Pointer pointer = (Pointer) Event.getGenerator(event);
+					int action = Pointer.getAction(event);
+					switch (action) {
+					case Pointer.DRAGGED:
+					case Pointer.PRESSED:
+					case Pointer.RELEASED:
+						Rectangle rect = new Rectangle();
+						getStyle().getMargin().wrap(rect);
+						int pointerX = pointer.getX() + rect.getX();
+						int pointerY = pointer.getY() + rect.getY();
+						int computeValue = computeValue(this.getRelativeX(pointerX), this.getRelativeY(pointerY));
+						performValueChange(computeValue);
+						return true;
+					}
 				}
 			}
 		}

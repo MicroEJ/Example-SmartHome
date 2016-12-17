@@ -67,19 +67,19 @@ public class LightCircularProgress extends CircularProgressWidget {
 	public boolean handleEvent(int event) {
 		if (isEnabled()) {
 			if (Event.getType(event) == Event.POINTER) {
-				if (Pointer.getAction(event) == Pointer.RELEASED) {
-					Pointer pointer = (Pointer) Event.getGenerator(event);
-					int pointerX = this.getRelativeX(pointer.getX());
-					int pointerY = this.getRelativeY(pointer.getY());
-					int radius = diameter / 2;
-					int dX = pointerX - (x + radius);
-					int dY = pointerY - (y + radius);
-					int d2 = dX*dX + dY*dY;
-					int r = radius / 2;
-					if (d2 <= r * r) {
+				Pointer pointer = (Pointer) Event.getGenerator(event);
+				int pointerX = this.getRelativeX(pointer.getX());
+				int pointerY = this.getRelativeY(pointer.getY());
+				int radius = diameter / 2;
+				int dX = pointerX - (x + radius);
+				int dY = pointerY - (y + radius);
+				int d2 = dX*dX + dY*dY;
+				int r = radius / 2;
+				if (d2 <= r * r) {
+					if (Pointer.getAction(event) == Pointer.RELEASED) {
 						this.onClickListener.onClick();
-						return true;
 					}
+					return true;
 				}
 			}
 		}

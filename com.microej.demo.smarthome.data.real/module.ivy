@@ -39,15 +39,9 @@
 		<dependency org="ej.library.iot.basedriver" name="basedriver-util" rev="[1.0.0-RC0,2.0.0-RC0["/>		
 
 		<dependency org="sew.library" name="light.philipshue" rev="+" />
-		<dependency org="ej.library.runtime" name="components" rev="[3.0.0-RC0,4.0.0-RC0[" />
-		<dependency org="ej.library.eclasspath" name="url" rev="[1.0.0-RC0,2.0.0-RC0[" />
-		<dependency org="ej.library.eclasspath" name="httpclient" rev="[1.0.0-RC0,2.0.0-RC0[" />
-		<dependency org="ej.library.eclasspath" name="executor" rev="[1.0.0-RC0,2.0.0-RC0[" />
-		<dependency org="ej.library.eclasspath" name="queues" rev="[1.0.0-RC0,2.0.0-RC0[" />
+
 		<dependency org="org.kxml2" name="kxml2" rev="[2.3.0-RC0,3.0.0-RC0[" />
 		<dependency org="org.json.me" name="json" rev="[1.0.0-RC0,2.0.0-RC0[" />
-		
-		
 		
 		<dependency org="ej.library.iot" name="connectivity" rev="[1.0.0-RC,2.0.0-RC["/>
 		

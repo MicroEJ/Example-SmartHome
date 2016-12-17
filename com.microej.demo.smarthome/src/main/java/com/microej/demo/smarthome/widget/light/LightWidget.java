@@ -14,8 +14,9 @@ import com.microej.demo.smarthome.widget.DeviceWidget;
 
 import ej.mwt.Desktop;
 import ej.mwt.Panel;
-import ej.widget.composed.ButtonImage;
+import ej.widget.basic.image.ImageSwitch;
 import ej.widget.listener.OnClickListener;
+import ej.widget.listener.OnStateChangeListener;
 import ej.widget.listener.OnValueChangeListener;
 import ej.widget.model.BoundedRangeModel;
 import ej.widget.model.DefaultBoundedRangeModel;
@@ -23,19 +24,13 @@ import ej.widget.model.DefaultBoundedRangeModel;
 /**
  *
  */
-public class LightWidget extends DeviceWidget<Light> implements LightEventListener {
-
-	/**
-	 * Values
-	 */
-	private static final String IMAGE_TOGGLE_ON = "/images/toggle_on.png";
-	private static final String IMAGE_TOGGLE_OFF = "/images/toggle_off.png";
+public class LightWidget extends DeviceWidget<Light> implements LightEventListener, OnStateChangeListener {
 
 	/**
 	 * Attributes
 	 */
 	private final LightCircularProgress circular;
-	private final ButtonImage toggleButton;
+	private final ImageSwitch switchButton;
 
 	/**
 	 * Constructor
@@ -53,21 +48,33 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 				changeColor();
 			}
 		});
+		circular.addOnValueChangeListener(new OnValueChangeListener() {
+
+			@Override
+			public void onValueChange(int newValue) {
+				setBrightness(circular.getPercentComplete());
+
+			}
+
+			@Override
+			public void onMinimumValueChange(int newMinimum) {
+			}
+
+			@Override
+			public void onMaximumValueChange(int newMaximum) {
+			}
+		});
 		circular.addClassSelector(ClassSelectors.LIGHT_PROGRESS);
 
 		// toggle button
-		toggleButton = new ButtonImage(model.isOn() ? IMAGE_TOGGLE_ON : IMAGE_TOGGLE_OFF);
-		toggleButton.addOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick() {
-				toggle();
-			}
-		});
-		toggleButton.addClassSelector(ClassSelectors.LIGHT_PROGRESS);
+		switchButton = new ImageSwitch();
+		switchButton.setChecked(model.isOn());
+		switchButton.addOnStateChangeListener(this);
+		switchButton.addClassSelector(ClassSelectors.LIGHT_PROGRESS);
 
 		// place widgets
 		setCenter(circular);
-		addBottom(toggleButton);
+		addBottom(switchButton);
 
 		// set initial state
 		circular.setColor(model.getColor());
@@ -96,7 +103,8 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 	@Override
 	public void onStateChange(boolean on) {
 		circular.setEnabled(on);
-		toggleButton.setSource(on ? IMAGE_TOGGLE_ON : IMAGE_TOGGLE_OFF);
+		switchButton.setChecked(on);
+		model.switchOn(on);
 	}
 
 	/**
@@ -107,13 +115,7 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 		int max = circular.getMaximum();
 		float value = brightness * (max - min) + min;
 		circular.setValue((int) value);
-	}
-
-	/**
-	 * Toggles the light
-	 */
-	private void toggle() {
-		model.switchOn(!model.isOn());
+		model.setBrightness(brightness);
 	}
 
 	/**

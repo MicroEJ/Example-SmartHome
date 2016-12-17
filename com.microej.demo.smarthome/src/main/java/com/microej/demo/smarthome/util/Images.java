@@ -16,4 +16,7 @@ public interface Images {
 	String SECURITY = "security";
 	String DOOR_OPEN = "door_open";
 	String DOOR_CLOSED = "door_closed";
+
+	String TOGGLE_ON = "/images/toggle_on.png";
+	String TOGGLE_OFF = "/images/toggle_off.png";
 }

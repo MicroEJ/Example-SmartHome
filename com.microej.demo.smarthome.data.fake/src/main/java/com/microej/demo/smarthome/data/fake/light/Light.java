@@ -44,17 +44,21 @@ public class Light extends Device<LightEventListener> implements com.microej.dem
 
 	@Override
 	public void setBrightness(float brightness) {
-		this.brightness = brightness;
-		for (LightEventListener lightEventListener : listeners) {
-			lightEventListener.onBrightnessChange(brightness);
+		if (this.brightness != brightness) {
+			this.brightness = brightness;
+			for (LightEventListener lightEventListener : listeners) {
+				lightEventListener.onBrightnessChange(brightness);
+			}
 		}
 	}
 
 	@Override
 	public void switchOn(boolean on) {
-		this.on = on;
-		for (LightEventListener lightEventListener : listeners) {
-			lightEventListener.onStateChange(on);
+		if (this.on != on) {
+			this.on = on;
+			for (LightEventListener lightEventListener : listeners) {
+				lightEventListener.onStateChange(on);
+			}
 		}
 	}
 
