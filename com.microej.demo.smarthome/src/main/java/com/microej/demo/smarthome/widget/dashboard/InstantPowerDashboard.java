@@ -9,7 +9,6 @@ package com.microej.demo.smarthome.widget.dashboard;
 import com.microej.demo.smarthome.data.power.InstantPower;
 import com.microej.demo.smarthome.data.power.Power;
 import com.microej.demo.smarthome.data.power.PowerEventListener;
-import com.microej.demo.smarthome.data.power.PowerProvider;
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Strings;
 import com.microej.demo.smarthome.widget.MaxWidthLabel;
@@ -34,8 +33,7 @@ public class InstantPowerDashboard extends Grid {
 	public InstantPowerDashboard() {
 		super(true, 2);
 		Flow text = new Flow(true);
-		PowerProvider powerProvider = ServiceLoaderFactory.getServiceLoader().getService(PowerProvider.class);
-		Power myPower = powerProvider.list()[0];
+		Power myPower = ServiceLoaderFactory.getServiceLoader().getService(Power.class);
 		power = new MaxWidthLabel(String.valueOf(myPower.getMaxPowerConsumption()));
 		power.addClassSelector(ClassSelectors.DASHBOARD_HUGE_TEXT);
 		power.addClassSelector(ClassSelectors.DASHBOARD_POWER_CONSUMPTION);
@@ -64,8 +62,7 @@ public class InstantPowerDashboard extends Grid {
 	@Override
 	public void showNotify() {
 		super.showNotify();
-		PowerProvider powerProvider = ServiceLoaderFactory.getServiceLoader().getService(PowerProvider.class);
-		Power myPower = powerProvider.list()[0];
+		Power myPower = ServiceLoaderFactory.getServiceLoader().getService(Power.class);
 		myPower.addListener(powerEventListener);
 		updateInstantPower(myPower.getInstantPowerConsumption());
 	}
@@ -73,8 +70,7 @@ public class InstantPowerDashboard extends Grid {
 	@Override
 	public void hideNotify() {
 		super.hideNotify();
-		PowerProvider powerProvider = ServiceLoaderFactory.getServiceLoader().getService(PowerProvider.class);
-		Power myPower = powerProvider.list()[0];
+		Power myPower = ServiceLoaderFactory.getServiceLoader().getService(Power.class);
 		myPower.removeListener(powerEventListener);
 	}
 
@@ -82,7 +78,6 @@ public class InstantPowerDashboard extends Grid {
 		int value = instantPower.getPower();
 		power.setText(String.valueOf(value));
 		powerBar.setValue(value);
-
 	}
 
 	@Override

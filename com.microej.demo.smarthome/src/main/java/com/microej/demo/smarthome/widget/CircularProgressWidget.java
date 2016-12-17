@@ -32,7 +32,7 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 
 	private static final int ANIMATION_STEPS = 8;
 
-	private static int EVENT_RATE = 80;
+	private static int EVENT_RATE = 50;
 
 	private static final int DEFAULT_START_ANGLE = -120;
 	private static final int DEFAULT_ARC_ANGLE = -300;
@@ -61,6 +61,8 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 	private long nextEvent;
 
 	private final TransitionListener transitionListener;
+
+	private boolean animated;
 
 
 	/**
@@ -384,23 +386,35 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 	}
 
 	public void startAnimation() {
-		if (isShown()) {
-			valueAnimation.start();
-			Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
-			animator.startAnimation(this);
-		} else {
-			currentArcAngle = computeAngle(valueAnimation.getCurrentValue());
+		if (!animated) {
+			animated = true;
+			if (isShown()) {
+				valueAnimation.start();
+				Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
+				animator.startAnimation(this);
+			} else {
+				currentArcAngle = computeAngle(valueAnimation.getCurrentValue());
+			}
 		}
 	}
 
 	public void stopAnimation() {
 		valueAnimation.stop();
+		animated = false;
 		Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
 		animator.stopAnimation(this);
 	}
 
 	@Override
 	public boolean tick(long currentTimeMillis) {
+		if (!doTick(currentTimeMillis)) {
+			animated = false;
+			return false;
+		}
+		return true;
+	}
+
+	public boolean doTick(long currentTimeMillis) {
 		if (valueAnimation.isFinished()) {
 			return false;
 		}

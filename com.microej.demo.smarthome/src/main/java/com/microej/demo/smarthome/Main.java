@@ -9,6 +9,9 @@ package com.microej.demo.smarthome;
 import com.microej.demo.smarthome.page.SmartHomePage;
 import com.microej.demo.smarthome.style.StylePopulator;
 
+import ej.bon.Timer;
+import ej.bon.TimerTask;
+import ej.components.dependencyinjection.ServiceLoaderFactory;
 import ej.microui.MicroUI;
 import ej.mwt.Desktop;
 import ej.mwt.Panel;
@@ -25,6 +28,15 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		ServiceLoaderFactory.getServiceLoader().getService(Timer.class, Timer.class).schedule(new TimerTask() {
+
+			@Override
+			public void run() {
+				Thread.currentThread().setName("MainTimer");
+
+			}
+		}, 0);
+
 		MicroUI.start();
 
 		StylePopulator.initializeStylesheet();

@@ -9,7 +9,6 @@ package com.microej.demo.smarthome.style;
 import com.microej.demo.smarthome.util.Colors;
 import com.microej.demo.smarthome.util.Constants;
 import com.microej.demo.smarthome.widget.CircularPlainBackground;
-import com.microej.demo.smarthome.widget.chart.BasicChart;
 
 import ej.bon.Util;
 import ej.microui.display.GraphicsContext;
@@ -295,6 +294,7 @@ public class StylePopulator {
 				EditableStyle dashboardTextStyle = new EditableStyle();
 				dashboardTextStyle.setAlignment(GraphicsContext.LEFT | GraphicsContext.VCENTER);
 				// dashboardTextStyle.setPadding(new ComplexOutline(4, 0, 0, 0));
+				dashboardTextStyle.setForegroundColor(Colors.CONCRETE_25);
 				dashboardTextStyle.setTextManager(new ComplexTextManager());
 				stylesheet.addRule(new ClassSelector(ClassSelectors.DASHBOARD_ITEM_TEXT), dashboardTextStyle);
 			}
@@ -356,21 +356,21 @@ public class StylePopulator {
 				chartScaleStyle.setFontProfile(fpSmall);
 				chartScaleStyle.setForegroundColor(Colors.LIGHT_CORAL);
 				chartScaleStyle.setBackgroundColor(Colors.DARK_CORAL);
-				stylesheet.addRule(new ClassSelector(BasicChart.CLASS_SELECTOR_SCALE), chartScaleStyle);
+				stylesheet.addRule(new ClassSelector(ClassSelectors.CLASS_SELECTOR_SCALE), chartScaleStyle);
 			}
 
 			{ // Chart selected info
 				EditableStyle chartInfoStyle = new EditableStyle();
 				chartInfoStyle.setFontProfile(fpSmall);
 				chartInfoStyle.setForegroundColor(Colors.CONCRETE_25);
-				stylesheet.addRule(new ClassSelector(BasicChart.CLASS_SELECTOR_SELECTED_INFO), chartInfoStyle);
+				stylesheet.addRule(new ClassSelector(ClassSelectors.CLASS_SELECTOR_SELECTED_INFO), chartInfoStyle);
 			}
 
 			{ // Chart selected value
 				EditableStyle chartValueStyle = new EditableStyle();
 				chartValueStyle.setFontProfile(fpSmall);
 				chartValueStyle.setForegroundColor(Colors.DARK_CORAL);
-				stylesheet.addRule(new ClassSelector(BasicChart.CLASS_SELECTOR_SELECTED_VALUE), chartValueStyle);
+				stylesheet.addRule(new ClassSelector(ClassSelectors.CLASS_SELECTOR_SELECTED_VALUE), chartValueStyle);
 			}
 
 		}

@@ -40,6 +40,7 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	 */
 	public ThermostatCircularProgress(ThermostatBoundedRangeModel model) {
 		super(model);
+		System.out.println("ThermostatCircularProgress.ThermostatCircularProgress()");
 		setThickness(8);
 		this.model = model;
 		target = new ValueAnimation(model.getValue(), model.getTargetValue(), model.getTargetValue(),
@@ -166,8 +167,8 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	}
 
 	@Override
-	public boolean tick(long currentTimeMillis) {
-		boolean tick = super.tick(currentTimeMillis);
+	public boolean doTick(long currentTimeMillis) {
+		boolean tick = super.doTick(currentTimeMillis);
 		if (!tick) {
 			if (target.isFinished()) {
 				return false;

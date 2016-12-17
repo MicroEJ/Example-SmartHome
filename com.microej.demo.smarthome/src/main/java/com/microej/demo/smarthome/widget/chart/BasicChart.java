@@ -6,6 +6,8 @@
  */
 package com.microej.demo.smarthome.widget.chart;
 
+import com.microej.demo.smarthome.style.ClassSelectors;
+
 import ej.animation.Animation;
 import ej.animation.Animator;
 import ej.components.dependencyinjection.ServiceLoaderFactory;
@@ -15,9 +17,8 @@ import ej.microui.display.shape.AntiAliasedShapes;
 import ej.microui.event.Event;
 import ej.microui.event.generator.Pointer;
 import ej.motion.Motion;
-import ej.motion.back.BackEaseInMotion;
-import ej.motion.bounce.BounceEaseOutMotion;
 import ej.motion.linear.LinearMotion;
+import ej.motion.none.NoMotion;
 import ej.mwt.MWT;
 import ej.style.Style;
 import ej.style.container.Rectangle;
@@ -32,20 +33,16 @@ import ej.style.util.StyleHelper;
 public abstract class BasicChart extends Chart implements Animation {
 
 	protected static final int LEFT_PADDING = 55;
-	protected static final int STEP_X = 30;
+	protected static final int STEP_X = 40;
 
-	private static final int APPARITION_DURATION = 750;
+	private static final int APPARITION_DURATION = 600;
 	private static final int APPARITION_STEPS = 100;
 
 	private static final int BUBBLE_RADIUS = 50;
 	private static final int ARROW_RADIUS = 14;
 
-	private static final int BUBBLE_ANIM_DURATION = 800;
+	private static final int BUBBLE_ANIM_DURATION = 300;
 	private static final int BUBBLE_ANIM_NUM_STEPS = 100;
-
-	public static final String CLASS_SELECTOR_SCALE = "chart-scale";
-	public static final String CLASS_SELECTOR_SELECTED_INFO = "chart-selected-info";
-	public static final String CLASS_SELECTOR_SELECTED_VALUE = "chart-selected-value";
 
 	/**
 	 * Elements
@@ -67,11 +64,12 @@ public abstract class BasicChart extends Chart implements Animation {
 	public BasicChart() {
 		super();
 		this.scaleElement = new ElementAdapter();
-		this.scaleElement.addClassSelector(CLASS_SELECTOR_SCALE);
+		this.scaleElement.addClassSelector(ClassSelectors.CLASS_SELECTOR_SCALE);
 		this.selectedInfoElement = new ElementAdapter();
-		this.selectedInfoElement.addClassSelector(CLASS_SELECTOR_SELECTED_INFO);
+		this.selectedInfoElement.addClassSelector(ClassSelectors.CLASS_SELECTOR_SELECTED_INFO);
 		this.selectedValueElement = new ElementAdapter();
-		this.selectedValueElement.addClassSelector(CLASS_SELECTOR_SELECTED_VALUE);
+		this.selectedValueElement.addClassSelector(ClassSelectors.CLASS_SELECTOR_SELECTED_VALUE);
+		motion = new NoMotion(0, 0);
 	}
 
 	/**
@@ -169,9 +167,9 @@ public abstract class BasicChart extends Chart implements Animation {
 		this.bubbleAnimationStep = (expand ? 0 : BUBBLE_ANIM_NUM_STEPS);
 		final Motion bubbleMotion;
 		if (expand) {
-			bubbleMotion = new BounceEaseOutMotion(0, BUBBLE_ANIM_NUM_STEPS, BUBBLE_ANIM_DURATION);
+			bubbleMotion = new LinearMotion(0, BUBBLE_ANIM_NUM_STEPS, BUBBLE_ANIM_DURATION);
 		} else {
-			bubbleMotion = new BackEaseInMotion(0, BUBBLE_ANIM_NUM_STEPS, BUBBLE_ANIM_DURATION);
+			bubbleMotion = new LinearMotion(0, BUBBLE_ANIM_NUM_STEPS, BUBBLE_ANIM_DURATION);
 		}
 
 		Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
@@ -242,9 +240,11 @@ public abstract class BasicChart extends Chart implements Animation {
 	/**
 	 * Render selected point value
 	 */
-	protected void renderSelectedPointValue(GraphicsContext g, Style style, Rectangle bounds) {
+	protected void renderSelectedPointValue(GraphicsContext g, Style style, Rectangle bounds, int firstDisplay,
+			int lastDisplay) {
 		Integer selectedPointIndex = getSelectedPoint();
-		if (selectedPointIndex != null) {
+		if (selectedPointIndex != null && selectedPointIndex > firstDisplay - 3
+				&& selectedPointIndex < lastDisplay + 3) {
 			ChartPoint selectedPoint = getPoints().get(selectedPointIndex);
 			float selectedPointValue = selectedPoint.getValue();
 			int fontHeight = StyleHelper.getFont(style).getHeight();
@@ -284,8 +284,14 @@ public abstract class BasicChart extends Chart implements Animation {
 			AntiAliasedShapes antiAliasedShapes = AntiAliasedShapes.Singleton;
 			antiAliasedShapes.setThickness(1);
 			antiAliasedShapes.setFade(1);
-			antiAliasedShapes.drawLine(g, valueX, valueY, arrow1X, arrow1Y);
-			antiAliasedShapes.drawLine(g, valueX, valueY, arrow2X, arrow2Y);
+
+			if (!isAnimated()) {
+				antiAliasedShapes.drawLine(g, valueX, valueY, arrow1X, arrow1Y);
+				antiAliasedShapes.drawLine(g, valueX, valueY, arrow2X, arrow2Y);
+			} else {
+				g.drawLine(valueX, valueY, arrow1X, arrow1Y);
+				g.drawLine(valueX, valueY, arrow2X, arrow2Y);
+			}
 
 			// fill bubble
 			int cX = centerX - bubbleRadius;
@@ -295,7 +301,11 @@ public abstract class BasicChart extends Chart implements Animation {
 
 			// draw anti aliased bubble
 			antiAliasedShapes.setThickness(2);
-			antiAliasedShapes.drawCircle(g, cX, cY, cD);
+			if (!isAnimated()) {
+				antiAliasedShapes.drawCircle(g, cX, cY, cD);
+			} else {
+				g.drawCircle(cX, cY, cD);
+			}
 
 			if (this.bubbleAnimationStep >= BUBBLE_ANIM_NUM_STEPS*3/4) {
 				// set info style
@@ -369,6 +379,10 @@ public abstract class BasicChart extends Chart implements Animation {
 		float finalLength = (yBarBottom - yBarTop) * (value / topValue);
 		int apparitionLength = (int) (finalLength * getAnimationRatio());
 		return yBarBottom - apparitionLength;
+	}
+
+	protected boolean isAnimated() {
+		return false;
 	}
 }
 

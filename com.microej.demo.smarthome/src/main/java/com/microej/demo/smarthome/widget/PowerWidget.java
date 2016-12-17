@@ -19,9 +19,6 @@ import com.microej.demo.smarthome.widget.chart.LineChart;
 
 import ej.widget.composed.Wrapper;
 import ej.widget.container.Scroll;
-import ej.widget.navigation.TransitionListener;
-import ej.widget.navigation.TransitionManager;
-import ej.widget.navigation.page.Page;
 
 /**
  *
@@ -38,7 +35,6 @@ public class PowerWidget extends Wrapper implements PowerEventListener {
 	 */
 	private final BasicChart chart;
 	private final Power model;
-	private final TransitionListener listener;
 
 	/**
 	 * Constructor
@@ -76,30 +72,6 @@ public class PowerWidget extends Wrapper implements PowerEventListener {
 		reload();
 
 		setWidget(scroll);
-
-		listener = new TransitionListener() {
-
-			@Override
-			public void onTransitionStop() {
-				if (isShown()) {
-					chart.startAnimation();
-				}
-
-			}
-
-			@Override
-			public void onTransitionStep(int step) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void onTransitionStart(int transitionsSteps, int transitionsStop, Page from, Page to) {
-				reload();
-				chart.stopAnimation();
-
-			}
-		};
 	}
 
 	/**
@@ -138,16 +110,20 @@ public class PowerWidget extends Wrapper implements PowerEventListener {
 		this.chart.repaint();
 	}
 
-	@Override
-	public void showNotify() {
-		TransitionManager.addGlobalTransitionListener(listener);
-		super.showNotify();
+	/**
+	 *
+	 * @see com.microej.demo.smarthome.widget.chart.BasicChart#startAnimation()
+	 */
+	public void startAnimation() {
+		chart.startAnimation();
 	}
 
-	@Override
-	public void hideNotify() {
-		super.hideNotify();
-		TransitionManager.removeGlobalTransitionListener(listener);
+	/**
+	 *
+	 * @see com.microej.demo.smarthome.widget.chart.BasicChart#stopAnimation()
+	 */
+	public void stopAnimation() {
+		chart.stopAnimation();
 	}
 
 }

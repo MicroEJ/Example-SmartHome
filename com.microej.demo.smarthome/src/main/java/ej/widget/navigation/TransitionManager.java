@@ -376,7 +376,7 @@ public abstract class TransitionManager {
 	 * @param currentPage
 	 */
 	public void notifyShow(Page currentPage) {
-		notifyTransitionStart(0, 0, currentPage, null);
+		notifyTransitionStart(0, 0, navigator.getPreviousPage(), currentPage);
 		notifyTransitionStop();
 	}
 
