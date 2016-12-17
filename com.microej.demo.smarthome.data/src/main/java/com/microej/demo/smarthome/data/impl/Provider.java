@@ -11,14 +11,11 @@ import java.util.List;
 
 import com.microej.demo.smarthome.data.ProviderListener;
 
-import ej.bon.Timer;
-
 /**
  *
  */
 public class Provider<T extends com.microej.demo.smarthome.data.Device>
 {
-	public final static Timer timer = new Timer();
 	private final List<ProviderListener<T>> listeners;
 	protected final List<T> devices;
 

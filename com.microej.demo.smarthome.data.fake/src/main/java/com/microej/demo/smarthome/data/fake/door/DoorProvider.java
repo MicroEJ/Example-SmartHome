@@ -8,7 +8,9 @@ package com.microej.demo.smarthome.data.fake.door;
 
 import com.microej.demo.smarthome.data.impl.Provider;
 
+import ej.bon.Timer;
 import ej.bon.TimerTask;
+import ej.components.dependencyinjection.ServiceLoaderFactory;
 
 /**
  *
@@ -23,7 +25,7 @@ implements com.microej.demo.smarthome.data.door.DoorProvider {
 		super();
 		Door door = new Door("Entrance");
 		add(door);
-		timer.schedule(new TimerTask() {
+		ServiceLoaderFactory.getServiceLoader().getService(Timer.class, Timer.class).schedule(new TimerTask() {
 
 			boolean open = true;
 
