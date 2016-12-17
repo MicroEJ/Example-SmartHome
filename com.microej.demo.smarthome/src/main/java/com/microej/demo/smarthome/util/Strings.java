@@ -27,7 +27,8 @@ public interface Strings {
 
 	String PLUS = "+";
 	String MINUS = "-";
-	String DEGREE = "°";
+	String DEGREE_CELSIUS = "°C";
+	String DEGREE_FAHRENHEIT = "°F";
 
 	String MAXPOWERTODAY = "MAX POWER TODAY";
 
