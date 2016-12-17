@@ -30,7 +30,10 @@ public class ThermostatWidget extends Grid {
 	private final Thermostat thermostat;
 	private final ThermostatBoundedRangeModel model;
 	private final ButtonWrapper button;
-	private DiffLabel diff;
+	private TemperatureLabel desiredTemperature;
+	private TemperatureLabel currentTemperature;
+	private String lastClassSelector = null;
+	private Label desiredLabel;
 
 	/**
 	 * @param thermostat
@@ -45,17 +48,14 @@ public class ThermostatWidget extends Grid {
 		ThermostatCircularProgress thermostatCircularProgress = new ThermostatCircularProgress(model);
 		thermostatCircularProgress.addClassSelector(ClassSelectors.THERMOSTAT);
 		composite.add(thermostatCircularProgress);
-		OnValueChangeListener onTargetValueChangeListener = new OnValueChangeListener() {
+		OnValueChangeListener onValueChangeListener = new OnValueChangeListener() {
 
 			@Override
 			public void onValueChange(int newValue) {
-				boolean visible = newValue != model.getTargetValue();
-				if (visible != button.isVisible()) {
-					button.setVisible(visible);
-					button.revalidate();
-				}
-				diff.setDif(newValue - thermostat.getTemperature());
-
+				desiredTemperature.setTemperature(thermostatCircularProgress.getTargetValue());
+				currentTemperature.setTemperature(thermostat.getTemperature());
+				updateClassSelectors(thermostat.getTemperature() / 10,
+						thermostatCircularProgress.getTargetValue() / 10);
 			}
 
 			@Override
@@ -70,7 +70,8 @@ public class ThermostatWidget extends Grid {
 
 			}
 		};
-		thermostatCircularProgress.addOnTargetValueChangeListener(onTargetValueChangeListener);
+		thermostatCircularProgress.addOnTargetValueChangeListener(onValueChangeListener);
+		thermostatCircularProgress.addOnValueChangeListener(onValueChangeListener);
 
 		button = new LimitedButtonWrapper();
 		button.setAdjustedToChild(false);
@@ -82,7 +83,6 @@ public class ThermostatWidget extends Grid {
 			@Override
 			public void onClick() {
 				thermostatCircularProgress.validateTagetValue();
-				onTargetValueChangeListener.onValueChange(thermostatCircularProgress.getTargetValue());
 
 			}
 		});
@@ -93,18 +93,18 @@ public class ThermostatWidget extends Grid {
 		add(composite);
 
 		add(createDesiredLabel());
+		updateClassSelectors(model.getValue(), model.getTargetValue());
 	}
 
 	/**
 	 * @return
 	 */
 	private Widget createDesiredLabel() {
-		Label topLabel = new Label(Strings.DESIRED);
-		topLabel.addClassSelector(ClassSelectors.THERMOSTAT_TOP_LABEL);
-		diff = new DiffLabel(thermostat, topLabel);
-		diff.setDif(thermostat.getTargetTemperature() - thermostat.getTemperature());
-		diff.addClassSelector(ClassSelectors.THERMOSTAT_BOTTOM_LABEL);
-		return createLabel(topLabel, diff);
+		desiredLabel = new Label(Strings.DESIRED);
+		desiredLabel.addClassSelector(ClassSelectors.THERMOSTAT_TOP_LABEL);
+		desiredTemperature = new TemperatureLabel(thermostat.getTargetTemperature(), thermostat.getMaxTemperature());
+		desiredTemperature.addClassSelector(ClassSelectors.THERMOSTAT_BOTTOM_LABEL);
+		return createLabel(desiredLabel, desiredTemperature);
 	}
 
 	/**
@@ -114,10 +114,10 @@ public class ThermostatWidget extends Grid {
 		Label topLabel = new Label(Strings.CURRENT);
 		topLabel.addClassSelector(ClassSelectors.THERMOSTAT_TOP_LABEL);
 		topLabel.addClassSelector(ClassSelectors.THERMOSTAT_CURRENT);
-		ThermostatLabel bottomLabel = new ThermostatLabel(thermostat);
-		bottomLabel.addClassSelector(ClassSelectors.THERMOSTAT_BOTTOM_LABEL);
+		currentTemperature = new TemperatureLabel(model.getValue(), model.getMaximum());
+		currentTemperature.addClassSelector(ClassSelectors.THERMOSTAT_BOTTOM_LABEL);
 
-		return createLabel(topLabel, bottomLabel);
+		return createLabel(topLabel, currentTemperature);
 	}
 
 	private Widget createLabel(Widget top, Widget bottom) {
@@ -129,5 +129,30 @@ public class ThermostatWidget extends Grid {
 		label.setAdjustedToChild(false);
 
 		return label;
+	}
+
+	private void updateClassSelectors(int current, int target) {
+		if (current == target) {
+			setDesiredClassSelector(null);
+		} else if (current > target) {
+			setDesiredClassSelector(ClassSelectors.THERMOSTAT_DESIRED_COLD);
+		} else /* current < target */ {
+			setDesiredClassSelector(ClassSelectors.COLOR_CORAL);
+		}
+	}
+
+	private void setDesiredClassSelector(String classSelector) {
+		if (lastClassSelector != classSelector) {
+			if (lastClassSelector != null) {
+				desiredTemperature.removeClassSelector(lastClassSelector);
+				desiredLabel.removeClassSelector(lastClassSelector);
+			}
+			if (classSelector != null) {
+				desiredTemperature.addClassSelector(classSelector);
+				desiredLabel.addClassSelector(classSelector);
+			}
+
+			lastClassSelector = classSelector;
+		}
 	}
 }

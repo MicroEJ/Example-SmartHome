@@ -6,6 +6,9 @@
  */
 package com.microej.demo.smarthome.widget;
 
+import ej.animation.Animation;
+import ej.animation.Animator;
+import ej.components.dependencyinjection.ServiceLoaderFactory;
 import ej.microui.display.GraphicsContext;
 import ej.microui.display.shape.AntiAliasedShapes;
 import ej.microui.event.Event;
@@ -18,11 +21,16 @@ import ej.widget.basic.BoundedRange;
 import ej.widget.listener.OnValueChangeListener;
 import ej.widget.model.BoundedRangeModel;
 import ej.widget.model.DefaultBoundedRangeModel;
+import ej.widget.navigation.TransitionListener;
+import ej.widget.navigation.TransitionManager;
+import ej.widget.navigation.page.Page;
 
 /**
  *
  */
-public class CircularProgressWidget extends BoundedRange {
+public class CircularProgressWidget extends BoundedRange implements Animation {
+
+	private static final int ANIMATION_STEPS = 8;
 
 	private static int EVENT_RATE = 80;
 
@@ -39,6 +47,7 @@ public class CircularProgressWidget extends BoundedRange {
 	private final OnValueChangeListener listener;
 	protected int fade = DEFAULT_FADE;
 	protected int thickness = DEFAULT_THICKNESS;
+	protected int animationProgress = 1;
 
 	// used to compute relative position.
 	protected int x;
@@ -47,15 +56,20 @@ public class CircularProgressWidget extends BoundedRange {
 	protected int offset;
 	protected int currentArcAngle;
 	protected Integer customColor;
+	protected final ValueAnimation valueAnimation;
 
 	private long nextEvent;
+
+	private final TransitionListener transitionListener;
+
 
 	/**
 	 * @param model
 	 */
 	public CircularProgressWidget(BoundedRangeModel model) {
 		super(model);
-		currentArcAngle = computeAngle(getValue());
+		animationProgress = model.getMaximum() / ANIMATION_STEPS;
+		currentArcAngle = computeAngle(getMinimum());
 		listener = new OnValueChangeListener() {
 			@Override
 			public void onValueChange(int newValue) {
@@ -75,6 +89,31 @@ public class CircularProgressWidget extends BoundedRange {
 
 			}
 		};
+
+		transitionListener = new TransitionListener() {
+
+			@Override
+			public void onTransitionStop() {
+				startAnimation();
+
+			}
+
+			@Override
+			public void onTransitionStep(int step) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onTransitionStart(int transitionsSteps, int transitionsStop, Page from, Page to) {
+				stopAnimation();
+				initAnimation();
+
+			}
+		};
+
+		valueAnimation = new ValueAnimation(model.getMinimum(), model.getValue(), model.getValue(),
+				model.getMaximum());
 	}
 
 	/**
@@ -282,8 +321,9 @@ public class CircularProgressWidget extends BoundedRange {
 	@Override
 	public void setValue(int value) {
 		super.setValue(value);
-		currentArcAngle = computeAngle(value);
-		repaint();
+		valueAnimation.setTargetValue(value);
+		startAnimation();
+
 	}
 
 	protected void performValueChange(int value) {
@@ -328,11 +368,45 @@ public class CircularProgressWidget extends BoundedRange {
 	public void showNotify() {
 		super.showNotify();
 		addOnValueChangeListener(listener);
+		TransitionManager.addGlobalTransitionListener(transitionListener);
 	}
 
 	@Override
 	public void hideNotify() {
 		super.hideNotify();
 		removeOnValueChangeListener(listener);
+		TransitionManager.removeGlobalTransitionListener(transitionListener);
+	}
+
+	public void initAnimation() {
+		valueAnimation.reset();
+		currentArcAngle = computeAngle(valueAnimation.getCurrentValue());
+	}
+
+	public void startAnimation() {
+		if (isShown()) {
+			valueAnimation.start();
+			Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
+			animator.startAnimation(this);
+		} else {
+			currentArcAngle = computeAngle(valueAnimation.getCurrentValue());
+		}
+	}
+
+	public void stopAnimation() {
+		valueAnimation.stop();
+		Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
+		animator.stopAnimation(this);
+	}
+
+	@Override
+	public boolean tick(long currentTimeMillis) {
+		if (valueAnimation.isFinished()) {
+			return false;
+		}
+		valueAnimation.tick(currentTimeMillis);
+		currentArcAngle = computeAngle(valueAnimation.getCurrentValue());
+		repaint();
+		return true;
 	}
 }

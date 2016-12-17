@@ -32,7 +32,7 @@ implements com.microej.demo.smarthome.data.light.Light, LightListener {
 	public HueLightSensor(Light light) {
 		super(light.getName());
 		this.light = light;
-		color = new Color(0, 0, 0);
+		color = new Color(0.8f, 1, 1f);
 		isOn = true;
 		ExecutorUtils.getExecutor(ExecutorUtils.LOW_PRIORITY).execute(new Runnable() {
 
@@ -41,7 +41,7 @@ implements com.microej.demo.smarthome.data.light.Light, LightListener {
 				onLightUpdate(light);
 			}
 		});
-		rgbColor = 0xFFFFFF;
+		rgbColor = 0xFF0300;
 		light.addListener(this);
 	}
 

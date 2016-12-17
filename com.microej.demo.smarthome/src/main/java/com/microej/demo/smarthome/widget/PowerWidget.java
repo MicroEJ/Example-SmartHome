@@ -12,6 +12,7 @@ import com.microej.demo.smarthome.data.power.InstantPower;
 import com.microej.demo.smarthome.data.power.Power;
 import com.microej.demo.smarthome.data.power.PowerEventListener;
 import com.microej.demo.smarthome.style.ClassSelectors;
+import com.microej.demo.smarthome.util.Strings;
 import com.microej.demo.smarthome.widget.chart.BasicChart;
 import com.microej.demo.smarthome.widget.chart.ChartPoint;
 import com.microej.demo.smarthome.widget.chart.LineChart;
@@ -30,7 +31,6 @@ public class PowerWidget extends Wrapper implements PowerEventListener {
 	/**
 	 * Values
 	 */
-	private static final String UNIT_STRING = "W";
 	private static final int NUM_SCALE_VALUES = 3;
 
 	/**
@@ -65,7 +65,7 @@ public class PowerWidget extends Wrapper implements PowerEventListener {
 		this.chart.setScale(NUM_SCALE_VALUES, model.getMaxPowerConsumption());
 
 		// set chart unit
-		this.chart.setUnit(UNIT_STRING);
+		this.chart.setUnit(Strings.WATT);
 
 		// create scroll
 		Scroll scroll = new Scroll(true, false);
@@ -140,14 +140,12 @@ public class PowerWidget extends Wrapper implements PowerEventListener {
 
 	@Override
 	public void showNotify() {
-		System.out.println("PowerWidget.showNotify()");
 		TransitionManager.addGlobalTransitionListener(listener);
 		super.showNotify();
 	}
 
 	@Override
 	public void hideNotify() {
-		System.out.println("PowerWidget.hideNotify()");
 		super.hideNotify();
 		TransitionManager.removeGlobalTransitionListener(listener);
 	}

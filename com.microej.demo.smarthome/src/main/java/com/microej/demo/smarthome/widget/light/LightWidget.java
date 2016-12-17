@@ -103,6 +103,10 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 	@Override
 	public void onStateChange(boolean on) {
 		circular.setEnabled(on);
+		if (on) {
+			circular.initAnimation();
+			circular.startAnimation();
+		}
 		switchButton.setChecked(on);
 		model.switchOn(on);
 	}

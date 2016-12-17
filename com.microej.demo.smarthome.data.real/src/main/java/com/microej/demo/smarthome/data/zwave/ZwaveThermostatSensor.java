@@ -34,7 +34,7 @@ public class ZwaveThermostatSensor extends Device<ThermostatEventListener> imple
 	private static final int MIN_TEMPERATURE = 50;
 	private static final int MAX_TEMPERATURE = 400;
 	private static final int DEFAULT_TEMPERATURE = 220;
-	private int target = DEFAULT_TEMPERATURE;
+	private int target = DEFAULT_TEMPERATURE - MIN_TEMPERATURE;
 	private int current = DEFAULT_TEMPERATURE;
 
 	private volatile ej.basedriver.Thermostat thermostat;

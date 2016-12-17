@@ -7,6 +7,7 @@
 package com.microej.demo.smarthome.standalone;
 
 import com.microej.demo.smarthome.data.philipshue.PhilipsHueBackgroundService;
+import com.microej.demo.smarthome.data.zwave.ZwaveControllerManager;
 
 import ej.components.dependencyinjection.ServiceLoaderFactory;
 import ej.components.registry.BundleRegistry;
@@ -23,7 +24,7 @@ public class Main {
 		BundleRegistryHelper.startup(registry);
 
 
-		// new ZwaveControllerManager();
+		new ZwaveControllerManager();
 
 		ZwaveSimuBackgroundService bg = new ZwaveSimuBackgroundService();
 		bg.onStart();
