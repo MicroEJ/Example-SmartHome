@@ -57,6 +57,11 @@ public class LightCircularProgress extends CircularProgressWidget {
 			antiAliasedShapes.setThickness(2);
 			antiAliasedShapes.setFade(1);
 			antiAliasedShapes.drawCircle(g, innerX, innerY, innerD);
+
+			// draw border
+			g.setColor(style.getBackgroundColor());
+			antiAliasedShapes.setThickness(1);
+			antiAliasedShapes.drawCircle(g, innerX-1, innerY-1, innerD+2);
 		}
 	}
 
