@@ -158,20 +158,15 @@ public class HomeRobot extends Robot {
 			if (colorPicker == null) {
 				break;
 			}
-		int width = colorPicker.getImage().getWidth() / 2;
-		int height = colorPicker.getImage().getHeight() / 2;
-		int r = Math.min(width, height);
-		double t = Math.PI * rand.nextFloat() * 2;
-		int x = (int) (r * Math.cos(t));
-		if ((rand.nextInt() & 1) == 0) {
-			x = width - x;
-		}
-		int y = (int) (r * Math.sin(t));
-		if ((rand.nextInt() & 1) == 0) {
-			y = height - y;
-		}
+		int width = colorPicker.getImage().getWidth();
+		int height = colorPicker.getImage().getHeight();
+		int r = colorPicker.getRadius();
+		double angle = rand.nextFloat() * (2.0 * Math.PI);
+		float distance = (rand.nextFloat()/2.0f + 0.5f) * r;
+		int x = (int) (distance * Math.cos(angle)) + width/2;
+		int y = (int) (distance * Math.sin(angle)) + height/2;
 		colorPicker.performClick(Pointer.PRESSED, x, y);
-			colorPicker.repaint();
+		colorPicker.performClick(Pointer.RELEASED, x, y);
 		break;
 		case INITIAL_STATE + 3:
 			if (colorPicker == null) {
