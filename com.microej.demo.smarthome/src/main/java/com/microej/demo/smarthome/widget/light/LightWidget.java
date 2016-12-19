@@ -6,14 +6,14 @@
  */
 package com.microej.demo.smarthome.widget.light;
 
+import com.microej.demo.smarthome.Main;
 import com.microej.demo.smarthome.data.light.Light;
 import com.microej.demo.smarthome.data.light.LightEventListener;
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.widget.ColorPicker;
 import com.microej.demo.smarthome.widget.DeviceWidget;
 
-import ej.mwt.Desktop;
-import ej.mwt.Panel;
+import ej.mwt.Dialog;
 import ej.widget.basic.image.ImageSwitch;
 import ej.widget.listener.OnClickListener;
 import ej.widget.listener.OnStateChangeListener;
@@ -150,11 +150,20 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 		ColorPicker picker = new ColorPicker(sourceX, sourceY);
 		picker.addOnValueChangeListener(listener);
 
-		// show color picker
-		Desktop desktop = new Desktop();
-		Panel panel = new Panel();
-		panel.setWidget(picker);
-		panel.show(desktop, true);
-		desktop.show();
+		// create dialog
+		final Dialog dialog = new Dialog();
+		dialog.setWidget(picker);
+
+		// set close dialog listener
+		OnClickListener closeButtonListener = new OnClickListener() {
+			@Override
+			public void onClick() {
+				dialog.hide();
+			}
+		};
+		picker.setCloseButtonListener(closeButtonListener);
+
+		// show dialog
+		dialog.show(Main.getDesktop(), true);
 	}
 }

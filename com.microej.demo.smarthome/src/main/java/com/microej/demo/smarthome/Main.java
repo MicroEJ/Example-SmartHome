@@ -51,8 +51,8 @@ public class Main {
 		desktop.show();
 	}
 
-	public static void showDesktop() {
-		desktop.show();
+	public static Desktop getDesktop() {
+		return desktop;
 	}
 
 }

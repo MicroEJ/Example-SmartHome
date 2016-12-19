@@ -9,7 +9,6 @@ package com.microej.demo.smarthome.widget;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.microej.demo.smarthome.Main;
 import com.microej.demo.smarthome.style.ClassSelectors;
 
 import ej.animation.Animation;
@@ -21,6 +20,7 @@ import ej.microui.event.Event;
 import ej.microui.event.generator.Pointer;
 import ej.motion.Motion;
 import ej.motion.linear.LinearMotion;
+import ej.mwt.Widget;
 import ej.style.Style;
 import ej.style.container.Rectangle;
 import ej.widget.basic.Image;
@@ -52,10 +52,12 @@ public class ColorPicker extends Wrapper implements Animation {
 	private int sourceX;
 	private int sourceY;
 	private List<OnValueChangeListener> listeners;
+	private OnClickListener closeButtonListener;
 	private Label titleLabel;
 	private Button closeButton;
 	private Image image;
 	private Motion motion;
+	private boolean closeAnim;
 	private int currentAnimStep;
 	private int selectedX;
 	private int selectedY;
@@ -91,7 +93,7 @@ public class ColorPicker extends Wrapper implements Animation {
 		this.closeButton.addOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick() {
-				Main.showDesktop();
+				playCloseAnimation();
 			}
 		});
 		this.closeButton.addClassSelector(ClassSelectors.PICKER_CLOSE_BUTTON);
@@ -107,23 +109,18 @@ public class ColorPicker extends Wrapper implements Animation {
 		split.setLast(imageWrapper);
 		setWidget(split);
 
-		// set initial state
-		this.sourceX = sourceX;
-		this.sourceY = sourceY;
-		this.listeners = new ArrayList<OnValueChangeListener>();
-		this.motion = new LinearMotion(0, ANIM_NUM_STEPS, ANIM_DURATION);
-		this.currentAnimStep = 0;
-		this.selectedX = -1;
-		this.selectedY = -1;
-
 		// hide widgets
 		this.titleLabel.setVisible(false);
 		this.closeButton.setVisible(false);
 		this.image.setVisible(false);
 
+		// set initial state
+		this.listeners = new ArrayList<OnValueChangeListener>();
+		this.selectedX = -1;
+		this.selectedY = -1;
+
 		// start animation
-		Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
-		animator.startAnimation(this);
+		playOpenAnimation(sourceX, sourceY);
 	}
 
 	/**
@@ -218,6 +215,34 @@ public class ColorPicker extends Wrapper implements Animation {
 	}
 
 	/**
+	 * Plays the open animation
+	 */
+	private void playOpenAnimation(int sourceX, int sourceY) {
+		this.sourceX = sourceX;
+		this.sourceY = sourceY;
+		this.motion = new LinearMotion(0, ANIM_NUM_STEPS, ANIM_DURATION);
+		this.currentAnimStep = 0;
+		this.closeAnim = false;
+
+		Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
+		animator.startAnimation(this);
+	}
+
+	/**
+	 * Plays the close animation
+	 */
+	private void playCloseAnimation() {
+		this.sourceX = getWidth() - 1;
+		this.sourceY = 0;
+		this.motion = new LinearMotion(ANIM_NUM_STEPS, 0, ANIM_DURATION);
+		this.currentAnimStep = ANIM_NUM_STEPS;
+		this.closeAnim = true;
+
+		Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
+		animator.startAnimation(this);
+	}
+
+	/**
 	 * Updates the animation
 	 */
 	@Override
@@ -237,6 +262,10 @@ public class ColorPicker extends Wrapper implements Animation {
 		float[] showImage = new float[] { 0.65f, 0.35f, 0.65f };
 		float[] showClose = new float[] { 0.95f, 0.60f, 0.28f };
 
+		float[][] showRatios = new float[][] { showTitle, showImage, showClose };
+		Widget[] widgets = new Widget[] { this.titleLabel, this.image, this.closeButton };
+
+		// guess source position
 		int position = 1; // center
 		if (this.sourceX < getWidth()/3) {
 			position = 0; // left
@@ -244,23 +273,29 @@ public class ColorPicker extends Wrapper implements Animation {
 			position = 2; // right
 		}
 
-		// show title label
-		if (!this.titleLabel.isVisible() && this.currentAnimStep >= ANIM_NUM_STEPS*showTitle[position]) {
-			this.titleLabel.setVisible(true);
-			this.titleLabel.revalidate();
+		// show/hide widgets
+		for (int w = 0; w < widgets.length; w++) {
+			Widget widget = widgets[w];
+			if (widget.isVisible() == this.closeAnim) {
+				boolean ratioReached = (this.currentAnimStep >= ANIM_NUM_STEPS*showRatios[w][position]);
+				if (ratioReached != this.closeAnim) {
+					widget.setVisible(!this.closeAnim);
+					widget.revalidate();
+				}
+			}
 		}
 
-		// show image
-		if (!this.image.isVisible() && this.currentAnimStep >= ANIM_NUM_STEPS*showImage[position]) {
-			this.image.setVisible(true);
-			this.image.revalidate();
+		// close dialog
+		if (this.closeAnim && this.currentAnimStep == 0) {
+			this.closeButtonListener.onClick();
 		}
+	}
 
-		// show close button
-		if (!this.closeButton.isVisible() && this.currentAnimStep >= ANIM_NUM_STEPS*showClose[position]) {
-			this.closeButton.setVisible(true);
-			this.closeButton.revalidate();
-		}
+	/**
+	 * Sets the close button listener
+	 */
+	public void setCloseButtonListener(OnClickListener listener) {
+		this.closeButtonListener = listener;
 	}
 
 	/**
