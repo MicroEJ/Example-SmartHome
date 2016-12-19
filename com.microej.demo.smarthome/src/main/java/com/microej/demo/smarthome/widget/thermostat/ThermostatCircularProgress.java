@@ -122,7 +122,7 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 		setLocalTarget(value);
 	}
 
-	private void setLocalTarget(int value) {
+	public void setLocalTarget(int value) {
 		target.setTargetValue(value);
 		target.start();
 		startAnimation();

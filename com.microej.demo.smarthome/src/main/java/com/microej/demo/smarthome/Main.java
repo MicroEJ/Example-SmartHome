@@ -6,6 +6,7 @@
  */
 package com.microej.demo.smarthome;
 
+import com.microej.demo.smarthome.navigator.DirectNavigator;
 import com.microej.demo.smarthome.page.SmartHomePage;
 import com.microej.demo.smarthome.style.StylePopulator;
 
@@ -15,7 +16,6 @@ import ej.components.dependencyinjection.ServiceLoaderFactory;
 import ej.microui.MicroUI;
 import ej.mwt.Desktop;
 import ej.mwt.Panel;
-import ej.widget.navigation.navigator.SimpleNavigator;
 
 /**
  *
@@ -41,18 +41,30 @@ public class Main {
 
 		StylePopulator.initializeStylesheet();
 
-		SimpleNavigator navigator = new SimpleNavigator();
-		navigator.show(SmartHomePage.class.getName(), true);
+		SmartHomePage mainPage = new SmartHomePage();
+		DirectNavigator navigator = new DirectNavigator();
+		navigator.show(mainPage, true);
 
 		desktop = new Desktop();
 		Panel panel = new Panel();
 		panel.setWidget(navigator);
 		panel.show(desktop, true);
 		desktop.show();
+
+		// Starts robot.
+		new HomeRobot();
 	}
 
 	public static void showDesktop() {
 		desktop.show();
 	}
 
+	/**
+	 * Gets the desktop.
+	 *
+	 * @return the desktop.
+	 */
+	public static Desktop getDesktop() {
+		return desktop;
+	}
 }

@@ -151,13 +151,17 @@ public abstract class BasicChart extends Chart implements Animation {
 		if (pointerX >= xStart && pointerX < xEnd) {
 			int selectedPoint = getPoints().size() * (pointerX - xStart) / (xEnd - xStart);
 			selectPoint(new Integer(selectedPoint));
-			playBubbleAnimation(true);
 		} else {
-			//selectPoint(null);
-			playBubbleAnimation(false);
+			selectPoint(null);
 		}
 
 		//playBubbleAnimation(BasicChart.this.getSelectedPoint() != null);
+	}
+
+	@Override
+	public void selectPoint(Integer pointIndex) {
+		playBubbleAnimation(true);
+		super.selectPoint(pointIndex);
 	}
 
 	/**

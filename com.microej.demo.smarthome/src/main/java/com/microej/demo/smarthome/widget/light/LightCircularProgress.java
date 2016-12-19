@@ -77,7 +77,7 @@ public class LightCircularProgress extends CircularProgressWidget {
 				int r = radius / 2;
 				if (d2 <= r * r) {
 					if (Pointer.getAction(event) == Pointer.RELEASED) {
-						this.onClickListener.onClick();
+						performClick();
 					}
 					return true;
 				}
@@ -92,5 +92,9 @@ public class LightCircularProgress extends CircularProgressWidget {
 	public void setColor(int color) {
 		customColor = color;
 		repaint();
+	}
+
+	public void performClick() {
+		this.onClickListener.onClick();
 	}
 }
