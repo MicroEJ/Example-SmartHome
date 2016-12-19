@@ -36,7 +36,6 @@ implements com.microej.demo.smarthome.data.door.DoorProvider {
 	 */
 	public DoorProvider() {
 		super();
-		System.out.println("DoorProvider.DoorProvider()");
 		sensors = new HashMap<>();
 		listener = new RegistrationListener<DryContact>() {
 

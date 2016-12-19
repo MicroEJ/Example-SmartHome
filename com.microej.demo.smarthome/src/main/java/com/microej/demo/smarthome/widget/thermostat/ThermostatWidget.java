@@ -34,6 +34,7 @@ public class ThermostatWidget extends Grid {
 	private TemperatureLabel currentTemperature;
 	private String lastClassSelector = null;
 	private Label desiredLabel;
+	private final OverlapingComposite composite;
 
 	/**
 	 * @param thermostat
@@ -43,7 +44,7 @@ public class ThermostatWidget extends Grid {
 		this.thermostat = thermostat;
 		model = new ThermostatBoundedRangeModel(thermostat);
 
-		OverlapingComposite composite = new OverlapingComposite();
+		composite = new OverlapingComposite();
 
 		ThermostatCircularProgress thermostatCircularProgress = new ThermostatCircularProgress(model);
 		thermostatCircularProgress.addClassSelector(ClassSelectors.THERMOSTAT);
@@ -54,8 +55,11 @@ public class ThermostatWidget extends Grid {
 			public void onValueChange(int newValue) {
 				desiredTemperature.setTemperature(thermostatCircularProgress.getTargetValue());
 				currentTemperature.setTemperature(thermostat.getTemperature());
+				int localTarget = thermostatCircularProgress.getTargetValue() / 10;
+				int target = thermostat.getTargetTemperature() / 10;
 				updateClassSelectors(thermostat.getTemperature() / 10,
-						thermostatCircularProgress.getTargetValue() / 10);
+						localTarget);
+				updateButton(target, localTarget);
 			}
 
 			@Override
@@ -83,6 +87,8 @@ public class ThermostatWidget extends Grid {
 			@Override
 			public void onClick() {
 				thermostatCircularProgress.validateTagetValue();
+				// Removes OK button.
+				updateButton(0, 0);
 
 			}
 		});
@@ -153,6 +159,22 @@ public class ThermostatWidget extends Grid {
 			}
 
 			lastClassSelector = classSelector;
+		}
+	}
+
+	private void updateButton(int targetTemperature, int targetValue) {
+		if (targetTemperature == targetValue && button.isVisible()) {
+			button.setVisible(false);
+			if (isShown()) {
+				composite.partialRevalidate();
+				composite.repaint();
+			}
+		} else if (targetTemperature != targetValue && !button.isVisible()) {
+			button.setVisible(true);
+			if (isShown()) {
+				composite.partialRevalidate();
+				composite.repaint();
+			}
 		}
 	}
 }
