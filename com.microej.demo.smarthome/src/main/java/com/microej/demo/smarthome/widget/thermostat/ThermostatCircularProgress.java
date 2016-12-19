@@ -40,7 +40,6 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	 */
 	public ThermostatCircularProgress(ThermostatBoundedRangeModel model) {
 		super(model);
-		System.out.println("ThermostatCircularProgress.ThermostatCircularProgress()");
 		setThickness(8);
 		this.model = model;
 		target = new ValueAnimation(model.getValue(), model.getTargetValue(), model.getTargetValue(),

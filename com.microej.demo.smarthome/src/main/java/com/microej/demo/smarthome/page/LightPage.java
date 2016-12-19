@@ -59,7 +59,6 @@ public class LightPage extends DevicePage<Light> implements ProviderListener<Lig
 
 	@Override
 	public void newElement(Light element) {
-		System.out.println("LightPage.newElement()");
 		LightWidget device = new LightWidget(element);
 		addDevice(element, device);
 		if (isShown()) {

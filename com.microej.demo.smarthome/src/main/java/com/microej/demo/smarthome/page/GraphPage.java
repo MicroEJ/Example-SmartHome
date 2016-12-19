@@ -47,9 +47,9 @@ public class GraphPage extends MenuPage {
 
 			@Override
 			public void onTransitionStep(int step) {
-				// TODO Auto-generated method stub
 
 			}
+
 
 			@Override
 			public void onTransitionStart(int transitionsSteps, int transitionsStop, Page from, Page to) {

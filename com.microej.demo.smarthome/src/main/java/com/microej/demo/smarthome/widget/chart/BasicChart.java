@@ -35,13 +35,13 @@ public abstract class BasicChart extends Chart implements Animation {
 	protected static final int LEFT_PADDING = 55;
 	protected static final int STEP_X = 40;
 
-	private static final int APPARITION_DURATION = 600;
+	private static final int APPARITION_DURATION = 400;
 	private static final int APPARITION_STEPS = 100;
 
 	private static final int BUBBLE_RADIUS = 50;
 	private static final int ARROW_RADIUS = 14;
 
-	private static final int BUBBLE_ANIM_DURATION = 300;
+	private static final int BUBBLE_ANIM_DURATION = 200;
 	private static final int BUBBLE_ANIM_NUM_STEPS = 100;
 
 	/**
@@ -164,20 +164,20 @@ public abstract class BasicChart extends Chart implements Animation {
 	 * Play bubble animation
 	 */
 	private void playBubbleAnimation(boolean expand) {
-		this.bubbleAnimationStep = (expand ? 0 : BUBBLE_ANIM_NUM_STEPS);
 		final Motion bubbleMotion;
 		if (expand) {
 			bubbleMotion = new LinearMotion(0, BUBBLE_ANIM_NUM_STEPS, BUBBLE_ANIM_DURATION);
 		} else {
-			bubbleMotion = new LinearMotion(0, BUBBLE_ANIM_NUM_STEPS, BUBBLE_ANIM_DURATION);
+			bubbleMotion = new LinearMotion(BUBBLE_ANIM_NUM_STEPS, 0, BUBBLE_ANIM_DURATION);
 		}
+		bubbleAnimationStep = bubbleMotion.getStartValue();
 
 		Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
 		animator.startAnimation(new Animation() {
 			@Override
 			public boolean tick(long currentTimeMillis) {
 				int step = bubbleMotion.getCurrentValue();
-				BasicChart.this.bubbleAnimationStep = (expand ? step : BUBBLE_ANIM_NUM_STEPS - step);
+				BasicChart.this.bubbleAnimationStep = step;
 				boolean finished = bubbleMotion.isFinished();
 				if (!expand && finished) {
 					selectPoint(null);
@@ -243,6 +243,7 @@ public abstract class BasicChart extends Chart implements Animation {
 	protected void renderSelectedPointValue(GraphicsContext g, Style style, Rectangle bounds, int firstDisplay,
 			int lastDisplay) {
 		Integer selectedPointIndex = getSelectedPoint();
+		// TODO remove magic number (3=the further you can see a part of the bubble).
 		if (selectedPointIndex != null && selectedPointIndex > firstDisplay - 3
 				&& selectedPointIndex < lastDisplay + 3) {
 			ChartPoint selectedPoint = getPoints().get(selectedPointIndex);

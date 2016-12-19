@@ -45,6 +45,6 @@ public interface Strings {
 
 	String INSTANT_POWER = "INSTANT POWER";
 
-	String WATT = "w";
+	String WATT = "W";
 
 }

@@ -138,8 +138,8 @@ public class LineChart extends BasicChart {
 					}
 
 					// Stops drawing point after clip
+					lastPointIndexDisplayed = pointIndex;
 					if (currentX > clipEnd) {
-						lastPointIndexDisplayed = pointIndex - 1;
 						break;
 					}
 				}
@@ -149,56 +149,58 @@ public class LineChart extends BasicChart {
 
 
 		// draw circles
-		int radius = 4;
 		pointIndex = firstPointIndexDisplayed;
-		nextX = LEFT_PADDING + pointIndex * STEP_X;
-		for (Iterator<ChartPoint> iterator = points.listIterator(pointIndex); iterator.hasNext();) {
-			ChartPoint chartPoint = iterator.next();
-			int currentX = nextX;
-
-			// Comput the position of the next point.
-			pointIndex++;
+		if (firstPointIndexDisplayed != -1) {
+			int radius = 4;
 			nextX = LEFT_PADDING + pointIndex * STEP_X;
-			// Draw only if next point is visible.
-			if (nextX > clipStart) {
+			for (Iterator<ChartPoint> iterator = points.listIterator(pointIndex); iterator.hasNext();) {
+				ChartPoint chartPoint = iterator.next();
+				int currentX = nextX;
+
+				// Comput the position of the next point.
+				pointIndex++;
+				nextX = LEFT_PADDING + pointIndex * STEP_X;
 				// Draw only if next point is visible.
-				float value = chartPoint.getValue();
-				if (value < 0.0f) {
-					pointIndex++;
-					continue;
-				}
+				if (nextX > clipStart) {
+					// Draw only if next point is visible.
+					float value = chartPoint.getValue();
+					if (value < 0.0f) {
+						pointIndex++;
+						continue;
+					}
 
-				Style pointStyle = chartPoint.getStyle();
-				int backgroundColor = pointStyle.getBackgroundColor();
-				int chartPointForegroundColor = pointStyle.getForegroundColor();
+					Style pointStyle = chartPoint.getStyle();
+					int backgroundColor = pointStyle.getBackgroundColor();
+					int chartPointForegroundColor = pointStyle.getForegroundColor();
 
-				int finalLength = (int) (graphHeightRatio * value);
-				int apparitionLength = (int) (finalLength * animationRatio);
-				int yTop = yBarBottom - apparitionLength;
-				int currentY = yTop;
+					int finalLength = (int) (graphHeightRatio * value);
+					int apparitionLength = (int) (finalLength * animationRatio);
+					int yTop = yBarBottom - apparitionLength;
+					int currentY = yTop;
 
-				g.setColor(backgroundColor);
-				int x = currentX - radius;
-				int y = currentY - radius;
-				int diameter = radius << 1;
-				g.fillCircle(x, y + 1, diameter);
-				g.setColor(chartPointForegroundColor);
+					g.setColor(backgroundColor);
+					int x = currentX - radius;
+					int y = currentY - radius;
+					int diameter = radius << 1;
+					g.fillCircle(x, y + 1, diameter);
+					g.setColor(chartPointForegroundColor);
 
-				if (!isAnimated() || animationRatio == 0) {
-					antiAliasedShapes.drawCircle(g, x, y, diameter);
-				} else {
-					g.drawCircle(x, y, diameter);
-				}
+					if (!isAnimated() || animationRatio == 0) {
+						antiAliasedShapes.drawCircle(g, x, y, diameter);
+					} else {
+						g.drawCircle(x, y, diameter);
+					}
 
-				// Stops drawing point after clip
-				if (currentX > clipEnd) {
-					break;
+					// Stops drawing point after clip
+					if (currentX > clipEnd) {
+						break;
+					}
 				}
 			}
-		}
 
-		// draw selected point value
-		renderSelectedPointValue(g, style, bounds, firstPointIndexDisplayed, lastPointIndexDisplayed);
+			// draw selected point value
+			renderSelectedPointValue(g, style, bounds, firstPointIndexDisplayed, lastPointIndexDisplayed);
+		}
 	}
 
 	@Override

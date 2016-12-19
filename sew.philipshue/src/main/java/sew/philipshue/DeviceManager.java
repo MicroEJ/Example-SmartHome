@@ -3,9 +3,12 @@
  */
 package sew.philipshue;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.util.Enumeration;
@@ -21,6 +24,7 @@ import com.microej.demo.smarthome.util.ExecutorUtils;
 import ej.bon.Timer;
 import ej.bon.TimerTask;
 import ej.components.dependencyinjection.ServiceLoaderFactory;
+import ej.wadapps.storage.Storage;
 import sew.light.LightManager;
 import sew.light.util.Color;
 import sew.upnp.Device;
@@ -70,7 +74,6 @@ public class DeviceManager {
 				// System.out.println("DeviceManager.updateSynchronous() " + string);
 				JSONObject jsonObject = new JSONObject(string);
 				Enumeration<String> keys = jsonObject.keys();
-				System.out.println("DeviceManager.updateSynchronous()");
 				while (keys.hasMoreElements()) {
 					String iString = keys.nextElement();
 					JSONObject light = jsonObject.getJSONObject(iString);
@@ -224,9 +227,14 @@ public class DeviceManager {
 
 	public String getUsername() {
 		try {
-			BridgeStorage bridgeStorage = ServiceLoaderFactory.getServiceLoader().getService(BridgeStorage.class);
-			if (bridgeStorage != null) {
-				return bridgeStorage.getUsername(this.device.getUDN());
+			Storage storage = ServiceLoaderFactory.getServiceLoader().getService(Storage.class);
+			if (storage != null) {
+				InputStream inputStream = storage.load(this.device.getUDN());
+				if (inputStream == null) {
+					return null;
+				}
+				BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+				return reader.readLine();
 			}
 		} catch (Throwable t) {
 			t.printStackTrace();
@@ -236,16 +244,27 @@ public class DeviceManager {
 	}
 
 	public void saveUsername() {
-		BridgeStorage bridgeStorage = ServiceLoaderFactory.getServiceLoader().getService(BridgeStorage.class);
-		if (bridgeStorage != null) {
-			bridgeStorage.store(this.device.getUDN(), this.username);
+
+		Storage storage = ServiceLoaderFactory.getServiceLoader().getService(Storage.class);
+		if (storage != null) {
+			byte[] charArray = this.username.getBytes();
+			ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(charArray);
+			try {
+				storage.store(this.device.getUDN(), byteArrayInputStream);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 	public void removeUsername() {
-		BridgeStorage bridgeStorage = ServiceLoaderFactory.getServiceLoader().getService(BridgeStorage.class);
-		if (bridgeStorage != null) {
-			bridgeStorage.removeUsername(this.device.getUDN());
+		Storage storage = ServiceLoaderFactory.getServiceLoader().getService(Storage.class);
+		if (storage != null) {
+			try {
+				storage.remove(this.device.getUDN());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			this.username = null;
 		}
 	}
