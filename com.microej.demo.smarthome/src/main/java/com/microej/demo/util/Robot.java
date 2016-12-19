@@ -184,9 +184,9 @@ public abstract class Robot implements WatchDogCallBack {
 			public boolean handleEvent(int event) {
 				if (isRunning()) {
 					stop();
-					return true;
+				} else {
+					feed();
 				}
-				feed();
 				return generatorEventHandler.handleEvent(event);
 			}
 
