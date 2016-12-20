@@ -63,27 +63,30 @@ public class TimeWidget extends StyledWidget {
 	 * @return
 	 */
 	private void update() {
-		refresh++;
-		if (refresh > UPDATE_RATE) {
-			Calendar calendar = Calendar.getInstance();
-			boolean am = calendar.get(Calendar.AM_PM) == Calendar.AM;
-			int hour = calendar.get(Calendar.HOUR);
-			if (hour == 0) {
-				hour = 12;
-			}
-			int min = calendar.get(Calendar.MINUTE);
-			start = Utils.formatDoubleDigits(hour);
-			StringBuilder builder = new StringBuilder(Utils.formatDoubleDigits(min));
-			builder.append(Strings.TIME_SEPARATOR);
-			if (am) {
-				builder.append(Strings.AM);
-			} else {
-				builder.append(Strings.PM);
-			}
-			end = builder.toString();
-		}
+		if (isShown() && getPanel().isActive() || start == null) {
 
-		repaint();
+			refresh++;
+			if (refresh > UPDATE_RATE) {
+				Calendar calendar = Calendar.getInstance();
+				boolean am = calendar.get(Calendar.AM_PM) == Calendar.AM;
+				int hour = calendar.get(Calendar.HOUR);
+				if (hour == 0) {
+					hour = 12;
+				}
+				int min = calendar.get(Calendar.MINUTE);
+				start = Utils.formatDoubleDigits(hour);
+				StringBuilder builder = new StringBuilder(Utils.formatDoubleDigits(min));
+				builder.append(Strings.TIME_SEPARATOR);
+				if (am) {
+					builder.append(Strings.AM);
+				} else {
+					builder.append(Strings.PM);
+				}
+				end = builder.toString();
+			}
+
+			repaint();
+		}
 	}
 
 	@Override
@@ -94,6 +97,7 @@ public class TimeWidget extends StyledWidget {
 
 	@Override
 	public void showNotify() {
+		super.showNotify();
 		Timer timer = ServiceLoaderFactory.getServiceLoader().getService(Timer.class, Timer.class);
 		synchronized (sync) {
 			if (update == null) {
@@ -112,6 +116,7 @@ public class TimeWidget extends StyledWidget {
 
 	@Override
 	public void hideNotify() {
+		super.hideNotify();
 		if (update != null) {
 			update.cancel();
 			update=null;

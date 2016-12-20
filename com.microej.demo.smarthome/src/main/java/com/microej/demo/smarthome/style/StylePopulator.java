@@ -131,7 +131,7 @@ public class StylePopulator {
 				EditableStyle lightProgressStyle = new EditableStyle();
 				lightProgressStyle.setBackgroundColor(Colors.CONCRETE_25);
 				lightProgressStyle.setForegroundColor(Colors.CORAL);
-				lightProgressStyle.setMargin(new ComplexOutline(SIMPLE_OUTLINE/2, 0, SIMPLE_OUTLINE/2, 0));
+				lightProgressStyle.setMargin(new ComplexOutline(HALF_OUTLINE, 0, HALF_OUTLINE, 0));
 				stylesheet.addRule(new ClassSelector(ClassSelectors.LIGHT_PROGRESS), lightProgressStyle);
 			}
 
@@ -156,7 +156,8 @@ public class StylePopulator {
 				EditableStyle pickerTitleStyle = new EditableStyle();
 				pickerTitleStyle.setForegroundColor(Colors.CONCRETE_25);
 				pickerTitleStyle.setAlignment(GraphicsContext.LEFT | GraphicsContext.VCENTER);
-				pickerTitleStyle.setPadding(new ComplexOutline(0, 0, 0, DOUBLE_OUTLINE));
+				pickerTitleStyle
+				.setPadding(new ComplexOutline(SIMPLE_OUTLINE, DOUBLE_OUTLINE, SIMPLE_OUTLINE, DOUBLE_OUTLINE));
 				stylesheet.addRule(new ClassSelector(ClassSelectors.PICKER_TITLE_LABEL), pickerTitleStyle);
 			}
 
@@ -164,7 +165,8 @@ public class StylePopulator {
 				EditableStyle pickerCloseStyle = new EditableStyle();
 				pickerCloseStyle.setForegroundColor(Colors.CORAL);
 				pickerCloseStyle.setAlignment(GraphicsContext.RIGHT | GraphicsContext.VCENTER);
-				pickerCloseStyle.setPadding(new ComplexOutline(0, DOUBLE_OUTLINE, 0, 0));
+				pickerCloseStyle
+				.setPadding(new ComplexOutline(SIMPLE_OUTLINE, DOUBLE_OUTLINE, SIMPLE_OUTLINE, DOUBLE_OUTLINE));
 				stylesheet.addRule(new ClassSelector(ClassSelectors.PICKER_CLOSE_BUTTON), pickerCloseStyle);
 			}
 
