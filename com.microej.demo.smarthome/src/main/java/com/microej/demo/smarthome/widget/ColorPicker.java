@@ -191,7 +191,7 @@ public class ColorPicker extends Wrapper implements Animation {
 		int dX = pointerX - this.image.getWidth() / 2;
 		int dY = pointerY - this.image.getHeight() / 2;
 		int d = (int) Math.sqrt(dX * dX + dY * dY);
-		int r = this.image.getWidth() / 2 - (SELECTED_CIRCLE_RADIUS + 1);
+		int r = getRadius();
 
 		if (d > r) {
 			pointerX = this.image.getWidth() / 2 + dX * r / d;
@@ -221,6 +221,12 @@ public class ColorPicker extends Wrapper implements Animation {
 
 	}
 
+	/**
+	 * Gets the circle radius
+	 */
+	public int getRadius() {
+		return this.image.getWidth() / 2 - (SELECTED_CIRCLE_RADIUS + 1);
+	}
 
 	/**
 	 * Plays the open animation

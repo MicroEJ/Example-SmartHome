@@ -31,10 +31,11 @@ public class MenuButton extends ButtonWrapper {
 
 	@Override
 	public boolean isInState(State state) {
-		if (state == State.Focus && focus) {
-			return true;
+		if (state == State.Focus) {
+			return focus;
+		} else {
+			return super.isInState(state);
 		}
-		return super.isInState(state);
 	}
 
 	public void setFocus(boolean focus) {
