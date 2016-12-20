@@ -44,13 +44,10 @@ public interface ClassSelectors {
 	String CHART = "CHART";
 	String CHART_POINT = "CHART_POINT";
 	String CHART_SCROLL = "CHART_SCROLL";
-
-
-
+	String CHART_SCALE = "chart-scale";
+	String CHART_SELECTED_INFO = "chart-selected-info";
+	String CHART_SELECTED_VALUE = "chart-selected-value";
 
 	String TEST = "TEST";
-	String CLASS_SELECTOR_SCALE = "chart-scale";
-	String CLASS_SELECTOR_SELECTED_INFO = "chart-selected-info";
-	String CLASS_SELECTOR_SELECTED_VALUE = "chart-selected-value";
 
 }

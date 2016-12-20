@@ -52,4 +52,6 @@ public interface Strings {
 	 */
 	String COLOR_PICKER_TITLE = "Pick a color";
 
+	public String HOUR_END = ":00 ";
+
 }

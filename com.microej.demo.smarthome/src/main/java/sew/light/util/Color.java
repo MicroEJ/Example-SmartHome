@@ -123,11 +123,10 @@ public class Color {
 				h = 4 + (red - green) / delta; // between magenta & cyan
 			}
 
-			h *= 60; // degrees.
-
-			if (h < 0) {
-				h += 360;
-			}
+			h *= 60; // degrees
+		}
+		if (h < 0) {
+			h += 360;
 		}
 
 		this.saturation = s;

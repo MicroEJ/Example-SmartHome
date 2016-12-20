@@ -48,7 +48,7 @@ import ej.widget.navigation.page.Page;
  */
 public class HomeRobot extends Robot {
 
-	private static final int DELAY = 2_000;
+	private static final int DELAY = 40_000;
 	private static final int PERIOD = 2_500;
 	private static final Timer timer = new Timer();
 	private static final int INITIAL_STATE = 0;
@@ -117,7 +117,7 @@ public class HomeRobot extends Robot {
 	private void automate(List<Composite> hierrary, ColorPicker colorPicker) {
 		switch (state) {
 		case INITIAL_STATE + 2:
-		int width = colorPicker.getImage().getWidth();
+			int width = colorPicker.getImage().getWidth();
 		int height = colorPicker.getImage().getHeight();
 		int r = colorPicker.getRadius();
 		double angle = rand.nextFloat() * (2.0 * Math.PI);
@@ -128,10 +128,10 @@ public class HomeRobot extends Robot {
 		colorPicker.performClick(Pointer.RELEASED, x, y);
 		break;
 		case INITIAL_STATE + 3:
-		colorPicker.getCloseButton().performClick();
+			colorPicker.getCloseButton().performClick();
 		break;
 		default:
-		break;
+			break;
 		}
 	}
 

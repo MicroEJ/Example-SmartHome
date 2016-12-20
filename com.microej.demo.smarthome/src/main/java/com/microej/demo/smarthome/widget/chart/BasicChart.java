@@ -64,11 +64,11 @@ public abstract class BasicChart extends Chart implements Animation {
 	public BasicChart() {
 		super();
 		this.scaleElement = new ElementAdapter();
-		this.scaleElement.addClassSelector(ClassSelectors.CLASS_SELECTOR_SCALE);
+		this.scaleElement.addClassSelector(ClassSelectors.CHART_SCALE);
 		this.selectedInfoElement = new ElementAdapter();
-		this.selectedInfoElement.addClassSelector(ClassSelectors.CLASS_SELECTOR_SELECTED_INFO);
+		this.selectedInfoElement.addClassSelector(ClassSelectors.CHART_SELECTED_INFO);
 		this.selectedValueElement = new ElementAdapter();
-		this.selectedValueElement.addClassSelector(ClassSelectors.CLASS_SELECTOR_SELECTED_VALUE);
+		this.selectedValueElement.addClassSelector(ClassSelectors.CHART_SELECTED_VALUE);
 		motion = new NoMotion(0, 0);
 	}
 
@@ -278,9 +278,10 @@ public abstract class BasicChart extends Chart implements Animation {
 
 			// calculate arrow position
 			int arrow1X = centerX;
-			int arrow1Y = centerY - bubbleRadius*3/4;
+			int radius = bubbleRadius * 3 / 4;
+			int arrow1Y = centerY - radius;
 			int arrow2X = centerX;
-			int arrow2Y = centerY + bubbleRadius*3/4;
+			int arrow2Y = centerY + radius;
 
 			// fill arrow
 			g.fillPolygon(new int[] { valueX, valueY, arrow1X, arrow1Y, arrow2X, arrow2Y });
@@ -333,9 +334,10 @@ public abstract class BasicChart extends Chart implements Animation {
 				float value = selectedPoint.getValue();
 				String valueString = Integer.toString((int) value);
 				if (getUnit() != null) {
-					valueString += " " + getUnit();
+					valueString += getUnit();
 				}
-				g.drawString(valueString, centerX, centerY+bubbleRadius/3, GraphicsContext.HCENTER | GraphicsContext.VCENTER);
+				g.drawString(valueString, centerX, centerY + bubbleRadius / 6,
+						GraphicsContext.HCENTER | GraphicsContext.VCENTER);
 			}
 		}
 	}

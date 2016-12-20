@@ -214,9 +214,8 @@ public class ColorPicker extends Wrapper implements Animation {
 		this.selectedY = pointerY;
 		repaint();
 
-		int[] argbData = new int[1];
-		this.image.getSource().getARGB(argbData, 0, 1, pointerX, pointerY, 1, 1);
-		notifyListeners(argbData[0]);
+		int argb = this.image.getSource().readPixel(pointerX, pointerY);
+		notifyListeners(argb & 0x00FFFFFF);
 		return true;
 
 	}

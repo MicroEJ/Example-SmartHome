@@ -50,8 +50,17 @@ public class PowerWidget extends Wrapper implements PowerEventListener {
 
 		// add chart points
 		for (int h = 0; h < 24; h++) {
+			int hour = h % 13;
+			if (h > 12) {
+				hour++;
+			}
 			String name = Integer.toString(h);
-			String fullName = name + ":00";
+			String fullName = Integer.toString(hour) + Strings.HOUR_END;
+			if (h > 12) {
+				fullName += Strings.PM;
+			} else {
+				fullName += Strings.AM;
+			}
 			ChartPoint point = new ChartPoint(name, fullName, -1.0f);
 			point.addClassSelector(ClassSelectors.CHART_POINT);
 			this.chart.addPoint(point);

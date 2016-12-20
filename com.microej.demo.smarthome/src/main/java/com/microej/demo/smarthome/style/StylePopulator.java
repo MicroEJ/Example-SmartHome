@@ -274,8 +274,8 @@ public class StylePopulator {
 				EditableStyle dashBoardActiveMenuStyle = new EditableStyle();
 				dashBoardActiveMenuStyle.setPadding(new ComplexOutline(HALF_OUTLINE, 0, HALF_OUTLINE, 0));
 				dashBoardActiveMenuStyle.setMargin(new ComplexOutline(0, DOUBLE_OUTLINE, 0, DOUBLE_OUTLINE));
-				dashBoardActiveMenuStyle.setBackground(new SimpleRoundedPlainBackground(11));
-				dashBoardActiveMenuStyle.setBorder(new SimpleRoundedBorder(11, 2));
+				dashBoardActiveMenuStyle.setBackground(new SimpleRoundedPlainBackground(14));
+				dashBoardActiveMenuStyle.setBorder(new SimpleRoundedBorder(12, 2));
 				dashBoardActiveMenuStyle.setBorderColor(Colors.CORAL);
 				dashBoardActiveMenuStyle.setBackgroundColor(Colors.CORAL);
 				dashBoardActiveMenuStyle.setForegroundColor(Colors.CONCRETE_90);
@@ -293,7 +293,6 @@ public class StylePopulator {
 			{ // item text
 				EditableStyle dashboardTextStyle = new EditableStyle();
 				dashboardTextStyle.setAlignment(GraphicsContext.LEFT | GraphicsContext.VCENTER);
-				// dashboardTextStyle.setPadding(new ComplexOutline(4, 0, 0, 0));
 				dashboardTextStyle.setForegroundColor(Colors.CONCRETE_25);
 				dashboardTextStyle.setTextManager(new ComplexTextManager());
 				stylesheet.addRule(new ClassSelector(ClassSelectors.DASHBOARD_ITEM_TEXT), dashboardTextStyle);
@@ -338,7 +337,7 @@ public class StylePopulator {
 			{ // Chart
 				EditableStyle chartStyle = new EditableStyle();
 				chartStyle.setFontProfile(fpSmall);
-				chartStyle.setForegroundColor(Colors.CONCRETE_90);
+				chartStyle.setForegroundColor(Colors.WHITE);
 				chartStyle.setPadding(doubleOutline);
 				stylesheet.addRule(new ClassSelector(ClassSelectors.CHART), chartStyle);
 			}
@@ -346,7 +345,7 @@ public class StylePopulator {
 			{ // Chart point
 				EditableStyle chartPointStyle = new EditableStyle();
 				chartPointStyle.setFontProfile(fpXSmall);
-				chartPointStyle.setForegroundColor(Colors.CONCRETE_75);
+				chartPointStyle.setForegroundColor(Colors.WHITE);
 				chartPointStyle.setBackgroundColor(Colors.CORAL);
 				stylesheet.addRule(new ClassSelector(ClassSelectors.CHART_POINT), chartPointStyle);
 			}
@@ -356,21 +355,22 @@ public class StylePopulator {
 				chartScaleStyle.setFontProfile(fpSmall);
 				chartScaleStyle.setForegroundColor(Colors.LIGHT_CORAL);
 				chartScaleStyle.setBackgroundColor(Colors.DARK_CORAL);
-				stylesheet.addRule(new ClassSelector(ClassSelectors.CLASS_SELECTOR_SCALE), chartScaleStyle);
+				stylesheet.addRule(new ClassSelector(ClassSelectors.CHART_SCALE), chartScaleStyle);
 			}
 
 			{ // Chart selected info
 				EditableStyle chartInfoStyle = new EditableStyle();
 				chartInfoStyle.setFontProfile(fpSmall);
 				chartInfoStyle.setForegroundColor(Colors.CONCRETE_25);
-				stylesheet.addRule(new ClassSelector(ClassSelectors.CLASS_SELECTOR_SELECTED_INFO), chartInfoStyle);
+				chartInfoStyle.setBackgroundColor(Colors.WHITE);
+				stylesheet.addRule(new ClassSelector(ClassSelectors.CHART_SELECTED_INFO), chartInfoStyle);
 			}
 
 			{ // Chart selected value
 				EditableStyle chartValueStyle = new EditableStyle();
-				chartValueStyle.setFontProfile(fpSmall);
-				chartValueStyle.setForegroundColor(Colors.DARK_CORAL);
-				stylesheet.addRule(new ClassSelector(ClassSelectors.CLASS_SELECTOR_SELECTED_VALUE), chartValueStyle);
+				chartValueStyle.setFontProfile(fpMedium);
+				chartValueStyle.setForegroundColor(Colors.CORAL);
+				stylesheet.addRule(new ClassSelector(ClassSelectors.CHART_SELECTED_VALUE), chartValueStyle);
 			}
 
 		}
