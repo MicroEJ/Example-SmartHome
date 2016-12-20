@@ -46,11 +46,15 @@ public class HomeImageLoader extends DefaultImageLoader {
 		return loadImage(name);
 	}
 
+	public static String getImageSource(String name) {
+		return BASE + name + SUFFIX;
+	}
+
 	/**
 	 * @param name
 	 * @return
 	 */
 	public static Image loadImage(String name) {
-		return StyleHelper.getImage(BASE + name + SUFFIX);
+		return StyleHelper.getImage(getImageSource(name));
 	}
 }

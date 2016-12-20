@@ -47,4 +47,9 @@ public interface Strings {
 
 	String WATT = "W";
 
+	/**
+	 * Values
+	 */
+	String COLOR_PICKER_TITLE = "Pick a color";
+
 }

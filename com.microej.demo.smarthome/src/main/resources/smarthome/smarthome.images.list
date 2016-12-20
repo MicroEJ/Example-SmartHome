@@ -15,6 +15,9 @@ images/dashboard/security.png:ARGB4444
 images/dashboard/security_active.png:ARGB4444
 
 images/door_open.png:ARGB4444
+images/door_close_to_open.png:ARGB4444
+images/door_close_to_closed.png:ARGB4444
+images/door_closer_to_closed.png:ARGB4444
 images/door_closed.png:ARGB4444
 
 images/toggle_on.png:ARGB4444

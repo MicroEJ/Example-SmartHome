@@ -55,15 +55,6 @@ public class Main {
 		new HomeRobot();
 	}
 
-	public static void showDesktop() {
-		desktop.show();
-	}
-
-	/**
-	 * Gets the desktop.
-	 *
-	 * @return the desktop.
-	 */
 	public static Desktop getDesktop() {
 		return desktop;
 	}

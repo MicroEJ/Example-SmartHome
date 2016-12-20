@@ -32,10 +32,9 @@ import com.microej.demo.util.Robot;
 import ej.bon.Timer;
 import ej.bon.TimerTask;
 import ej.microui.display.Display;
-import ej.microui.display.Displayable;
 import ej.microui.event.EventGenerator;
 import ej.microui.event.generator.Pointer;
-import ej.mwt.Desktop;
+import ej.mwt.Composite;
 import ej.mwt.Widget;
 import ej.widget.basic.image.ImageSwitch;
 import ej.widget.composed.ButtonWrapper;
@@ -49,7 +48,7 @@ import ej.widget.navigation.page.Page;
  */
 public class HomeRobot extends Robot {
 
-	private static final int DELAY = 10_000;
+	private static final int DELAY = 2_000;
 	private static final int PERIOD = 2_500;
 	private static final Timer timer = new Timer();
 	private static final int INITIAL_STATE = 0;
@@ -89,29 +88,62 @@ public class HomeRobot extends Robot {
 		display.waitForEvent();
 		display.waitForEvent();
 
-		List<Page> hierrary = getPageHierrary();
-		Page lastPage = hierrary.get(hierrary.size() - 1);
-		if (lastPage instanceof InformationPage) {
-			automate(hierrary, (InformationPage) lastPage);
-		} else if (lastPage instanceof GraphPage) {
-			automate(hierrary, (GraphPage) lastPage);
-		} else if (lastPage instanceof ThermostatPage) {
-			automate(hierrary, (ThermostatPage) lastPage);
-		} else if (lastPage instanceof LightPage) {
-			automate(hierrary, (LightPage) lastPage);
-		} else if (lastPage instanceof DoorPage) {
-			automate(hierrary, (DoorPage) lastPage);
-		} else {
-			System.out.println("Unsupported: " + lastPage);
+		System.out.println("HomeRobot.automate()");
+		List<Composite> hierrary = getPageHierrary();
+		if (hierrary.size() > 0) {
+			Composite lastPage = hierrary.get(hierrary.size() - 1);
+			if (lastPage instanceof InformationPage) {
+				automate(hierrary, (InformationPage) lastPage);
+			} else if (lastPage instanceof GraphPage) {
+				automate(hierrary, (GraphPage) lastPage);
+			} else if (lastPage instanceof ThermostatPage) {
+				automate(hierrary, (ThermostatPage) lastPage);
+			} else if (lastPage instanceof LightPage) {
+				automate(hierrary, (LightPage) lastPage);
+			} else if (lastPage instanceof ColorPicker) {
+				automate(hierrary, (ColorPicker) lastPage);
+			} else if (lastPage instanceof DoorPage) {
+				automate(hierrary, (DoorPage) lastPage);
+			} else {
+				System.out.println("Unsupported: " + lastPage);
+			}
+			state++;
 		}
-		state++;
 	}
 
 	/**
 	 * @param hierrary
 	 * @param lastPage
 	 */
-	private void automate(List<Page> hierrary, DoorPage lastPage) {
+	private void automate(List<Composite> hierrary, ColorPicker colorPicker) {
+		switch (state) {
+		case INITIAL_STATE + 2:
+			int width = colorPicker.getImage().getWidth() / 2;
+		int height = colorPicker.getImage().getHeight() / 2;
+		int r = Math.min(width, height);
+		double t = Math.PI * rand.nextFloat() * 2;
+		int x = (int) (r * Math.cos(t));
+		if ((rand.nextInt() & 1) == 0) {
+			x = width - x;
+		}
+		int y = (int) (r * Math.sin(t));
+		if ((rand.nextInt() & 1) == 0) {
+			y = height - y;
+		}
+		colorPicker.performClick(Pointer.PRESSED, x, y);
+		colorPicker.repaint();
+		break;
+		case INITIAL_STATE + 3:
+			colorPicker.getCloseButton().performClick();
+		break;
+		}
+	}
+
+	/**
+	 * @param hierrary
+	 * @param lastPage
+	 */
+	private void automate(List<Composite> hierrary, DoorPage lastPage) {
 		goToNext(lastPage.getMenu(), lastPage.getMenuButton());
 	}
 
@@ -119,7 +151,7 @@ public class HomeRobot extends Robot {
 	 * @param hierrary
 	 * @param lastPage
 	 */
-	private void automate(List<Page> hierrary, LightPage lastPage) {
+	private void automate(List<Composite> hierrary, LightPage lastPage) {
 		Grid lights = (Grid) lastPage.getWidget(0);
 		int widgetsCount = lights.getWidgetsCount();
 		if (widgetsCount == 0) {
@@ -131,16 +163,6 @@ public class HomeRobot extends Robot {
 		LightWidget light = (LightWidget) lights.getWidget(nextInt);
 		LightCircularProgress lightCircularProgress = (LightCircularProgress) light.getWidget(1);
 		ImageSwitch switchButton = (ImageSwitch) light.getWidget(2);
-		ColorPicker colorPicker = null;
-
-		Displayable displayable = Display.getDefaultDisplay().getDisplayable();
-		if (displayable instanceof Desktop) {
-			Desktop desktop = (Desktop) displayable;
-			Widget widget = desktop.getActivePanel().getWidget();
-			if (widget instanceof ColorPicker) {
-				colorPicker = (ColorPicker) widget;
-			}
-		}
 
 		switch (state) {
 		case INITIAL_STATE:
@@ -155,36 +177,16 @@ public class HomeRobot extends Robot {
 			}
 		break;
 		case INITIAL_STATE + 2:
-			if (colorPicker == null) {
-				break;
-			}
-		int width = colorPicker.getImage().getWidth() / 2;
-		int height = colorPicker.getImage().getHeight() / 2;
-		int r = Math.min(width, height);
-		double t = Math.PI * rand.nextFloat() * 2;
-		int x = (int) (r * Math.cos(t));
-		if ((rand.nextInt() & 1) == 0) {
-			x = width - x;
-		}
-		int y = (int) (r * Math.sin(t));
-		if ((rand.nextInt() & 1) == 0) {
-			y = height - y;
-		}
-		colorPicker.performClick(Pointer.PRESSED, x, y);
-			colorPicker.repaint();
-		break;
 		case INITIAL_STATE + 3:
-			if (colorPicker == null) {
-				break;
-			}
-		colorPicker.getCloseButton().performClick();
-		break;
+			// see automate color picker.
+			break;
 		case INITIAL_STATE + 4:
 			light.onStateChange((rand.nextInt() & 1) == 0);
 		break;
 		case INITIAL_STATE + 5:
+		default:
 			goToNext(lastPage.getMenu(), lastPage.getMenuButton());
-		break;
+			break;
 		}
 	}
 
@@ -192,7 +194,7 @@ public class HomeRobot extends Robot {
 	 * @param hierrary
 	 * @param lastPage
 	 */
-	private void automate(List<Page> hierrary, ThermostatPage lastPage) {
+	private void automate(List<Composite> hierrary, ThermostatPage lastPage) {
 		Grid thermostats = (Grid) lastPage.getWidget(0);
 		ThermostatWidget thermostat = (ThermostatWidget) thermostats.getWidget(0);
 		OverlapingComposite composite = (OverlapingComposite) thermostat.getWidget(1);
@@ -207,8 +209,9 @@ public class HomeRobot extends Robot {
 			validate.performClick();
 		break;
 		case INITIAL_STATE + 2:
+		default:
 			goToNext(lastPage.getMenu(), lastPage.getMenuButton());
-		break;
+			break;
 		}
 	}
 
@@ -216,7 +219,7 @@ public class HomeRobot extends Robot {
 	 * @param hierrary
 	 * @param lastPage
 	 */
-	private void automate(List<Page> hierrary, GraphPage lastPage) {
+	private void automate(List<Composite> hierrary, GraphPage lastPage) {
 		PowerWidget powerWidget = (PowerWidget) lastPage.getWidget(0);
 		Scroll scroll = (Scroll) powerWidget.getWidget(0);
 		Chart chart = (Chart) scroll.getWidget(0);
@@ -228,8 +231,9 @@ public class HomeRobot extends Robot {
 			chart.selectPoint(null);
 		break;
 		case INITIAL_STATE + 2:
+		default:
 			goToNextDashboard(hierrary, lastPage, false);
-		break;
+			break;
 		}
 	}
 
@@ -237,11 +241,11 @@ public class HomeRobot extends Robot {
 	 * @param hierrary
 	 * @param lastPage
 	 */
-	private void automate(List<Page> hierrary, InformationPage lastPage) {
+	private void automate(List<Composite> hierrary, InformationPage lastPage) {
 		goToNextDashboard(hierrary, lastPage, true);
 	}
 
-	private void goToNextDashboard(List<Page> hierrary, MenuPage lastPage, boolean forward) {
+	private void goToNextDashboard(List<Composite> hierrary, MenuPage lastPage, boolean forward) {
 		if (dashBoardForward == forward) {
 			goToNext(lastPage.getMenu(), lastPage.getMenuButton());
 		} else {
@@ -268,8 +272,8 @@ public class HomeRobot extends Robot {
 		}
 	}
 
-	private List<Page> getPageHierrary() {
-		List<Page> pages = new ArrayList<Page>();
+	private List<Composite> getPageHierrary() {
+		List<Composite> pages = new ArrayList<>();
 		Widget widget = Main.getDesktop().getActivePanel().getWidget();
 		while (widget != null) {
 			if (widget instanceof Navigator) {
@@ -283,6 +287,9 @@ public class HomeRobot extends Robot {
 					widget = null;
 				}
 			} else {
+				if (widget instanceof Composite) {
+					pages.add((Composite) widget);
+				}
 				widget = null;
 			}
 		}

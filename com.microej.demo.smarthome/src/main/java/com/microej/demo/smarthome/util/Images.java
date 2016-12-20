@@ -14,9 +14,14 @@ public interface Images {
 	String DASHBOARD = "dashboard";
 	String LIGHTS = "lights";
 	String SECURITY = "security";
+
 	String DOOR_OPEN = "door_open";
+	String DOOR_CLOSE_TO_OPEN = "door_close_to_open";
+	String DOOR_CLOSE_TO_CLOSED = "door_close_to_closed";
+	String DOOR_CLOSER_TO_CLOSED = "door_closer_to_closed";
 	String DOOR_CLOSED = "door_closed";
 
-	String TOGGLE_ON = "/images/toggle_on.png";
-	String TOGGLE_OFF = "/images/toggle_off.png";
+	String TOGGLE_ON = "toggle_on";
+	String TOGGLE_OFF = "toggle_off";
+	String COLOR_PICKER = "color_picker";
 }
