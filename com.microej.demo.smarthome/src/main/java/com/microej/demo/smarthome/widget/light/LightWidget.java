@@ -118,8 +118,12 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 		int min = circular.getMinimum();
 		int max = circular.getMaximum();
 		float value = brightness * (max - min) + min;
-		circular.setValue((int) value);
-		model.setBrightness(brightness);
+		if (value != circular.getValue()) {
+			circular.setValue((int) value);
+		}
+		if (brightness != model.getBrightness()) {
+			model.setBrightness(brightness);
+		}
 	}
 
 	/**
@@ -156,5 +160,9 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 		panel.setWidget(picker);
 		panel.show(desktop, true);
 		desktop.show();
+	}
+
+	public void startAnimation() {
+		circular.startAnimation();
 	}
 }

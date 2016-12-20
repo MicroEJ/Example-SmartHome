@@ -23,7 +23,7 @@ import ej.widget.navigation.transition.HorizontalTransitionManager;
 public class SmartHomePage extends MenuNavigatorPage {
 
 	private final static String[] pagesURL = {
-			DashBoard.class.getName(),
+			DashBoardPage.class.getName(),
 			ThermostatPage.class.getName(),
 			LightPage.class.getName(),
 			DoorPage.class.getName() };

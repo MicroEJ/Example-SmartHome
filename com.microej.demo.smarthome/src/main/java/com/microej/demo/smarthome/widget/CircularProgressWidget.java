@@ -96,7 +96,9 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 
 			@Override
 			public void onTransitionStop() {
-				startAnimation();
+				if (isShown()) {
+					startAnimation();
+				}
 
 			}
 
@@ -322,10 +324,11 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 
 	@Override
 	public void setValue(int value) {
-		super.setValue(value);
-		valueAnimation.setTargetValue(value);
-		startAnimation();
-
+		if (value != getValue()) {
+			super.setValue(value);
+			valueAnimation.setTargetValue(value);
+			startAnimation();
+		}
 	}
 
 	protected void performValueChange(int value) {
@@ -388,13 +391,13 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 	public void startAnimation() {
 		if (!animated) {
 			animated = true;
-			if (isShown()) {
-				valueAnimation.start();
-				Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
-				animator.startAnimation(this);
-			} else {
-				currentArcAngle = computeAngle(valueAnimation.getCurrentValue());
-			}
+			// if (isShown()) {
+			valueAnimation.start();
+			Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
+			animator.startAnimation(this);
+			// } else {
+			// currentArcAngle = computeAngle(valueAnimation.getCurrentValue());
+			// }
 		}
 	}
 

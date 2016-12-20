@@ -18,14 +18,14 @@ import ej.widget.navigation.transition.NoTransitionManager;
 /**
  *
  */
-public class DashBoard extends MenuNavigatorPage {
+public class DashBoardPage extends MenuNavigatorPage {
 
 	private static final String[] pagesURL = { InformationPage.class.getName(), GraphPage.class.getName() };
 
 	/**
 	 *
 	 */
-	public DashBoard() {
+	public DashBoardPage() {
 		super(pagesURL);
 
 		Dock mainDock = new Dock();

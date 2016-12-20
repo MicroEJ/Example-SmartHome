@@ -42,27 +42,12 @@ public class LightPage extends DevicePage<Light> implements ProviderListener<Lig
 	}
 
 	@Override
-	public void showNotify() {
-
-
-		super.showNotify();
-	}
-
-	@Override
-	public void hideNotify() {
-		super.hideNotify();
-		// LightProvider provider = ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class);
-		// removeAllWidgets();
-		// provider.removeListener(this);
-
-	}
-
-	@Override
 	public void newElement(Light element) {
 		LightWidget device = new LightWidget(element);
 		addDevice(element, device);
 		if (isShown()) {
 			revalidate();
+			device.startAnimation();
 		}
 	}
 
