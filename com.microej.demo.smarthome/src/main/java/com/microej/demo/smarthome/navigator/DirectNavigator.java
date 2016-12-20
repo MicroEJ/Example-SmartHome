@@ -14,6 +14,7 @@ import ej.widget.navigation.page.Page;
  */
 public class DirectNavigator extends Navigator {
 
+	private Page previousPage = null;
 	/**
 	 * Shows a new page.
 	 *
@@ -24,8 +25,15 @@ public class DirectNavigator extends Navigator {
 	 */
 	@Override
 	public void show(Page page, boolean forward) {
-		if (this.getCurrentPage() != page) {
+		Page currentPage = this.getCurrentPage();
+		if (currentPage != page) {
+			previousPage = currentPage;
 			super.show(page, forward);
 		}
+	}
+
+	@Override
+	protected Page getPreviousPage() {
+		return previousPage;
 	}
 }

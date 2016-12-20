@@ -9,7 +9,6 @@ package com.microej.demo.smarthome.style;
 import com.microej.demo.smarthome.util.Colors;
 import com.microej.demo.smarthome.util.Constants;
 import com.microej.demo.smarthome.widget.CircularPlainBackground;
-import com.microej.demo.smarthome.widget.chart.BasicChart;
 
 import ej.bon.Util;
 import ej.microui.display.GraphicsContext;
@@ -18,6 +17,7 @@ import ej.style.Stylesheet;
 import ej.style.background.NoBackground;
 import ej.style.background.PlainBackground;
 import ej.style.background.SimpleRoundedPlainBackground;
+import ej.style.border.SimpleRoundedBorder;
 import ej.style.font.FontProfile;
 import ej.style.font.FontProfile.FontSize;
 import ej.style.outline.ComplexOutline;
@@ -126,7 +126,7 @@ public class StylePopulator {
 				lightWidgetStyle.setPadding(new ComplexOutline(SIMPLE_OUTLINE, 0, DOUBLE_OUTLINE, 0));
 				stylesheet.addRule(new ClassSelector(ClassSelectors.LIGHT_WIDGET), lightWidgetStyle);
 			}
-	
+
 			{ // Light progress
 				EditableStyle lightProgressStyle = new EditableStyle();
 				lightProgressStyle.setBackgroundColor(Colors.CONCRETE_25);
@@ -134,7 +134,7 @@ public class StylePopulator {
 				lightProgressStyle.setMargin(new ComplexOutline(SIMPLE_OUTLINE/2, 0, SIMPLE_OUTLINE/2, 0));
 				stylesheet.addRule(new ClassSelector(ClassSelectors.LIGHT_PROGRESS), lightProgressStyle);
 			}
-	
+
 			{ // Light toggle
 				EditableStyle lightToggleStyle = new EditableStyle();
 				lightToggleStyle.setMargin(new ComplexOutline(0, 0, DOUBLE_OUTLINE, 0));
@@ -151,7 +151,7 @@ public class StylePopulator {
 				pickerStyle.setBackgroundColor(Colors.WHITE);
 				stylesheet.addRule(new ClassSelector(ClassSelectors.PICKER), pickerStyle);
 			}
-	
+
 			{ // Title label
 				EditableStyle pickerTitleStyle = new EditableStyle();
 				pickerTitleStyle.setForegroundColor(Colors.CONCRETE_25);
@@ -159,7 +159,7 @@ public class StylePopulator {
 				pickerTitleStyle.setPadding(new ComplexOutline(0, 0, 0, DOUBLE_OUTLINE));
 				stylesheet.addRule(new ClassSelector(ClassSelectors.PICKER_TITLE_LABEL), pickerTitleStyle);
 			}
-	
+
 			{ // Close button
 				EditableStyle pickerCloseStyle = new EditableStyle();
 				pickerCloseStyle.setForegroundColor(Colors.CORAL);
@@ -172,7 +172,7 @@ public class StylePopulator {
 
 		{ // Door widget
 			EditableStyle doorWidgetStyle = new EditableStyle();
-			doorWidgetStyle.setPadding(new ComplexOutline(0, 0, DOUBLE_OUTLINE, 0));
+			doorWidgetStyle.setPadding(new ComplexOutline(DOUBLE_OUTLINE, 0, 0, 0));
 			stylesheet.addRule(new ClassSelector(ClassSelectors.DOOR_WIDGET), doorWidgetStyle);
 		}
 
@@ -275,6 +275,8 @@ public class StylePopulator {
 				dashBoardActiveMenuStyle.setPadding(new ComplexOutline(HALF_OUTLINE, 0, HALF_OUTLINE, 0));
 				dashBoardActiveMenuStyle.setMargin(new ComplexOutline(0, DOUBLE_OUTLINE, 0, DOUBLE_OUTLINE));
 				dashBoardActiveMenuStyle.setBackground(new SimpleRoundedPlainBackground(11));
+				dashBoardActiveMenuStyle.setBorder(new SimpleRoundedBorder(11, 2));
+				dashBoardActiveMenuStyle.setBorderColor(Colors.CORAL);
 				dashBoardActiveMenuStyle.setBackgroundColor(Colors.CORAL);
 				dashBoardActiveMenuStyle.setForegroundColor(Colors.CONCRETE_90);
 				stylesheet.addRule(new AndCombinator(new ClassSelector(ClassSelectors.DASHBOARD_MENU_BUTTON),
@@ -292,6 +294,7 @@ public class StylePopulator {
 				EditableStyle dashboardTextStyle = new EditableStyle();
 				dashboardTextStyle.setAlignment(GraphicsContext.LEFT | GraphicsContext.VCENTER);
 				// dashboardTextStyle.setPadding(new ComplexOutline(4, 0, 0, 0));
+				dashboardTextStyle.setForegroundColor(Colors.CONCRETE_25);
 				dashboardTextStyle.setTextManager(new ComplexTextManager());
 				stylesheet.addRule(new ClassSelector(ClassSelectors.DASHBOARD_ITEM_TEXT), dashboardTextStyle);
 			}
@@ -353,21 +356,21 @@ public class StylePopulator {
 				chartScaleStyle.setFontProfile(fpSmall);
 				chartScaleStyle.setForegroundColor(Colors.LIGHT_CORAL);
 				chartScaleStyle.setBackgroundColor(Colors.DARK_CORAL);
-				stylesheet.addRule(new ClassSelector(BasicChart.CLASS_SELECTOR_SCALE), chartScaleStyle);
+				stylesheet.addRule(new ClassSelector(ClassSelectors.CLASS_SELECTOR_SCALE), chartScaleStyle);
 			}
 
 			{ // Chart selected info
 				EditableStyle chartInfoStyle = new EditableStyle();
 				chartInfoStyle.setFontProfile(fpSmall);
 				chartInfoStyle.setForegroundColor(Colors.CONCRETE_25);
-				stylesheet.addRule(new ClassSelector(BasicChart.CLASS_SELECTOR_SELECTED_INFO), chartInfoStyle);
+				stylesheet.addRule(new ClassSelector(ClassSelectors.CLASS_SELECTOR_SELECTED_INFO), chartInfoStyle);
 			}
 
 			{ // Chart selected value
 				EditableStyle chartValueStyle = new EditableStyle();
 				chartValueStyle.setFontProfile(fpSmall);
 				chartValueStyle.setForegroundColor(Colors.DARK_CORAL);
-				stylesheet.addRule(new ClassSelector(BasicChart.CLASS_SELECTOR_SELECTED_VALUE), chartValueStyle);
+				stylesheet.addRule(new ClassSelector(ClassSelectors.CLASS_SELECTOR_SELECTED_VALUE), chartValueStyle);
 			}
 
 		}

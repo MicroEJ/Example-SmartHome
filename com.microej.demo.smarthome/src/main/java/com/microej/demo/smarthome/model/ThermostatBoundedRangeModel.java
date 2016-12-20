@@ -90,7 +90,4 @@ public class ThermostatBoundedRangeModel extends DefaultBoundedRangeModel implem
 		thermostat.removeListener(this);
 	}
 
-	public int getDiff() {
-		return getTargetValue() - getValue();
-	}
 }

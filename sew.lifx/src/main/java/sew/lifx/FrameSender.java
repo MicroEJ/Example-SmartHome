@@ -8,9 +8,8 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.concurrent.Executor;
 
-import ej.components.dependencyinjection.ServiceLoaderFactory;
+import com.microej.demo.smarthome.util.ExecutorUtils;
 
 /**
  *
@@ -24,8 +23,7 @@ public class FrameSender {
 	}
 
 	public void send(final InetAddress address, final int port, final LIFXFrame lifxFrame) {
-		Executor executor = ServiceLoaderFactory.getServiceLoader().getService(Executor.class);
-		executor.execute(new Runnable() {
+		ExecutorUtils.getExecutor(ExecutorUtils.VERY_LOW_PRIORITY).execute(new Runnable() {
 			@Override
 			public void run() {
 				boolean tagged = lifxFrame.isTagged();

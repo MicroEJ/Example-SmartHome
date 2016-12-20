@@ -6,41 +6,43 @@
  */
 package com.microej.demo.smarthome.widget;
 
-import com.microej.demo.smarthome.data.power.Power;
-
 import java.util.List;
 
 import com.microej.demo.smarthome.data.power.InstantPower;
+import com.microej.demo.smarthome.data.power.Power;
 import com.microej.demo.smarthome.data.power.PowerEventListener;
 import com.microej.demo.smarthome.style.ClassSelectors;
-import com.microej.demo.smarthome.widget.chart.Chart;
+import com.microej.demo.smarthome.util.Strings;
+import com.microej.demo.smarthome.widget.chart.BasicChart;
 import com.microej.demo.smarthome.widget.chart.ChartPoint;
 import com.microej.demo.smarthome.widget.chart.LineChart;
 
+import ej.widget.composed.Wrapper;
 import ej.widget.container.Scroll;
 
 /**
  *
  */
-public class PowerWidget extends DeviceWidget<Power> implements PowerEventListener {
+public class PowerWidget extends Wrapper implements PowerEventListener {
 
 	/**
 	 * Values
 	 */
-	private static final String UNIT_STRING = "W";
 	private static final int NUM_SCALE_VALUES = 3;
 
 	/**
 	 * Attributes
 	 */
-	private Chart chart;
+	private final BasicChart chart;
+	private final Power model;
 
 	/**
 	 * Constructor
 	 */
 	public PowerWidget(Power model) {
-		super(model);
-		removeAllWidgets();
+		super();
+
+		this.model = model;
 
 		// create chart
 		this.chart = new LineChart();
@@ -59,7 +61,7 @@ public class PowerWidget extends DeviceWidget<Power> implements PowerEventListen
 		this.chart.setScale(NUM_SCALE_VALUES, model.getMaxPowerConsumption());
 
 		// set chart unit
-		this.chart.setUnit(UNIT_STRING);
+		this.chart.setUnit(Strings.WATT);
 
 		// create scroll
 		Scroll scroll = new Scroll(true, false);
@@ -69,7 +71,7 @@ public class PowerWidget extends DeviceWidget<Power> implements PowerEventListen
 		// load chart data
 		reload();
 
-		setCenter(scroll);
+		setWidget(scroll);
 	}
 
 	/**
@@ -108,16 +110,20 @@ public class PowerWidget extends DeviceWidget<Power> implements PowerEventListen
 		this.chart.repaint();
 	}
 
-	@Override
-	public void showNotify() {
-		super.showNotify();
-		model.addListener(this);
-		reload();
+	/**
+	 *
+	 * @see com.microej.demo.smarthome.widget.chart.BasicChart#startAnimation()
+	 */
+	public void startAnimation() {
+		chart.startAnimation();
 	}
 
-	@Override
-	public void hideNotify() {
-		model.removeListener(this);
+	/**
+	 *
+	 * @see com.microej.demo.smarthome.widget.chart.BasicChart#stopAnimation()
+	 */
+	public void stopAnimation() {
+		chart.stopAnimation();
 	}
 
 }

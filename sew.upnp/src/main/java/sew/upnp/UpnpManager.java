@@ -14,9 +14,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.concurrent.Executor;
 
-import ej.components.dependencyinjection.ServiceLoaderFactory;
+import com.microej.demo.smarthome.util.ExecutorUtils;
 
 public class UpnpManager {
 
@@ -80,8 +79,7 @@ public class UpnpManager {
 	}
 
 	public void discover(final String type) {
-		Executor executor = ServiceLoaderFactory.getServiceLoader().getService(Executor.class);
-		executor.execute(new Runnable() {
+		ExecutorUtils.getExecutor(ExecutorUtils.VERY_LOW_PRIORITY).execute(new Runnable() {
 			@Override
 			public void run() {
 				System.out.println("Send UPnP request.");
@@ -165,7 +163,7 @@ public class UpnpManager {
 	}
 
 	private void receiveInformation(final InetAddress address, final Map<String, String> attributes) {
-		ServiceLoaderFactory.getServiceLoader().getService(Executor.class).execute(new Runnable() {
+		ExecutorUtils.getExecutor(ExecutorUtils.VERY_LOW_PRIORITY).execute(new Runnable() {
 			@Override
 			public void run() {
 				Device device = UpnpManager.this.devices.get(address);

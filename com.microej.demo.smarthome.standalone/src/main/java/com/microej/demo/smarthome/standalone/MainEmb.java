@@ -12,7 +12,6 @@ import com.microej.demo.smarthome.data.philipshue.PhilipsHueBackgroundService;
 import ej.components.dependencyinjection.ServiceLoaderFactory;
 import ej.components.registry.BundleRegistry;
 import ej.components.registry.util.BundleRegistryHelper;
-import ej.wadapps.basedriver.zwave.ZwaveBackgroundService;
 
 /**
  *
@@ -23,7 +22,7 @@ public class MainEmb {
 		BundleRegistry registry = ServiceLoaderFactory.getServiceLoader().getService(BundleRegistry.class);
 		BundleRegistryHelper.startup(registry);
 
-		ZwaveBackgroundService bg = new ZwaveBackgroundService();
+		ZwaveEmbBackgroundService bg = new ZwaveEmbBackgroundService();
 		bg.onStart();
 
 		PhilipsHueBackgroundService philipsHueBackgroundService = new PhilipsHueBackgroundService();

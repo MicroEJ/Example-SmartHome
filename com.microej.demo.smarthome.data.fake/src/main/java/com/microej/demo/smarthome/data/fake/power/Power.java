@@ -8,10 +8,15 @@ package com.microej.demo.smarthome.data.fake.power;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-import com.microej.demo.smarthome.data.fake.Device;
+import com.microej.demo.smarthome.data.impl.Device;
 import com.microej.demo.smarthome.data.power.InstantPower;
 import com.microej.demo.smarthome.data.power.PowerEventListener;
+
+import ej.bon.Timer;
+import ej.bon.TimerTask;
+import ej.components.dependencyinjection.ServiceLoaderFactory;
 
 /**
  *
@@ -19,9 +24,15 @@ import com.microej.demo.smarthome.data.power.PowerEventListener;
 public class Power extends Device<PowerEventListener>
 implements com.microej.demo.smarthome.data.power.Power {
 
+	private static final long HOUR_IN_MS = 1000 * 60 * 60;
+
+	private long lastPowerTime;
+	private final Random rand = new Random();
+
 	/**
 	 * Values
 	 */
+	private static final int INITIAL_HOUR = 7;
 	private static final int MAX_POWER_AT_A_TIME = 24;
 	private static final int MAX_PC = 6000;
 
@@ -37,6 +48,18 @@ implements com.microej.demo.smarthome.data.power.Power {
 	public Power() {
 		super(Power.class.getSimpleName());
 		powers = new ArrayList<InstantPower>(MAX_POWER_AT_A_TIME);
+
+		lastPowerTime = System.currentTimeMillis();
+		for (int i = INITIAL_HOUR; i < getMaxPowerAtATime() + INITIAL_HOUR; i++) {
+			addInstantPower();
+		}
+
+		ServiceLoaderFactory.getServiceLoader().getService(Timer.class, Timer.class).schedule(new TimerTask() {
+			@Override
+			public void run() {
+				addInstantPower();
+			}
+		}, 2_000, 2_000);
 	}
 
 	@Override
@@ -76,4 +99,15 @@ implements com.microej.demo.smarthome.data.power.Power {
 		}
 	}
 
+
+	/**
+	 * Adds a power data value
+	 */
+	private synchronized void addInstantPower() {
+		lastPowerTime += HOUR_IN_MS;
+		int powerValue = rand.nextInt(getMaxPowerConsumption());
+		InstantPower instantPower = new com.microej.demo.smarthome.data.fake.power.InstantPower(lastPowerTime,
+				powerValue);
+		addInstantPower(instantPower);
+	}
 }

@@ -32,6 +32,7 @@
 		<dependency conf="provided->*" org="ej.api" name="microui" rev="[2.0.0-RC0,3.0.0-RC0["/>
 		<dependency conf="provided->*" org="ej.api" name="mwt" rev="[2.0.0-RC0,3.0.0-RC0["/>
 		<dependency org="ej.library.ui" name="widget" rev="[2.0.0-RC0,3.0.0-RC0["/>
+		<dependency org="ej.library.eclasspath" name="executor" rev="[1.0.0-RC0,2.0.0-RC0[" />
 		
 		<!-- 
 			Put your project dependencies here. An example of project dependency declaration 

@@ -23,7 +23,7 @@ public class DeviceWidget<D extends Device<?>> extends Dock {
 	 */
 	public DeviceWidget(D model) {
 		this.model = model;
-		this.addBottom(new Label(model.getName()));
+		this.addTop(new Label(model.getName()));
 	}
 
 

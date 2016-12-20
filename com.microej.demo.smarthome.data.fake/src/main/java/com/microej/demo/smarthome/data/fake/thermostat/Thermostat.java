@@ -8,11 +8,12 @@ package com.microej.demo.smarthome.data.fake.thermostat;
 
 import java.util.Random;
 
-import com.microej.demo.smarthome.data.fake.Device;
-import com.microej.demo.smarthome.data.fake.Provider;
+import com.microej.demo.smarthome.data.impl.Device;
 import com.microej.demo.smarthome.data.thermostat.ThermostatEventListener;
 
+import ej.bon.Timer;
 import ej.bon.TimerTask;
+import ej.components.dependencyinjection.ServiceLoaderFactory;
 
 /**
  *
@@ -38,7 +39,7 @@ implements com.microej.demo.smarthome.data.thermostat.Thermostat {
 	public Thermostat(String name) {
 		super(name);
 
-		Provider.timer.schedule(new TimerTask() {
+		ServiceLoaderFactory.getServiceLoader().getService(Timer.class, Timer.class).schedule(new TimerTask() {
 
 			@Override
 			public void run() {
@@ -51,7 +52,7 @@ implements com.microej.demo.smarthome.data.thermostat.Thermostat {
 			}
 		}, 1_000, 10_000);
 
-		Provider.timer.schedule(new TimerTask() {
+		ServiceLoaderFactory.getServiceLoader().getService(Timer.class, Timer.class).schedule(new TimerTask() {
 			Random rand = new Random();
 
 			@Override

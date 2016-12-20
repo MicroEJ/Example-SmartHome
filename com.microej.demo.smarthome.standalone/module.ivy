@@ -30,17 +30,19 @@
 			Other regular runtime dependencies are in the "default" configuration  
 		-->		
 		<dependency org="ej.api" name="edc" rev="[1.2.0,2.0.0[" conf="provided->*" />
+		<dependency org="ej.api" name="net" rev="[1.0.0,2.0.0[" conf="provided->*" />
 		<dependency org="ej.api" name="bon" rev="[1.2.0,2.0.0[" conf="provided->*" />
-		<dependency org="ej.api" name="net" rev="1.0.+" conf="provided->*" />
 		<dependency org="ej.api" name="ecom" rev="[1.0.0,2.0.0[" conf="provided->*" />
-		<dependency org="ej.api" name="fs" rev="[2.0.0,3.0.0[" conf="provided->*" />
 		
+		<dependency org="ej.library.wadapps" name="framework" rev="[1.0.0-RC,2.0.0-RC["/> 
 		<dependency org="ej.library.runtime" name="components" rev="[3.0.0-RC,4.0.0-RC["/>
 		<dependency org="ej.library.iot" name="connectivity" rev="[1.0.0-RC,2.0.0-RC["/>
 		
 		<dependency org="org.kxml2" name="kxml2" rev="[2.3.0-RC0,3.0.0-RC0[" />
 		
 		<dependency org="ej.library.iot.basedriver" name="zwave" rev="[1.0.0-RC0,2.0.0-RC0["/>
-		<dependency org="ej.wadapps.basedriver.app" name="zwave"  rev="[1.0.0-RC0,2.0.0-RC0[" conf="microej.launch.standalone->*"/>
+		<dependency org="ej.library.iot.basedriver" name="basedriver-api" rev="[1.0.0-RC0,2.0.0-RC0["/>
+		<dependency org="ej.library.iot.basedriver" name="basedriver-event" rev="[1.0.0-RC0,2.0.0-RC0["/>
+		<dependency org="ej.library.iot.basedriver" name="basedriver-util" rev="[1.0.0-RC0,2.0.0-RC0["/>
 	</dependencies>
 </ivy-module>

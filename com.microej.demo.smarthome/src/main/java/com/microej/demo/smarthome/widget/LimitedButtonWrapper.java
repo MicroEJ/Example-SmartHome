@@ -6,7 +6,6 @@
  */
 package com.microej.demo.smarthome.widget;
 
-import ej.microui.display.Display;
 import ej.microui.event.Event;
 import ej.microui.event.generator.Pointer;
 import ej.widget.composed.ButtonWrapper;
@@ -41,22 +40,5 @@ public class LimitedButtonWrapper extends ButtonWrapper {
 		return getWidget(0).contains(x, y);
 	}
 
-	/**
-	 *
-	 */
-	public void partialRevalidate() {
-		Display.getDefaultDisplay().callSerially(new Runnable() {
-			@Override
-			public void run() {
-				int buttonWrapperX = getX();
-				int buttonWrapperY = getY();
-				int buttonWrapperWidth = getWidth();
-				int buttonWrapperHeight = getHeight();
-				validate(buttonWrapperWidth, buttonWrapperHeight);
-				setBounds(buttonWrapperX, buttonWrapperY, buttonWrapperWidth, buttonWrapperHeight);
-			}
-		});
-
-	}
 
 }

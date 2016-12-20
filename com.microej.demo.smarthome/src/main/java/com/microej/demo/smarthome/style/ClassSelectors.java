@@ -49,5 +49,8 @@ public interface ClassSelectors {
 
 
 	String TEST = "TEST";
+	String CLASS_SELECTOR_SCALE = "chart-scale";
+	String CLASS_SELECTOR_SELECTED_INFO = "chart-selected-info";
+	String CLASS_SELECTOR_SELECTED_VALUE = "chart-selected-value";
 
 }

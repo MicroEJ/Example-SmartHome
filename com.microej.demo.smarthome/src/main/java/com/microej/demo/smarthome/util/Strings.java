@@ -27,7 +27,8 @@ public interface Strings {
 
 	String PLUS = "+";
 	String MINUS = "-";
-	String DEGREE = "°";
+	String DEGREE_CELSIUS = "°C";
+	String DEGREE_FAHRENHEIT = "°F";
 
 	String MAXPOWERTODAY = "MAX POWER TODAY";
 
@@ -44,6 +45,6 @@ public interface Strings {
 
 	String INSTANT_POWER = "INSTANT POWER";
 
-	String WATT = "w";
+	String WATT = "W";
 
 }

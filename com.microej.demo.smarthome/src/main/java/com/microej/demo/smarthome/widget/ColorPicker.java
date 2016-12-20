@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.microej.demo.smarthome.Main;
 import com.microej.demo.smarthome.style.ClassSelectors;
+import com.microej.demo.smarthome.util.Strings;
 
 import ej.animation.Animation;
 import ej.animation.Animator;
@@ -37,7 +38,6 @@ public class ColorPicker extends Wrapper implements Animation {
 	 * Values
 	 */
 	private static final String TITLE = "Pick a color";
-	private static final String CLOSE_BUTTON_TEXT = "OK";
 	private static final String IMAGE_FILENAME = "/images/color_picker.png";
 	private static final int SELECTED_CIRCLE_RADIUS = 5;
 	private static final int MAX_CIRCLE_RADIUS = 420;
@@ -49,13 +49,14 @@ public class ColorPicker extends Wrapper implements Animation {
 	/**
 	 * Attributes
 	 */
-	private int sourceX;
-	private int sourceY;
-	private List<OnValueChangeListener> listeners;
-	private Label titleLabel;
-	private Button closeButton;
-	private Image image;
-	private Motion motion;
+	private final int sourceX;
+	private final int sourceY;
+	private final List<OnValueChangeListener> listeners;
+	private final Label titleLabel;
+	private final Button closeButton;
+	private final Image image;
+
+	private final Motion motion;
 	private int currentAnimStep;
 	private int selectedX;
 	private int selectedY;
@@ -87,19 +88,19 @@ public class ColorPicker extends Wrapper implements Animation {
 		this.titleLabel.addClassSelector(ClassSelectors.PICKER_TITLE_LABEL);
 
 		// close button
-		this.closeButton = new Button(CLOSE_BUTTON_TEXT);
-		this.closeButton.addOnClickListener(new OnClickListener() {
+		this.closeButton = new Button(Strings.OK);
+		this.getCloseButton().addOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick() {
 				Main.showDesktop();
 			}
 		});
-		this.closeButton.addClassSelector(ClassSelectors.PICKER_CLOSE_BUTTON);
+		this.getCloseButton().addClassSelector(ClassSelectors.PICKER_CLOSE_BUTTON);
 
 		// top bar
 		Split topBar = new Split(true, TOP_BAR_RATIO);
 		topBar.setFirst(titleLabel);
-		topBar.setLast(this.closeButton);
+		topBar.setLast(this.getCloseButton());
 
 		// split
 		Split split = new Split(false, SPLIT_RATIO);
@@ -118,7 +119,7 @@ public class ColorPicker extends Wrapper implements Animation {
 
 		// hide widgets
 		this.titleLabel.setVisible(false);
-		this.closeButton.setVisible(false);
+		this.getCloseButton().setVisible(false);
 		this.image.setVisible(false);
 
 		// start animation
@@ -181,41 +182,52 @@ public class ColorPicker extends Wrapper implements Animation {
 			case Pointer.RELEASED:
 				int pointerX = this.image.getRelativeX(pointer.getX());
 				int pointerY = this.image.getRelativeY(pointer.getY());
-
-				int dX = pointerX - this.image.getWidth()/2;
-				int dY = pointerY - this.image.getHeight()/2;
-				int d = (int) Math.sqrt(dX*dX + dY*dY);
-				int r = this.image.getWidth()/2 - (SELECTED_CIRCLE_RADIUS+1);
-
-				if (d > r) {
-					pointerX = this.image.getWidth()/2 + dX*r/d;
-					pointerY = this.image.getHeight()/2 + dY*r/d;
-				} else {
-					if (action == Pointer.PRESSED) {
-						pressedInside = true;
-					}
+				if (performClick(action, pointerX, pointerY)) {
+					return true;
 				}
-
-				if (!pressedInside) {
-					break;
-				}
-
-				if (action == Pointer.RELEASED) {
-					pressedInside = false;
-				}
-
-				this.selectedX = pointerX;
-				this.selectedY = pointerY;
-				repaint();
-
-				int[] argbData = new int[1];
-				this.image.getSource().getARGB(argbData, 0, 1, pointerX, pointerY, 1, 1);
-				notifyListeners(argbData[0]);
-				return true;
 			}
 		}
 		return super.handleEvent(event);
 	}
+
+	/**
+	 * @param pointerX
+	 * @param pointerY
+	 */
+	public boolean performClick(int action, int pointerX, int pointerY) {
+		int dX = pointerX - this.image.getWidth() / 2;
+		int dY = pointerY - this.image.getHeight() / 2;
+		int d = (int) Math.sqrt(dX * dX + dY * dY);
+		int r = this.image.getWidth() / 2 - (SELECTED_CIRCLE_RADIUS + 1);
+
+		if (d > r) {
+			pointerX = this.image.getWidth() / 2 + dX * r / d;
+			pointerY = this.image.getHeight() / 2 + dY * r / d;
+		} else {
+			if (action == Pointer.PRESSED) {
+				pressedInside = true;
+			}
+		}
+
+		if (!pressedInside) {
+			return false;
+		}
+
+		if (action == Pointer.RELEASED) {
+			pressedInside = false;
+		}
+
+		this.selectedX = pointerX;
+		this.selectedY = pointerY;
+		repaint();
+
+		int[] argbData = new int[1];
+		this.image.getSource().getARGB(argbData, 0, 1, pointerX, pointerY, 1, 1);
+		notifyListeners(argbData[0]);
+		return true;
+
+	}
+
 
 	/**
 	 * Updates the animation
@@ -257,9 +269,9 @@ public class ColorPicker extends Wrapper implements Animation {
 		}
 
 		// show close button
-		if (!this.closeButton.isVisible() && this.currentAnimStep >= ANIM_NUM_STEPS*showClose[position]) {
-			this.closeButton.setVisible(true);
-			this.closeButton.revalidate();
+		if (!this.getCloseButton().isVisible() && this.currentAnimStep >= ANIM_NUM_STEPS*showClose[position]) {
+			this.getCloseButton().setVisible(true);
+			this.getCloseButton().revalidate();
 		}
 	}
 
@@ -277,5 +289,22 @@ public class ColorPicker extends Wrapper implements Animation {
 		for (OnValueChangeListener listener : this.listeners) {
 			listener.onValueChange(color);
 		}
+	}
+
+	/**
+	 * Gets the image.
+	 *
+	 * @return the image.
+	 */
+	public Image getImage() {
+		return image;
+	}
+
+	/**
+	 * Gets the closeButton.
+	 * @return the closeButton.
+	 */
+	public Button getCloseButton() {
+		return closeButton;
 	}
 }

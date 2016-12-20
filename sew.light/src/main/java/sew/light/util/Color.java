@@ -77,7 +77,60 @@ public class Color {
 	 *            the value to set.
 	 */
 	public void setValue(float value) {
+		System.out.println("Color.setValue() " + value);
 		this.value = value;
+	}
+
+	/**
+	 * @param rgbColor
+	 */
+	public void setColor(int rgbColor) {
+		setColor(ColorHelper.getRed(rgbColor), ColorHelper.getGreen(rgbColor), ColorHelper.getBlue(rgbColor));
+
+	}
+
+	/**
+	 * Set the color from RGB, doesn't change the brightness.
+	 *
+	 * @param red
+	 * @param green
+	 * @param blue
+	 */
+	public void setColor(int red, int green, int blue) {
+		float h, s, v;
+
+		float min, max, delta;
+
+		min = Math.min(Math.min(red, green), blue);
+		max = Math.max(Math.max(red, green), blue);
+
+		delta = max - min;
+
+		if (delta == 0 || max == 0) {
+			h = 0;
+			s = 0;
+		} else {
+			// S
+			s = delta / max;
+
+			// H
+			if (red == max) {
+				h = (green - blue) / delta; // between yellow & magenta
+			} else if (green == max) {
+				h = 2 + (blue - red) / delta; // between cyan & yellow
+			} else {
+				h = 4 + (red - green) / delta; // between magenta & cyan
+			}
+
+			h *= 60; // degrees
+
+			if (h < 0) {
+				h += 360;
+			}
+		}
+
+		this.saturation = s;
+		this.hue = h;
 	}
 
 	@Override
@@ -140,5 +193,4 @@ public class Color {
 		// + saturation + ", " + value);
 		return rgb;
 	}
-
 }

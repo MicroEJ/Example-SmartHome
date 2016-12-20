@@ -12,6 +12,7 @@ import java.util.List;
 import com.microej.demo.smarthome.model.ThermostatBoundedRangeModel;
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.widget.CircularProgressWidget;
+import com.microej.demo.smarthome.widget.ValueAnimation;
 
 import ej.microui.display.GraphicsContext;
 import ej.microui.display.shape.AntiAliasedShapes;
@@ -26,8 +27,10 @@ import ej.widget.listener.OnValueChangeListener;
 public class ThermostatCircularProgress extends CircularProgressWidget {
 
 	private final ThermostatBoundedRangeModel model;
-	private int target;
+
+	private final ValueAnimation target;
 	private int targetAngle;
+
 	private final OnValueChangeListener listener;
 	private final ElementAdapter colors;
 	private final List<OnValueChangeListener> listeners;
@@ -39,11 +42,13 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 		super(model);
 		setThickness(8);
 		this.model = model;
+		target = new ValueAnimation(model.getValue(), model.getTargetValue(), model.getTargetValue(),
+				model.getMaximum());
 		listener = new OnValueChangeListener(){
 			@Override
 			public void onValueChange(int newValue) {
-				target = newValue;
-				updateAngle();
+				target.setTargetValue(newValue);
+				startAnimation();
 				notifyListeners();
 
 
@@ -73,7 +78,7 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	@Override
 	public void renderContent(GraphicsContext g, Style style, Rectangle bounds) {
 		super.renderContent(g, style, bounds);
-		if (targetAngle != 0) {
+		if (targetAngle != 0 && valueAnimation.isFinished()) {
 			AntiAliasedShapes shapes = AntiAliasedShapes.Singleton;
 			if (targetAngle > 0) {
 				g.setColor(colors.getStyle().getForegroundColor());
@@ -88,23 +93,24 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 
 	@Override
 	public void setValue(int value) {
+		target.setStart(value);
 		super.setValue(value);
-		updateAngle();
 	}
 
 	public int getTargetValue() {
-		return target;
+		return target.getTargetValue();
 	}
 
 	public void validateTagetValue() {
-		model.setTargetValue(target);
+		model.setTargetValue(target.getTargetValue());
 	}
 
 	/**
 	 *
 	 */
 	private void updateAngle() {
-		int computeAngle = computeAngle(target - model.getValue() + model.getMinimum());
+		int computeAngle = computeAngle(
+				target.getCurrentValue() - valueAnimation.getCurrentValue() + model.getMinimum());
 		if (computeAngle != targetAngle) {
 			targetAngle = computeAngle;
 			repaint();
@@ -116,9 +122,10 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 		setLocalTarget(value);
 	}
 
-	private void setLocalTarget(int value) {
-		target = value;
-		updateAngle();
+	public void setLocalTarget(int value) {
+		target.setTargetValue(value);
+		target.start();
+		startAnimation();
 		notifyListeners();
 	}
 
@@ -147,7 +154,31 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 
 	private void notifyListeners() {
 		for (OnValueChangeListener changeListener : listeners) {
-			changeListener.onValueChange(target);
+			changeListener.onValueChange(target.getTargetValue());
 		}
+	}
+
+	@Override
+	public void initAnimation() {
+		super.initAnimation();
+		target.reset();
+		targetAngle = 0;
+	}
+
+	@Override
+	public boolean doTick(long currentTimeMillis) {
+		boolean tick = super.doTick(currentTimeMillis);
+		if (!tick) {
+			if (target.isFinished()) {
+				return false;
+			}
+			target.tick(currentTimeMillis);
+			updateAngle();
+		} else {
+			// So the animation starts at the end of the first one.
+			// TODO call it only once.
+			target.start(currentTimeMillis);
+		}
+		return true;
 	}
 }

@@ -1,6 +1,5 @@
 com.microej.demo.smarthome.data.door.DoorProvider=com.microej.demo.smarthome.data.zwave.DoorProvider
 com.microej.demo.smarthome.data.thermostat.Thermostat=com.microej.demo.smarthome.data.zwave.ZwaveThermostatSensor
-#com.microej.demo.smarthome.data.light.LightProvider=com.microej.demo.smarthome.data.philipshue.PhilipsHueLightProvider
-#com.microej.demo.smarthome.data.power.PowerConsumption=com.microej.demo.smarthome.data.fake.power.PowerConsumption
+com.microej.demo.smarthome.data.light.LightProvider=com.microej.demo.smarthome.data.philipshue.PhilipsHueLightProvider
 
-sew.philipshue.BridgeStorage=com.microej.demo.smarthome.data.philipshue.BridgeStorageFS
+java.util.concurrent.Executor=ej.util.concurrent.SingleThreadExecutor
