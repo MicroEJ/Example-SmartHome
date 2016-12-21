@@ -6,6 +6,7 @@
  */
 package com.microej.demo.smarthome.page;
 
+import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.widget.Menu;
 import com.microej.demo.smarthome.widget.MenuButton;
 
@@ -24,6 +25,7 @@ public abstract class MenuPage extends Page {
 		super();
 
 		button = createMenuButton();
+		addClassSelector(ClassSelectors.BODY);
 		if (button != null) {
 			button.addOnClickListener(new OnClickListener() {
 

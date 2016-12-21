@@ -15,7 +15,7 @@ import ej.mwt.Widget;
 import ej.widget.basic.Label;
 import ej.widget.container.Dock;
 import ej.widget.navigation.page.Page;
-import ej.widget.navigation.transition.HorizontalTransitionManager;
+import ej.widget.navigation.transition.HorizontalScreenshotTransitionManager;
 
 /**
  *
@@ -53,8 +53,8 @@ public class SmartHomePage extends MenuNavigatorPage {
 	private Widget createMainContent() {
 		navigator.addClassSelector(ClassSelectors.BODY);
 		// create navigator
-		navigator.setTransitionManager(new HorizontalTransitionManager() {
-			// navigator.setTransitionManager(new HorizontalScreenshotTransitionManager() {
+		// navigator.setTransitionManager(new HorizontalTransitionManager() {
+		navigator.setTransitionManager(new HorizontalScreenshotTransitionManager() {
 			@Override
 			protected void setCurrentPage(Page newPage) {
 				super.setCurrentPage(newPage);

@@ -13,7 +13,8 @@ import com.microej.demo.smarthome.widget.Menu;
 import com.microej.demo.smarthome.widget.MenuButton;
 
 import ej.widget.container.Dock;
-import ej.widget.navigation.transition.NoTransitionManager;
+import ej.widget.navigation.TransitionManager;
+import ej.widget.navigation.transition.VerticalScreenshotTransitionManager;
 
 /**
  *
@@ -29,7 +30,7 @@ public class DashBoardPage extends MenuNavigatorPage {
 		super(pagesURL);
 
 		Dock mainDock = new Dock();
-		NoTransitionManager manager = new NoTransitionManager();
+		TransitionManager manager = new VerticalScreenshotTransitionManager();
 		navigator.setTransitionManager(manager);
 
 		mainDock.setCenter(navigator);

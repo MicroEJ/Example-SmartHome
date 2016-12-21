@@ -324,10 +324,12 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 
 	@Override
 	public void setValue(int value) {
-		if (value != getValue()) {
-			super.setValue(value);
-			valueAnimation.setTargetValue(value);
-			startAnimation();
+		synchronized (this) {
+			if (value != getValue()) {
+				super.setValue(value);
+				valueAnimation.setTargetValue(value);
+				startAnimation();
+			}
 		}
 	}
 

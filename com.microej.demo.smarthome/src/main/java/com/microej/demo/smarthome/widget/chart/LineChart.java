@@ -52,7 +52,6 @@ public class LineChart extends BasicChart {
 			@Override
 			public void onTransitionStart(int transitionsSteps, int transitionsStop, Page from, Page to) {
 				isInTransition = true;
-
 			}
 		};
 	}
@@ -213,6 +212,7 @@ public class LineChart extends BasicChart {
 	@Override
 	public void hideNotify() {
 		TransitionManager.removeGlobalTransitionListener(listener);
+		resetAnimation();
 		super.hideNotify();
 	}
 

@@ -77,17 +77,27 @@ public abstract class BasicChart extends Chart implements Animation {
 	 */
 	@Override
 	public void showNotify() {
+		System.out.println("BasicChart.showNotify()");
 		super.showNotify();
 		if (isEnabled()) {
-			this.currentApparitionStep = 0;
+			resetAnimation();
 		} else {
 			this.currentApparitionStep = APPARITION_STEPS;
 		}
 	}
 
+	@Override
+	public void renderContent(GraphicsContext g, Style style, Rectangle bounds) {
+		System.out.println("BasicChart.renderContent()");
+		super.renderContent(g, style, bounds);
+	}
+	public void resetAnimation() {
+		this.currentApparitionStep = 0;
+	}
+
 	public void startAnimation() {
 		this.motion = new LinearMotion(0, APPARITION_STEPS, APPARITION_DURATION);
-		this.currentApparitionStep = 0;
+		resetAnimation();
 		Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
 		animator.startAnimation(this);
 	}

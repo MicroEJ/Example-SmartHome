@@ -46,7 +46,7 @@ public class ColorPicker extends Dock implements Animation {
 	private static final int SELECTED_CIRCLE_RADIUS = 5;
 	private static final int MAX_CIRCLE_RADIUS = 420;
 	private static final int ANIM_NUM_STEPS = MAX_CIRCLE_RADIUS;
-	private static final int ANIM_DURATION = 450;
+	private static final int ANIM_DURATION = 250;
 
 	/**
 	 * Attributes
@@ -63,6 +63,8 @@ public class ColorPicker extends Dock implements Animation {
 	private int currentAnimStep;
 	private int selectedX;
 	private int selectedY;
+	private int clickX;
+	private int clickY;
 	private boolean pressedInside;
 	private long nextInput = -1;
 	private ej.microui.display.Image screenshot;
@@ -194,8 +196,10 @@ public class ColorPicker extends Dock implements Animation {
 				case Pointer.PRESSED:
 				case Pointer.DRAGGED:
 				case Pointer.RELEASED:
-					int pointerX = this.image.getRelativeX(pointer.getX());
-					int pointerY = this.image.getRelativeY(pointer.getY());
+					clickX = pointer.getX();
+					clickY = pointer.getY();
+					int pointerX = this.image.getRelativeX(clickX);
+					int pointerY = this.image.getRelativeY(clickY);
 					if (pointerX > 0 && pointerX < this.image.getWidth() && pointerY > 0
 							&& pointerY < this.image.getHeight()) {
 						performClick(action, pointerX, pointerY);
@@ -279,16 +283,18 @@ public class ColorPicker extends Dock implements Animation {
 	 * Plays the close animation
 	 */
 	private void playCloseAnimation() {
-		Panel[] panels = getPanel().getDesktop().getPanels();
-		DrawScreenHelper.draw(screenshot.getGraphicsContext(), panels[0]);
-		this.sourceX = closeButton.getAbsoluteX() + closeButton.getWidth() / 2;
-		this.sourceY = closeButton.getAbsoluteY() + closeButton.getHeight() / 2;
-		this.motion = new LinearMotion(ANIM_NUM_STEPS, 0, ANIM_DURATION);
-		this.currentAnimStep = ANIM_NUM_STEPS;
-		this.closeAnim = true;
+		if (motion.isFinished()) {
+			Panel[] panels = getPanel().getDesktop().getPanels();
+			DrawScreenHelper.draw(screenshot.getGraphicsContext(), panels[0]);
+			this.sourceX = clickX;
+			this.sourceY = clickY;
+			this.motion = new LinearMotion(ANIM_NUM_STEPS, 0, ANIM_DURATION);
+			this.currentAnimStep = ANIM_NUM_STEPS;
+			this.closeAnim = true;
 
-		Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
-		animator.startAnimation(this);
+			Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
+			animator.startAnimation(this);
+		}
 	}
 
 	@Override
