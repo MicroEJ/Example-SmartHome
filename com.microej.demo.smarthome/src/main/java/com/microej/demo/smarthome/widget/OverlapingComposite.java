@@ -25,8 +25,8 @@ public class OverlapingComposite extends StyledComposite {
 	public Rectangle validateContent(Style style, Rectangle bounds) {
 		int widthHint = bounds.getWidth();
 		int heightHint = bounds.getHeight();
-		int width = bounds.getWidth();
-		int height = bounds.getHeight();
+		int width = widthHint;
+		int height = heightHint;
 		boolean maxWidth = (widthHint == MWT.NONE);
 		boolean maxHeight = (heightHint == MWT.NONE);
 
@@ -40,7 +40,7 @@ public class OverlapingComposite extends StyledComposite {
 			}
 		}
 
-		return new Rectangle(0, 0, widthHint, heightHint);
+		return new Rectangle(0, 0, width, height);
 	}
 
 	@Override
