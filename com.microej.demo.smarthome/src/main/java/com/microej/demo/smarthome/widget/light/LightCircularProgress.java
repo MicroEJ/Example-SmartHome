@@ -50,6 +50,7 @@ public class LightCircularProgress extends CircularProgressWidget {
 			int innerX = x + (diameter - innerD) / 2;
 			int innerY = y + (diameter - innerD) / 2;
 			g.setColor(customColor);
+			g.removeBackgroundColor();
 			g.fillCircle(innerX, innerY, innerD);
 
 			// draw anti aliased circle
