@@ -356,7 +356,12 @@ public class HorizontalScreenshotTransitionManager extends TransitionManager {
 				this.display.callSerially(new Runnable() {
 					@Override
 					public void run() {
-						end();
+						HorizontalScreenshotAnimation.this.display.callSerially(new Runnable() {
+							@Override
+							public void run() {
+								end();
+							}
+						});
 					}
 				});
 			}
