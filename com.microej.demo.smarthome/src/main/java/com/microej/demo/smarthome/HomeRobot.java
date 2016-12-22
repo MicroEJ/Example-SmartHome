@@ -154,15 +154,15 @@ public class HomeRobot extends Robot {
 	private void automate(List<Composite> hierrary, LightPage lastPage) {
 		Grid lights = (Grid) lastPage.getWidget(0);
 		int widgetsCount = lights.getWidgetsCount();
-		if (widgetsCount == 0) {
+		if (widgetsCount == 0 && state < INITIAL_STATE + 4) {
 			state = INITIAL_STATE + 4;
 			return;
 		}
 
-		Box switchButton;
-		BoundedRange lightCircularProgress;
-		CircleWidget circleWidget;
-		LightWidget light;
+		Box switchButton = null;
+		BoundedRange lightCircularProgress = null;
+		CircleWidget circleWidget = null;
+		LightWidget light = null;
 		int nextInt = rand.nextInt(widgetsCount);
 		Widget widget = lights.getWidget(nextInt);
 		if (widget instanceof LightWidget) {
@@ -171,7 +171,7 @@ public class HomeRobot extends Robot {
 			lightCircularProgress = (LightCircularProgress) composite.getWidget(0);
 			circleWidget = (CircleWidget) composite.getWidget(1);
 			switchButton = (ImageSwitch) light.getWidget(2);
-		} else {
+		} else if (state < INITIAL_STATE + 4) {
 			state = INITIAL_STATE + 4;
 			return;
 		}

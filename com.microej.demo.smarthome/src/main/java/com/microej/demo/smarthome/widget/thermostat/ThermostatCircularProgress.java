@@ -131,6 +131,7 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 
 	@Override
 	public void showNotify() {
+		System.out.println("ThermostatCircularProgress.showNotify()");
 		super.showNotify();
 		setLocalTarget(model.getTargetValue());
 		model.addOnTargetValueChangeListener(listener);
@@ -139,6 +140,7 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 
 	@Override
 	public void hideNotify() {
+		System.out.println("ThermostatCircularProgress.hideNotify()");
 		super.hideNotify();
 		model.removeOnTargetValueChangeListener(listener);
 		model.unregister();

@@ -373,9 +373,10 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 
 	@Override
 	public void showNotify() {
-		super.showNotify();
+		transitionListener.onTransitionStart(0, 0, null, null);
 		addOnValueChangeListener(listener);
 		TransitionManager.addGlobalTransitionListener(transitionListener);
+		super.showNotify();
 	}
 
 	@Override
