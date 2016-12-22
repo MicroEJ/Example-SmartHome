@@ -38,6 +38,8 @@ import ej.microui.event.generator.Pointer;
 import ej.mwt.Composite;
 import ej.mwt.Panel;
 import ej.mwt.Widget;
+import ej.widget.basic.BoundedRange;
+import ej.widget.basic.Box;
 import ej.widget.basic.image.ImageSwitch;
 import ej.widget.composed.ButtonWrapper;
 import ej.widget.container.Grid;
@@ -157,12 +159,22 @@ public class HomeRobot extends Robot {
 			return;
 		}
 
+		Box switchButton;
+		BoundedRange lightCircularProgress;
+		CircleWidget circleWidget;
+		LightWidget light;
 		int nextInt = rand.nextInt(widgetsCount);
-		LightWidget light = (LightWidget) lights.getWidget(nextInt);
-		OverlapingComposite composite = (OverlapingComposite) light.getWidget(1);
-		LightCircularProgress lightCircularProgress = (LightCircularProgress) composite.getWidget(0);
-		CircleWidget circleWidget = (CircleWidget) composite.getWidget(1);
-		ImageSwitch switchButton = (ImageSwitch) light.getWidget(2);
+		Widget widget = lights.getWidget(nextInt);
+		if (widget instanceof LightWidget) {
+			light = (LightWidget) widget;
+			OverlapingComposite composite = (OverlapingComposite) light.getWidget(1);
+			lightCircularProgress = (LightCircularProgress) composite.getWidget(0);
+			circleWidget = (CircleWidget) composite.getWidget(1);
+			switchButton = (ImageSwitch) light.getWidget(2);
+		} else {
+			state = INITIAL_STATE + 4;
+			return;
+		}
 
 		switch (state) {
 		case INITIAL_STATE:
