@@ -2,7 +2,7 @@
  * Java
  *
  * Copyright 2016 IS2T. All rights reserved.
- * IS2T PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ * Use of this source code is subject to license terms.
  */
 package com.microej.demo.smarthome.data.fake.door;
 
@@ -23,7 +23,7 @@ implements com.microej.demo.smarthome.data.door.DoorProvider {
 	 */
 	public DoorProvider() {
 		super();
-		Door door = new Door("Entrance");
+		final Door door = new Door("Entrance");
 		add(door);
 		ServiceLoaderFactory.getServiceLoader().getService(Timer.class, Timer.class).schedule(new TimerTask() {
 

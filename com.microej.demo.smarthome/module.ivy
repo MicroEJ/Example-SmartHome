@@ -2,7 +2,7 @@
 	Ivy
 	
 	Copyright 2016 IS2T. All rights reserved.
-	IS2T PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+	Use of this source code is subject to license terms.
 -->
 <ivy-module version="2.0" xmlns:ea="http://www.easyant.org"> 
 	<info organisation="com.microej.demo" module="smarthome" status="integration" revision="0.1.0">
@@ -33,7 +33,8 @@
 		<dependency conf="provided->*" org="ej.api" name="mwt" rev="[2.0.0-RC0,3.0.0-RC0["/>
 		<dependency org="ej.library.ui" name="widget" rev="[2.0.0-RC0,3.0.0-RC0["/>
 		<dependency org="ej.library.eclasspath" name="executor" rev="[1.0.0-RC0,2.0.0-RC0[" />
-		
+		<dependency org="com.microej.demo.smarthome" name="data"  rev="[0.0.0-RC0,1.0.0-RC0[" />
+		<dependency org="com.microej.demo.smarthome" name="util"  rev="[0.0.0-RC0,1.0.0-RC0[" />
 		<!-- 
 			Put your project dependencies here. An example of project dependency declaration 
 			is provided below:

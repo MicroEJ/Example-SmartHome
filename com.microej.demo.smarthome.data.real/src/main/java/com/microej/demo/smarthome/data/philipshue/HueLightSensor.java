@@ -2,7 +2,7 @@
  * Java
  *
  * Copyright 2016 IS2T. All rights reserved.
- * IS2T PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ * Use of this source code is subject to license terms.
  */
 package com.microej.demo.smarthome.data.philipshue;
 
@@ -31,7 +31,7 @@ implements com.microej.demo.smarthome.data.light.Light, LightListener {
 	 * @param light
 	 * @param lightGroup
 	 */
-	public HueLightSensor(Light light) {
+	public HueLightSensor(final Light light) {
 		super(light.getName());
 		this.light = light;
 

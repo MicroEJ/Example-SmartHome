@@ -2,8 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/main/resources"/>
-	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=test2&amp;ivyXmlPath=module.ivy&amp;confs=*"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/com.microej.demo.smarthome"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/com.microej.demo.smarthome.data.real"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.microej.demo.smarthome.data.fake"/>
+	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=test2&amp;ivyXmlPath=module.ivy&amp;confs=*"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

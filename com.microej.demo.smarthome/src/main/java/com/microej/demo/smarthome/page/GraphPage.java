@@ -2,7 +2,7 @@
  * Java
  *
  * Copyright 2016 IS2T. All rights reserved.
- * IS2T PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ * Use of this source code is subject to license terms.
  */
 package com.microej.demo.smarthome.page;
 
@@ -31,8 +31,8 @@ public class GraphPage extends MenuPage {
 	 */
 	public GraphPage() {
 		super();
-		Power power = ServiceLoaderFactory.getServiceLoader().getService(Power.class);
-		PowerWidget powerWidget = new PowerWidget(power);
+		final Power power = ServiceLoaderFactory.getServiceLoader().getService(Power.class);
+		final PowerWidget powerWidget = new PowerWidget(power);
 		setWidget(powerWidget);
 
 		listener = new TransitionListener() {
@@ -46,13 +46,13 @@ public class GraphPage extends MenuPage {
 			}
 
 			@Override
-			public void onTransitionStep(int step) {
+			public void onTransitionStep(final int step) {
 
 			}
 
 
 			@Override
-			public void onTransitionStart(int transitionsSteps, int transitionsStop, Page from, Page to) {
+			public void onTransitionStart(final int transitionsSteps, final int transitionsStop, final Page from, final Page to) {
 				if (isInHierarchy(GraphPage.this, to)) {
 					powerWidget.reload();
 				}
@@ -66,7 +66,7 @@ public class GraphPage extends MenuPage {
 	 */
 	@Override
 	protected MenuButton createMenuButton() {
-		MenuButton menuButton = new MenuButton(new Label(Strings.MAXPOWERTODAY));
+		final MenuButton menuButton = new MenuButton(new Label(Strings.MAXPOWERTODAY));
 		menuButton.addClassSelector(ClassSelectors.DASHBOARD_MENU_BUTTON);
 		return menuButton;
 	}
@@ -84,7 +84,7 @@ public class GraphPage extends MenuPage {
 		TransitionManager.removeGlobalTransitionListener(listener);
 	}
 
-	private boolean isInHierarchy(Widget widget, Widget hierarchy) {
+	private boolean isInHierarchy(Widget widget, final Widget hierarchy) {
 		if (hierarchy == null) {
 			return false;
 		}

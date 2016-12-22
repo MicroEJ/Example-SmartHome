@@ -2,7 +2,7 @@
 	Ivy
 	
 	Copyright 2016 IS2T. All rights reserved.
-	IS2T PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+	Use of this source code is subject to license terms.
 -->
 <ivy-module version="2.0" xmlns:ea="http://www.easyant.org"> 
 	<info organisation="com.microej.demo.smarthome.data" module="real" status="integration" revision="0.1.0">
@@ -45,6 +45,6 @@
 		
 		<dependency org="ej.library.iot" name="connectivity" rev="[1.0.0-RC,2.0.0-RC["/>
 		
-		
+		<dependency org="com.microej.demo.smarthome" name="data" rev="[0.0.0,1.0.0[" />
 	</dependencies>
 </ivy-module>
