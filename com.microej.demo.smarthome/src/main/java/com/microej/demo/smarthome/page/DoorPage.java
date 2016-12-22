@@ -14,7 +14,6 @@ import com.microej.demo.smarthome.util.Images;
 import com.microej.demo.smarthome.widget.DoorWidget;
 import com.microej.demo.smarthome.widget.ImageMenuButton;
 import com.microej.demo.smarthome.widget.MenuButton;
-import com.microej.demo.smarthome.widget.NoDeviceWidget;
 
 import ej.components.dependencyinjection.ServiceLoaderFactory;
 

@@ -10,9 +10,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.microej.demo.smarthome.data.Device;
-import com.microej.demo.smarthome.widget.NoDeviceWidget;
+import com.microej.demo.smarthome.util.Strings;
 
 import ej.mwt.Widget;
+import ej.widget.basic.Label;
 import ej.widget.container.Grid;
 
 /**
@@ -23,7 +24,7 @@ public abstract class DevicePage<D extends Device<?>> extends MenuPage {
 	private final Object sync = new Object();
 	private final Map<D, Widget> devicesMap;
 	private final Grid devices;
-	private final NoDeviceWidget noDeviceWidget;
+	private final Label noDeviceWidget;
 
 	/**
 	 *
@@ -32,7 +33,7 @@ public abstract class DevicePage<D extends Device<?>> extends MenuPage {
 		super();
 		devices = new Grid(false, 1);
 		devicesMap = new HashMap<>();
-		noDeviceWidget = new NoDeviceWidget();
+		noDeviceWidget = new Label(Strings.NO_DEVICE_FOUND);
 		devices.add(noDeviceWidget);
 		setWidget(devices);
 	}

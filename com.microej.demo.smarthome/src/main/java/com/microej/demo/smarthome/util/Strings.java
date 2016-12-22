@@ -52,6 +52,8 @@ public interface Strings {
 	 */
 	String COLOR_PICKER_TITLE = "Pick a color";
 
-	public String HOUR_END = ":00 ";
+	String HOUR_END = ":00 ";
+
+	String NO_DEVICE_FOUND = "No device found";
 
 }
