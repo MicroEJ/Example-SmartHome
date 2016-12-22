@@ -38,7 +38,7 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	/**
 	 * @param model
 	 */
-	public ThermostatCircularProgress(ThermostatBoundedRangeModel model) {
+	public ThermostatCircularProgress(final ThermostatBoundedRangeModel model) {
 		super(model);
 		setThickness(8);
 		this.model = model;
@@ -46,7 +46,7 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 				model.getMaximum());
 		listener = new OnValueChangeListener(){
 			@Override
-			public void onValueChange(int newValue) {
+			public void onValueChange(final int newValue) {
 				target.setTargetValue(newValue);
 				startAnimation();
 				notifyListeners();
@@ -55,13 +55,13 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 			}
 
 			@Override
-			public void onMaximumValueChange(int newMaximum) {
+			public void onMaximumValueChange(final int newMaximum) {
 				// Not used
 
 			}
 
 			@Override
-			public void onMinimumValueChange(int newMinimum) {
+			public void onMinimumValueChange(final int newMinimum) {
 				// Not used
 
 			}
@@ -76,10 +76,10 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	}
 
 	@Override
-	public void renderContent(GraphicsContext g, Style style, Rectangle bounds) {
+	public void renderContent(final GraphicsContext g, final Style style, final Rectangle bounds) {
 		super.renderContent(g, style, bounds);
 		if (targetAngle != 0 && valueAnimation.isFinished()) {
-			AntiAliasedShapes shapes = AntiAliasedShapes.Singleton;
+			final AntiAliasedShapes shapes = AntiAliasedShapes.Singleton;
 			if (targetAngle > 0) {
 				g.setColor(colors.getStyle().getForegroundColor());
 			} else {
@@ -92,7 +92,7 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	}
 
 	@Override
-	public void setValue(int value) {
+	public void setValue(final int value) {
 		target.setStart(value);
 		super.setValue(value);
 	}
@@ -109,7 +109,7 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	 *
 	 */
 	private void updateAngle() {
-		int computeAngle = computeAngle(
+		final int computeAngle = computeAngle(
 				target.getCurrentValue() - valueAnimation.getCurrentValue() + model.getMinimum());
 		if (computeAngle != targetAngle) {
 			targetAngle = computeAngle;
@@ -118,11 +118,11 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	}
 
 	@Override
-	protected void performValueChange(int value) {
+	protected void performValueChange(final int value) {
 		setLocalTarget(value);
 	}
 
-	public void setLocalTarget(int value) {
+	public void setLocalTarget(final int value) {
 		target.setTargetValue(value);
 		target.start();
 		startAnimation();
@@ -131,7 +131,6 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 
 	@Override
 	public void showNotify() {
-		System.out.println("ThermostatCircularProgress.showNotify()");
 		super.showNotify();
 		setLocalTarget(model.getTargetValue());
 		model.addOnTargetValueChangeListener(listener);
@@ -140,22 +139,21 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 
 	@Override
 	public void hideNotify() {
-		System.out.println("ThermostatCircularProgress.hideNotify()");
 		super.hideNotify();
 		model.removeOnTargetValueChangeListener(listener);
 		model.unregister();
 	}
 
-	public void addOnTargetValueChangeListener(OnValueChangeListener listener) {
+	public void addOnTargetValueChangeListener(final OnValueChangeListener listener) {
 		listeners.add(listener);
 	}
 
-	public void removeOnTargetValueChangeListener(OnValueChangeListener listener) {
+	public void removeOnTargetValueChangeListener(final OnValueChangeListener listener) {
 		listeners.remove(listener);
 	}
 
 	private void notifyListeners() {
-		for (OnValueChangeListener changeListener : listeners) {
+		for (final OnValueChangeListener changeListener : listeners) {
 			changeListener.onValueChange(target.getTargetValue());
 		}
 	}
@@ -168,8 +166,8 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	}
 
 	@Override
-	public boolean doTick(long currentTimeMillis) {
-		boolean tick = super.doTick(currentTimeMillis);
+	public boolean doTick(final long currentTimeMillis) {
+		final boolean tick = super.doTick(currentTimeMillis);
 		if (!tick) {
 			if (target.isFinished()) {
 				return false;

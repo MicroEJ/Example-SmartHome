@@ -18,6 +18,7 @@ import com.microej.demo.smarthome.util.Strings;
 import ej.animation.Animation;
 import ej.animation.Animator;
 import ej.components.dependencyinjection.ServiceLoaderFactory;
+import ej.microui.display.Display;
 import ej.microui.display.GraphicsContext;
 import ej.microui.display.shape.AntiAliasedShapes;
 import ej.microui.event.Event;
@@ -38,6 +39,7 @@ import ej.widget.container.Dock;
 import ej.widget.container.Grid;
 import ej.widget.listener.OnClickListener;
 import ej.widget.listener.OnValueChangeListener;
+import ej.widget.navigation.TransitionManager;
 import ej.widget.util.DrawScreenHelper;
 
 public class ColorPicker extends Dock implements Animation {
@@ -345,6 +347,33 @@ public class ColorPicker extends Dock implements Animation {
 			showWidgets(widget);
 		}
 		repaint();
+
+		// close dialog
+		if (this.closeAnim && this.currentAnimStep == 0) {
+			final Display display = getPanel().getDesktop().getDisplay();
+
+			// Ugly fix to start animation. TODO move transition to a new Transition manager.
+			display.callSerially(new Runnable() {
+
+				@Override
+				public void run() {
+					display.callSerially(new Runnable() {
+
+						@Override
+						public void run() {
+							closeButtonListener.onClick();
+							display.callSerially(new Runnable() {
+
+								@Override
+								public void run() {
+									TransitionManager.notifyGlobalListeners(0, 0, null, null);
+								}
+							});
+						}
+					});
+				}
+			});
+		}
 		return !finished;
 	}
 
@@ -363,10 +392,7 @@ public class ColorPicker extends Dock implements Animation {
 				((StyledWidget) w).partialRevalidate();
 			}
 		}
-		// close dialog
-		if (this.closeAnim && this.currentAnimStep == 0) {
-			this.closeButtonListener.onClick();
-		}
+
 	}
 
 	private void hideWidgets(final Widget w) {

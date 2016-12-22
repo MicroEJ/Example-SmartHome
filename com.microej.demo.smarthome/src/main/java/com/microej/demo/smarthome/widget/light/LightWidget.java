@@ -22,7 +22,6 @@ import ej.widget.listener.OnStateChangeListener;
 import ej.widget.listener.OnValueChangeListener;
 import ej.widget.model.BoundedRangeModel;
 import ej.widget.model.DefaultBoundedRangeModel;
-import ej.widget.navigation.TransitionManager;
 
 /**
  *
@@ -39,30 +38,30 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 	/**
 	 * Constructor
 	 */
-	public LightWidget(Light model) {
+	public LightWidget(final Light model) {
 		super(model);
 		model.addListener(this);
 		addClassSelector(ClassSelectors.LIGHT_WIDGET);
 
-		OverlapingComposite overlapingComposite = new OverlapingComposite();
+		final OverlapingComposite overlapingComposite = new OverlapingComposite();
 		// circular progress
-		BoundedRangeModel boundedRange = new DefaultBoundedRangeModel(0, 1000, 0);
+		final BoundedRangeModel boundedRange = new DefaultBoundedRangeModel(0, 1000, 0);
 		circular = new LightCircularProgress(boundedRange);
 
 		circular.addOnValueChangeListener(new OnValueChangeListener() {
 
 			@Override
-			public void onValueChange(int newValue) {
+			public void onValueChange(final int newValue) {
 				setBrightness(circular.getPercentComplete());
 
 			}
 
 			@Override
-			public void onMinimumValueChange(int newMinimum) {
+			public void onMinimumValueChange(final int newMinimum) {
 			}
 
 			@Override
-			public void onMaximumValueChange(int newMaximum) {
+			public void onMaximumValueChange(final int newMaximum) {
 			}
 		});
 		circular.addClassSelector(ClassSelectors.LIGHT_PROGRESS);
@@ -99,7 +98,7 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 	 * Handle color change event
 	 */
 	@Override
-	public void onColorChange(int color) {
+	public void onColorChange(final int color) {
 		circular.setColor(color);
 	}
 
@@ -107,7 +106,7 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 	 * Handle brightness change event
 	 */
 	@Override
-	public void onBrightnessChange(float brightness) {
+	public void onBrightnessChange(final float brightness) {
 		setBrightness(brightness);
 	}
 
@@ -115,7 +114,7 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 	 * Handle state change event
 	 */
 	@Override
-	public void onStateChange(boolean on) {
+	public void onStateChange(final boolean on) {
 		circular.setEnabled(on);
 		circularButton.setEnabled(on);
 		if (on) {
@@ -129,10 +128,10 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 	/**
 	 * Sets the brightness value
 	 */
-	private void setBrightness(float brightness) {
-		int min = circular.getMinimum();
-		int max = circular.getMaximum();
-		float value = brightness * (max - min) + min;
+	private void setBrightness(final float brightness) {
+		final int min = circular.getMinimum();
+		final int max = circular.getMaximum();
+		final float value = brightness * (max - min) + min;
 		if (value != circular.getValue()) {
 			circular.setValue((int) value);
 		}
@@ -146,28 +145,28 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 	 */
 	private void changeColor() {
 		// calculate animation source position
-		int sourceX = circular.getAbsoluteX() + circular.getWidth() / 2;
-		int sourceY = circular.getAbsoluteY() + circular.getHeight() / 2;
+		final int sourceX = circular.getAbsoluteX() + circular.getWidth() / 2;
+		final int sourceY = circular.getAbsoluteY() + circular.getHeight() / 2;
 
 		// create color change listener
-		OnValueChangeListener listener = new OnValueChangeListener() {
+		final OnValueChangeListener listener = new OnValueChangeListener() {
 			@Override
-			public void onValueChange(int newValue) {
+			public void onValueChange(final int newValue) {
 				model.setColor(newValue);
 				circularButton.setColor(newValue);
 			}
 
 			@Override
-			public void onMinimumValueChange(int newMinimum) {
+			public void onMinimumValueChange(final int newMinimum) {
 			}
 
 			@Override
-			public void onMaximumValueChange(int newMaximum) {
+			public void onMaximumValueChange(final int newMaximum) {
 			}
 		};
 
 		// create color picker
-		ColorPicker picker = new ColorPicker(sourceX, sourceY, model.getColor(), getPanel());
+		final ColorPicker picker = new ColorPicker(sourceX, sourceY, model.getColor(), getPanel());
 		picker.addOnValueChangeListener(listener);
 
 		// create dialog
@@ -175,12 +174,11 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 		dialog.setWidget(picker);
 
 		// set close dialog listener
-		OnClickListener closeButtonListener = new OnClickListener() {
+		final OnClickListener closeButtonListener = new OnClickListener() {
 			@Override
 			public void onClick() {
 				getPanel().show(Main.getDesktop());
 				dialog.hide();
-				TransitionManager.notifyGlobalListeners(0, 0, null, null);
 			}
 		};
 		picker.setCloseButtonListener(closeButtonListener);

@@ -58,16 +58,16 @@ public class VerticalScreenshotTransitionManager extends TransitionManager {
 	private boolean forward;
 
 	@Override
-	public void animate(Page oldPage, Page newPage, boolean forward) {
+	public void animate(final Page oldPage, final Page newPage, final boolean forward) {
 		this.forward = forward;
-		Navigator navigation = getNavigator();
-		Rectangle contentBounds = getContentBounds();
+		final Navigator navigation = getNavigator();
+		final Rectangle contentBounds = getContentBounds();
 
-		int height = navigation.getHeight();
+		final int height = navigation.getHeight();
 		this.contentX = contentBounds.getX();
 		this.contentY = contentBounds.getY();
-		int contentWidth = contentBounds.getWidth();
-		int contentHeight = contentBounds.getHeight();
+		final int contentWidth = contentBounds.getWidth();
+		final int contentHeight = contentBounds.getHeight();
 
 		if (!forward) {
 			this.shift = height;
@@ -75,7 +75,7 @@ public class VerticalScreenshotTransitionManager extends TransitionManager {
 			this.shift = -height;
 		}
 
-		int startY = 0;
+		final int startY = 0;
 
 		// Create image of the current page.
 		createCurrentScreenshot(oldPage, contentWidth, contentHeight);
@@ -85,39 +85,39 @@ public class VerticalScreenshotTransitionManager extends TransitionManager {
 
 		notifyTransitionStart(startY, -shift, oldPage, newPage);
 
-		long duration = DURATION - (DURATION * Math.abs(startY) / Math.abs(this.shift));
-		Motion motion = new LinearMotion(startY, -this.shift, duration);
+		final long duration = DURATION - (DURATION * Math.abs(startY) / Math.abs(this.shift));
+		final Motion motion = new LinearMotion(startY, -this.shift, duration);
 
 		this.animating = true;
-		Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class, Animator.class);
+		final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class, Animator.class);
 		animator.startAnimation(new VerticalScreenshotAnimation(navigation, newPage, oldPage, motion));
 	}
 
-	private void createCurrentScreenshot(Page oldPage, int contentWidth, int contentHeight) {
+	private void createCurrentScreenshot(final Page oldPage, final int contentWidth, final int contentHeight) {
 		this.oldImage = Image.createImage(contentWidth, contentHeight);
-		GraphicsContext g = this.oldImage.getGraphicsContext();
+		final GraphicsContext g = this.oldImage.getGraphicsContext();
 		g.drawRegion(Display.getDefaultDisplay(), oldPage.getAbsoluteX(), oldPage.getAbsoluteY(), contentWidth,
 				contentHeight, 0, 0, GraphicsContext.LEFT | GraphicsContext.TOP);
 		removePage(oldPage);
 	}
 
-	private void createNewPageScreenshot(Page newPage, int contentWidth, int contentHeight) {
+	private void createNewPageScreenshot(final Page newPage, final int contentWidth, final int contentHeight) {
 		this.newImage = createPageScreenshot(newPage, contentWidth, contentHeight);
 	}
 
-	private Image createPageScreenshot(Page page, int contentWidth, int contentHeight) {
+	private Image createPageScreenshot(final Page page, final int contentWidth, final int contentHeight) {
 		page.validate(contentWidth, contentHeight);
 		page.setSize(contentWidth, contentHeight);
-		Image image = Image.createImage(contentWidth, contentHeight);
-		GraphicsContext g = image.getGraphicsContext();
+		final Image image = Image.createImage(contentWidth, contentHeight);
+		final GraphicsContext g = image.getGraphicsContext();
 		DrawScreenHelper.draw(g, page);
 		return image;
 	}
 
 	@Override
-	public void render(GraphicsContext g, Style style, Rectangle bounds) {
+	public void render(final GraphicsContext g, final Style style, final Rectangle bounds) {
 		if (this.animating || this.dragged) {
-			int contentY = this.contentY;
+			final int contentY = this.contentY;
 			Image front = this.oldImage;
 			Image back = this.newImage;
 			int shift = contentY + this.shift + currentY;
@@ -133,11 +133,11 @@ public class VerticalScreenshotTransitionManager extends TransitionManager {
 	}
 
 	@Override
-	public boolean handleEvent(int event) {
+	public boolean handleEvent(final int event) {
 		if (canGoBackward() || canGoForward()) {
 			if (Event.getType(event) == Event.POINTER) {
-				Pointer pointer = (Pointer) Event.getGenerator(event);
-				int pointerX = pointer.getX();
+				final Pointer pointer = (Pointer) Event.getGenerator(event);
+				final int pointerX = pointer.getX();
 				switch (Pointer.getAction(event)) {
 				case Pointer.PRESSED:
 					return onPointerPressed(pointerX);
@@ -151,7 +151,7 @@ public class VerticalScreenshotTransitionManager extends TransitionManager {
 		return super.handleEvent(event);
 	}
 
-	private boolean onPointerPressed(int pointerX) {
+	private boolean onPointerPressed(final int pointerX) {
 		// Initiate drag.
 		this.pressed = true;
 		this.pressedX = pointerX;
@@ -167,14 +167,14 @@ public class VerticalScreenshotTransitionManager extends TransitionManager {
 	}
 
 
-	private boolean onPointerReleased(int pointerX) {
+	private boolean onPointerReleased(final int pointerX) {
 		this.pressed = false;
 		if (this.dragged) {
-			Navigator navigation = getNavigator();
-			Page currentPage = navigation.getCurrentPage();
-			int width = navigation.getWidth();
-			int moveX = pointerX - this.pressedX;
-			int minShiftX = width / MIN_SHIFT_RATIO;
+			final Navigator navigation = getNavigator();
+			final Page currentPage = navigation.getCurrentPage();
+			final int width = navigation.getWidth();
+			final int moveX = pointerX - this.pressedX;
+			final int minShiftX = width / MIN_SHIFT_RATIO;
 			if (moveX > minShiftX) {
 				// Go backward.
 				removePage(this.previousPage);
@@ -204,7 +204,7 @@ public class VerticalScreenshotTransitionManager extends TransitionManager {
 		private final Motion motion;
 		private final Display display;
 
-		private VerticalScreenshotAnimation(Navigator navigation, Page newPage, Page oldPage, Motion motion) {
+		private VerticalScreenshotAnimation(final Navigator navigation, final Page newPage, final Page oldPage, final Motion motion) {
 			this.newPage = newPage;
 			this.navigation = navigation;
 			this.motion = motion;
@@ -213,16 +213,21 @@ public class VerticalScreenshotTransitionManager extends TransitionManager {
 		}
 
 		@Override
-		public boolean tick(long currentTimeMillis) {
-			int currentValue = this.motion.getCurrentValue();
-			boolean finished = motion.isFinished();
+		public boolean tick(final long currentTimeMillis) {
+			final int currentValue = this.motion.getCurrentValue();
+			final boolean finished = motion.isFinished();
 			VerticalScreenshotTransitionManager.this.currentY = currentValue;
 			this.navigation.repaint();
 			if (finished) {
 				this.display.callSerially(new Runnable() {
 					@Override
 					public void run() {
-						end();
+						display.callSerially(new Runnable() {
+							@Override
+							public void run() {
+								end();
+							}
+						});
 					}
 				});
 			}
@@ -230,7 +235,7 @@ public class VerticalScreenshotTransitionManager extends TransitionManager {
 		}
 
 		private void end() {
-			Page newPage = this.newPage;
+			final Page newPage = this.newPage;
 			addPage(newPage);
 			setCurrentPage(newPage);
 			setChildBounds(newPage);
