@@ -381,6 +381,7 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 
 	@Override
 	public void hideNotify() {
+		transitionListener.onTransitionStart(0, 0, null, null);
 		super.hideNotify();
 		removeOnValueChangeListener(listener);
 		TransitionManager.removeGlobalTransitionListener(transitionListener);
