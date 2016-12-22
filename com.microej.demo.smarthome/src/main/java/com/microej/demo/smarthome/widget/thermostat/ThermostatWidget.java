@@ -2,7 +2,7 @@
  * Java
  *
  * Copyright 2016 IS2T. All rights reserved.
- * IS2T PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ * Use of this source code is subject to license terms.
  */
 package com.microej.demo.smarthome.widget.thermostat;
 
@@ -39,37 +39,37 @@ public class ThermostatWidget extends Grid {
 	/**
 	 * @param thermostat
 	 */
-	public ThermostatWidget(Thermostat thermostat) {
+	public ThermostatWidget(final Thermostat thermostat) {
 		super(false, 1);
 		this.thermostat = thermostat;
 		model = new ThermostatBoundedRangeModel(thermostat);
 
 		composite = new OverlapingComposite();
 
-		ThermostatCircularProgress thermostatCircularProgress = new ThermostatCircularProgress(model);
+		final ThermostatCircularProgress thermostatCircularProgress = new ThermostatCircularProgress(model);
 		thermostatCircularProgress.addClassSelector(ClassSelectors.THERMOSTAT);
 		composite.add(thermostatCircularProgress);
-		OnValueChangeListener onValueChangeListener = new OnValueChangeListener() {
+		final OnValueChangeListener onValueChangeListener = new OnValueChangeListener() {
 
 			@Override
-			public void onValueChange(int newValue) {
+			public void onValueChange(final int newValue) {
 				desiredTemperature.setTemperature(thermostatCircularProgress.getTargetValue());
 				currentTemperature.setTemperature(thermostat.getTemperature());
-				int localTarget = thermostatCircularProgress.getTargetValue() / 10;
-				int target = thermostat.getTargetTemperature() / 10;
+				final int localTarget = thermostatCircularProgress.getTargetValue() / 10;
+				final int target = thermostat.getTargetTemperature() / 10;
 				updateClassSelectors(thermostat.getTemperature() / 10,
 						localTarget);
 				updateButton(target, localTarget);
 			}
 
 			@Override
-			public void onMinimumValueChange(int newMinimum) {
+			public void onMinimumValueChange(final int newMinimum) {
 				// Not used.
 
 			}
 
 			@Override
-			public void onMaximumValueChange(int newMaximum) {
+			public void onMaximumValueChange(final int newMaximum) {
 				// Not used.
 
 			}
@@ -79,7 +79,7 @@ public class ThermostatWidget extends Grid {
 
 		button = new LimitedButtonWrapper();
 		button.setAdjustedToChild(false);
-		Label widget = new Label(Strings.OK);
+		final Label widget = new Label(Strings.OK);
 		widget.addClassSelector(ClassSelectors.THERMOSTAT_VALIDATE);
 		button.setWidget(widget);
 		button.addOnClickListener(new OnClickListener() {
@@ -118,7 +118,7 @@ public class ThermostatWidget extends Grid {
 	 * @return
 	 */
 	private Widget createCurrentLabel() {
-		Label topLabel = new Label(Strings.CURRENT);
+		final Label topLabel = new Label(Strings.CURRENT);
 		topLabel.addClassSelector(ClassSelectors.THERMOSTAT_TOP_LABEL);
 		topLabel.addClassSelector(ClassSelectors.THERMOSTAT_CURRENT);
 		currentTemperature = new TemperatureLabel(model.getValue(), model.getMaximum());
@@ -127,9 +127,9 @@ public class ThermostatWidget extends Grid {
 		return createLabel(topLabel, currentTemperature);
 	}
 
-	private Widget createLabel(Widget top, Widget bottom) {
-		Wrapper label = new Wrapper();
-		List list = new List(false);
+	private Widget createLabel(final Widget top, final Widget bottom) {
+		final Wrapper label = new Wrapper();
+		final List list = new List(false);
 		list.add(top);
 		list.add(bottom);
 		label.setWidget(list);
@@ -139,11 +139,11 @@ public class ThermostatWidget extends Grid {
 	}
 
 	@Override
-	public void setBounds(int x, int y, int width, int height) {
+	public void setBounds(final int x, final int y, final int width, final int height) {
 		super.setBounds(x, y, width, height);
 	}
 
-	private void updateClassSelectors(int current, int target) {
+	private void updateClassSelectors(final int current, final int target) {
 		if (current == target) {
 			setDesiredClassSelector(null);
 		} else if (current > target) {
@@ -153,7 +153,7 @@ public class ThermostatWidget extends Grid {
 		}
 	}
 
-	private void setDesiredClassSelector(String classSelector) {
+	private void setDesiredClassSelector(final String classSelector) {
 		if (lastClassSelector != classSelector) {
 			if (lastClassSelector != null) {
 				desiredTemperature.removeClassSelector(lastClassSelector);
@@ -168,7 +168,7 @@ public class ThermostatWidget extends Grid {
 		}
 	}
 
-	private void updateButton(int targetTemperature, int targetValue) {
+	private void updateButton(final int targetTemperature, final int targetValue) {
 		if (targetTemperature == targetValue && button.isVisible()) {
 			button.setVisible(false);
 			if (isShown()) {

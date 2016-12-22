@@ -2,7 +2,7 @@
  * Java
  *
  * Copyright 2016 IS2T. All rights reserved.
- * IS2T PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ * Use of this source code is subject to license terms.
  */
 package com.microej.demo.smarthome.util;
 
@@ -22,7 +22,7 @@ public class ExecutorUtils {
 	public static final int LOW_PRIORITY = Thread.NORM_PRIORITY;
 	public static final int VERY_LOW_PRIORITY = LOW_PRIORITY;
 
-	public static Executor getExecutor(int priority) {
+	public static Executor getExecutor(final int priority) {
 		Executor executor = executors.get(priority);
 		if (executor == null) {
 			executor = new SingleThreadExecutor();

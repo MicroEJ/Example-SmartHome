@@ -2,10 +2,10 @@
 	Ivy
 	
 	Copyright 2016 IS2T. All rights reserved.
-	IS2T PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+	Use of this source code is subject to license terms.
 -->
 <ivy-module version="2.0" xmlns:ea="http://www.easyant.org"> 
-	<info organisation="com.microej.demo.smarthome" module="data" status="integration" revision="0.1.0">
+	<info organisation="com.microej.demo.smarthome" module="util" status="integration" revision="0.1.0">
 		<ea:build organisation="com.is2t.easyant.buildtypes" module="build-microej-javalib" revision="3.+">
 		</ea:build>
 	</info>

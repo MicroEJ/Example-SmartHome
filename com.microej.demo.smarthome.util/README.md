@@ -1,10 +1,10 @@
 <!--
 	Markdown
 	Copyright 2014-2016 IS2T. All rights reserved.
-	IS2T PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+	Use of this source code is subject to license terms.
 -->
 # Overview
-MicroEJ Java library API: data.
+The project contains util classes for Smarthome project.
 
 ## Usage
 Add the following line to your `module.ivy` or your `ivy.xml`:
@@ -12,6 +12,8 @@ Add the following line to your `module.ivy` or your `ivy.xml`:
 
 # Requirements
   - EDC-1.2 or higher
+  - BON-1.2 or higher
+  - FS-2.0 or higher
 
 ## Dependencies
 _All dependencies are retrieved transitively by Ivy resolver_.

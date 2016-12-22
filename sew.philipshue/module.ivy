@@ -27,5 +27,8 @@
 		<dependency org="org.json.me" name="json" rev="[1.0.0-RC0,2.0.0-RC0[" />
 		<dependency org="sew.library" name="upnp" rev="+" />
 		<dependency org="sew.library" name="light" rev="+" />
+		
+		
+		<dependency org="com.microej.demo.smarthome" name="util" rev="[0.0.0,1.0.0[" />
 	</dependencies>
 </ivy-module>

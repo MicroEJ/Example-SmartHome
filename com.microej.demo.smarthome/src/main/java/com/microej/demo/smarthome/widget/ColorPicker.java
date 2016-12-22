@@ -2,7 +2,7 @@
  * Java
  *
  * Copyright 2016 IS2T. All rights reserved.
- * IS2T PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ * Use of this source code is subject to license terms.
  */
 package com.microej.demo.smarthome.widget;
 
@@ -76,7 +76,7 @@ public class ColorPicker extends Dock implements Animation {
 	/**
 	 * Constructor
 	 */
-	public ColorPicker(int sourceX, int sourceY, int initialColor, Panel background) {
+	public ColorPicker(final int sourceX, final int sourceY, final int initialColor, final Panel background) {
 		super();
 		this.background = background;
 		// set class
@@ -85,7 +85,7 @@ public class ColorPicker extends Dock implements Animation {
 		// image
 		this.image = new Image(HomeImageLoader.loadImage(Images.COLOR_PICKER)) {
 			@Override
-			public void renderContent(GraphicsContext g, Style style, Rectangle bounds) {
+			public void renderContent(final GraphicsContext g, final Style style, final Rectangle bounds) {
 				if (isVisible()) {
 					super.renderContent(g, style, bounds);
 					renderSelectedCircle(g, style, bounds);
@@ -94,17 +94,17 @@ public class ColorPicker extends Dock implements Animation {
 		};
 
 		// image wrapper
-		Wrapper imageWrapper = new Wrapper();
+		final Wrapper imageWrapper = new Wrapper();
 		imageWrapper.setAdjustedToChild(false);
 		imageWrapper.setWidget(this.image);
 
-		OnClickListener onClickCloseListener = new OnClickListener() {
+		final OnClickListener onClickCloseListener = new OnClickListener() {
 			@Override
 			public void onClick() {
 				playCloseAnimation();
 			}
 		};
-		OnClickListener onClickResetListener = new OnClickListener() {
+		final OnClickListener onClickResetListener = new OnClickListener() {
 
 			@Override
 			public void onClick() {
@@ -125,14 +125,14 @@ public class ColorPicker extends Dock implements Animation {
 		this.closeButton.addClassSelector(ClassSelectors.PICKER_CLOSE_BUTTON);
 
 		// top bar
-		Grid topBar = new Grid(true, 2);
+		final Grid topBar = new Grid(true, 2);
 		topBar.add(titleLabel);
 		topBar.add(this.closeButton);
 
 		// split
 		addTop(topBar);
 
-		CircleWidget initialColorWidget = new CircleWidget(onClickResetListener);
+		final CircleWidget initialColorWidget = new CircleWidget(onClickResetListener);
 		initialColorWidget.setColor(initialColor);
 		initialColorWidget.addClassSelector(ClassSelectors.LIGHT_PROGRESS);
 
@@ -159,17 +159,17 @@ public class ColorPicker extends Dock implements Animation {
 	 * Renders the widget
 	 */
 	@Override
-	public void renderContent(GraphicsContext g, Style style, Rectangle bounds) {
+	public void renderContent(final GraphicsContext g, final Style style, final Rectangle bounds) {
 		// render parent
 		// super.renderContent(g, style, bounds);
 
 		if (currentAnimStep < ANIM_NUM_STEPS) {
 			g.drawImage(screenshot, 0, 0, GraphicsContext.TOP | GraphicsContext.LEFT);
 			// fill circle
-			int circleR = MAX_CIRCLE_RADIUS * this.currentAnimStep / ANIM_NUM_STEPS;
-			int circleX = sourceX - circleR;
-			int circleY = sourceY - circleR;
-			int diameter = circleR << 1;
+			final int circleR = MAX_CIRCLE_RADIUS * this.currentAnimStep / ANIM_NUM_STEPS;
+			final int circleX = sourceX - circleR;
+			final int circleY = sourceY - circleR;
+			final int diameter = circleR << 1;
 			g.setColor(style.getBackgroundColor());
 			g.removeBackgroundColor();
 			g.fillCircle(circleX, circleY, diameter);
@@ -183,8 +183,8 @@ public class ColorPicker extends Dock implements Animation {
 			// antiAliasedShapes.drawCircle(g, circleX, circleY, diameter);
 		} else {
 			g.setColor(style.getBackgroundColor());
-			int x = g.getClipX();
-			int y = g.getClipY();
+			final int x = g.getClipX();
+			final int y = g.getClipY();
 			g.fillRect(x, y, x + g.getClipWidth(), y + g.getClipHeight());
 		}
 	}
@@ -192,15 +192,15 @@ public class ColorPicker extends Dock implements Animation {
 	/**
 	 * Renders the selected circle
 	 */
-	public void renderSelectedCircle(GraphicsContext g, Style style, Rectangle bounds) {
+	public void renderSelectedCircle(final GraphicsContext g, final Style style, final Rectangle bounds) {
 		// draw selected circle
 		if (this.selectedX != -1 && this.selectedY != -1) {
-			int circleX = this.selectedX - SELECTED_CIRCLE_RADIUS;
-			int circleY = this.selectedY - SELECTED_CIRCLE_RADIUS;
+			final int circleX = this.selectedX - SELECTED_CIRCLE_RADIUS;
+			final int circleY = this.selectedY - SELECTED_CIRCLE_RADIUS;
 
 			g.setColor(style.getForegroundColor());
 			g.removeBackgroundColor();
-			AntiAliasedShapes antiAliasedShapes = AntiAliasedShapes.Singleton;
+			final AntiAliasedShapes antiAliasedShapes = AntiAliasedShapes.Singleton;
 			antiAliasedShapes.setThickness(1);
 			antiAliasedShapes.setFade(1);
 			antiAliasedShapes.drawCircle(g, circleX, circleY, 2*SELECTED_CIRCLE_RADIUS);
@@ -211,8 +211,8 @@ public class ColorPicker extends Dock implements Animation {
 	 * Handles click events
 	 */
 	@Override
-	public boolean handleEvent(int event) {
-		long currentTime = System.currentTimeMillis();
+	public boolean handleEvent(final int event) {
+		final long currentTime = System.currentTimeMillis();
 		if (currentTime > nextInput) {
 			if (nextInput == -1) {
 				nextInput = 0;
@@ -220,16 +220,16 @@ public class ColorPicker extends Dock implements Animation {
 				nextInput = currentTime + INPUT_RATE;
 			}
 			if (Event.getType(event) == Event.POINTER) {
-				Pointer pointer = (Pointer) Event.getGenerator(event);
-				int action = Pointer.getAction(event);
+				final Pointer pointer = (Pointer) Event.getGenerator(event);
+				final int action = Pointer.getAction(event);
 				switch(action) {
 				case Pointer.PRESSED:
 				case Pointer.DRAGGED:
 				case Pointer.RELEASED:
 					clickX = pointer.getX();
 					clickY = pointer.getY();
-					int pointerX = this.image.getRelativeX(clickX);
-					int pointerY = this.image.getRelativeY(clickY);
+					final int pointerX = this.image.getRelativeX(clickX);
+					final int pointerY = this.image.getRelativeY(clickY);
 					if (pointerX > 0 && pointerX < this.image.getWidth() && pointerY > 0
 							&& pointerY < this.image.getHeight()) {
 						performClick(action, pointerX, pointerY);
@@ -246,13 +246,13 @@ public class ColorPicker extends Dock implements Animation {
 	 * @param pointerX
 	 * @param pointerY
 	 */
-	public boolean performClick(int action, int pointerX, int pointerY) {
-		int centerX = this.image.getWidth() >> 1;
-					int centerY = this.image.getHeight() >> 1;
-					int dX = pointerX - centerX;
-					int dY = pointerY - centerY;
-					int d = (int) Math.sqrt(dX * dX + dY * dY);
-					int r = getRadius();
+	public boolean performClick(final int action, int pointerX, int pointerY) {
+		final int centerX = this.image.getWidth() >> 1;
+					final int centerY = this.image.getHeight() >> 1;
+					final int dX = pointerX - centerX;
+					final int dY = pointerY - centerY;
+					final int d = (int) Math.sqrt(dX * dX + dY * dY);
+					final int r = getRadius();
 
 					if (d > r) {
 						pointerX = centerX + dX * r / d;
@@ -294,11 +294,11 @@ public class ColorPicker extends Dock implements Animation {
 		this.motion = new LinearMotion(0, ANIM_NUM_STEPS, ANIM_DURATION);
 		this.currentAnimStep = 0;
 		this.closeAnim = false;
-		for (Widget widget : getWidgets()) {
+		for (final Widget widget : getWidgets()) {
 			hideWidgets(widget);
 		}
 
-		Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
+		final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
 		animator.startAnimation(this);
 	}
 
@@ -321,13 +321,13 @@ public class ColorPicker extends Dock implements Animation {
 			this.currentAnimStep = ANIM_NUM_STEPS;
 			this.closeAnim = true;
 
-			Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
+			final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
 			animator.startAnimation(this);
 		}
 	}
 
 	@Override
-	public void setBounds(int x, int y, int width, int height) {
+	public void setBounds(final int x, final int y, final int width, final int height) {
 		super.setBounds(x, y, width, height);
 		// Starts animation.
 		playOpenAnimation();
@@ -337,20 +337,20 @@ public class ColorPicker extends Dock implements Animation {
 	 * Updates the animation
 	 */
 	@Override
-	public boolean tick(long currentTimeMillis) {
-		boolean finished = this.motion.isFinished();
+	public boolean tick(final long currentTimeMillis) {
+		final boolean finished = this.motion.isFinished();
 		this.currentAnimStep = this.motion.getCurrentValue();
 		// showWidgets();
-		for (Widget widget : getWidgets()) {
+		for (final Widget widget : getWidgets()) {
 			showWidgets(widget);
 		}
 		repaint();
 		return !finished;
 	}
 
-	private void showWidgets(Widget w) {
+	private void showWidgets(final Widget w) {
 		if (w instanceof Composite) {
-			for (Widget widget : ((Composite) w).getWidgets()) {
+			for (final Widget widget : ((Composite) w).getWidgets()) {
 				showWidgets(widget);
 			}
 			return;
@@ -369,9 +369,9 @@ public class ColorPicker extends Dock implements Animation {
 		}
 	}
 
-	private void hideWidgets(Widget w) {
+	private void hideWidgets(final Widget w) {
 		if (w instanceof Composite) {
-			for (Widget widget : ((Composite) w).getWidgets()) {
+			for (final Widget widget : ((Composite) w).getWidgets()) {
 				hideWidgets(widget);
 			}
 			return;
@@ -383,16 +383,16 @@ public class ColorPicker extends Dock implements Animation {
 	 * @param w
 	 * @return
 	 */
-	private boolean changeState(Widget w) {
-		int r = MAX_CIRCLE_RADIUS * this.currentAnimStep / ANIM_NUM_STEPS;
-		int xStart = w.getAbsoluteX();
-		int xEnd = xStart + w.getWidth();
-		int yStart = w.getAbsoluteY();
-		int yEnd = xStart + w.getHeight();
-		int showStartX = sourceX - r;
-		int showEndX = sourceX + r;
-		int showStartY = sourceY - r;
-		int showEndY = sourceY + r;
+	private boolean changeState(final Widget w) {
+		final int r = MAX_CIRCLE_RADIUS * this.currentAnimStep / ANIM_NUM_STEPS;
+		final int xStart = w.getAbsoluteX();
+		final int xEnd = xStart + w.getWidth();
+		final int yStart = w.getAbsoluteY();
+		final int yEnd = xStart + w.getHeight();
+		final int showStartX = sourceX - r;
+		final int showEndX = sourceX + r;
+		final int showStartY = sourceY - r;
+		final int showEndY = sourceY + r;
 
 		if (closeAnim) {
 			return w.isVisible() && (xEnd > showEndX || xStart < showStartX || yEnd > showEndY || yStart < showStartY);
@@ -405,27 +405,27 @@ public class ColorPicker extends Dock implements Animation {
 	/**
 	 * Sets the close button listener
 	 */
-	public void setCloseButtonListener(OnClickListener listener) {
+	public void setCloseButtonListener(final OnClickListener listener) {
 		this.closeButtonListener = listener;
 	}
 
 	/**
 	 * Adds a listener
 	 */
-	public void addOnValueChangeListener(OnValueChangeListener listener) {
+	public void addOnValueChangeListener(final OnValueChangeListener listener) {
 		this.listeners.add(listener);
 	}
 
 	/**
 	 * Notifies the listeners that a new color has been picked
 	 */
-	private void notifyListeners(int color) {
+	private void notifyListeners(final int color) {
 		currentColorWidget.setColor(color);
 		ServiceLoaderFactory.getServiceLoader().getService(Executor.class).execute(new Runnable() {
 
 			@Override
 			public void run() {
-				for (OnValueChangeListener listener : listeners) {
+				for (final OnValueChangeListener listener : listeners) {
 					listener.onValueChange(color);
 				}
 			}
@@ -450,7 +450,7 @@ public class ColorPicker extends Dock implements Animation {
 	}
 
 	@Override
-	public void validate(int widthHint, int heightHint) {
+	public void validate(final int widthHint, final int heightHint) {
 		super.validate(widthHint, heightHint);
 	}
 

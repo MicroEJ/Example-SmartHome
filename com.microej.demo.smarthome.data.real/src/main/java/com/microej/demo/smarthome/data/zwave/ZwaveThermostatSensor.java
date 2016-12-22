@@ -2,7 +2,7 @@
  * Java
  *
  * Copyright 2016 IS2T. All rights reserved.
- * IS2T PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ * Use of this source code is subject to license terms.
  */
 package com.microej.demo.smarthome.data.zwave;
 
@@ -140,11 +140,11 @@ public class ZwaveThermostatSensor extends Device<ThermostatEventListener> imple
 	}
 
 	@Override
-	public void setTargetTemperature(int temperature) {
+	public void setTargetTemperature(final int temperature) {
 		if (temperature != target) {
 			this.target = temperature;
 			if (thermostat != null) {
-				ThermostatMode mode = thermostat.getLastknownMode();
+				final ThermostatMode mode = thermostat.getLastknownMode();
 				if (mode != null) {
 					ExecutorUtils.getExecutor(ExecutorUtils.LOW_PRIORITY).execute(new Runnable() {
 
