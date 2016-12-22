@@ -17,6 +17,7 @@ import com.microej.demo.smarthome.page.LightPage;
 import com.microej.demo.smarthome.page.MenuNavigatorPage;
 import com.microej.demo.smarthome.page.MenuPage;
 import com.microej.demo.smarthome.page.ThermostatPage;
+import com.microej.demo.smarthome.widget.CircleWidget;
 import com.microej.demo.smarthome.widget.ColorPicker;
 import com.microej.demo.smarthome.widget.Menu;
 import com.microej.demo.smarthome.widget.MenuButton;
@@ -35,6 +36,7 @@ import ej.microui.display.Display;
 import ej.microui.event.EventGenerator;
 import ej.microui.event.generator.Pointer;
 import ej.mwt.Composite;
+import ej.mwt.Panel;
 import ej.mwt.Widget;
 import ej.widget.basic.image.ImageSwitch;
 import ej.widget.composed.ButtonWrapper;
@@ -157,7 +159,9 @@ public class HomeRobot extends Robot {
 
 		int nextInt = rand.nextInt(widgetsCount);
 		LightWidget light = (LightWidget) lights.getWidget(nextInt);
-		LightCircularProgress lightCircularProgress = (LightCircularProgress) light.getWidget(1);
+		OverlapingComposite composite = (OverlapingComposite) light.getWidget(1);
+		LightCircularProgress lightCircularProgress = (LightCircularProgress) composite.getWidget(0);
+		CircleWidget circleWidget = (CircleWidget) composite.getWidget(1);
 		ImageSwitch switchButton = (ImageSwitch) light.getWidget(2);
 
 		switch (state) {
@@ -169,7 +173,7 @@ public class HomeRobot extends Robot {
 			break;
 		case INITIAL_STATE + 1:
 			if (switchButton.isChecked()) {
-				lightCircularProgress.performClick();
+				circleWidget.performClick();
 			}
 		break;
 		case INITIAL_STATE + 2:
@@ -270,23 +274,26 @@ public class HomeRobot extends Robot {
 
 	private List<Composite> getPageHierrary() {
 		List<Composite> pages = new ArrayList<>();
-		Widget widget = Main.getDesktop().getActivePanel().getWidget();
-		while (widget != null) {
-			if (widget instanceof Navigator) {
-				Navigator navigator = (Navigator) widget;
-				Page currentPage = navigator.getCurrentPage();
-				pages.add(currentPage);
-				if (currentPage instanceof MenuNavigatorPage) {
-					MenuNavigatorPage menuNavigatorPage = (MenuNavigatorPage) currentPage;
-					widget = menuNavigatorPage.getNavigator();
+		Panel activePanel = Main.getDesktop().getActivePanel();
+		if (activePanel != null) {
+			Widget widget = activePanel.getWidget();
+			while (widget != null) {
+				if (widget instanceof Navigator) {
+					Navigator navigator = (Navigator) widget;
+					Page currentPage = navigator.getCurrentPage();
+					pages.add(currentPage);
+					if (currentPage instanceof MenuNavigatorPage) {
+						MenuNavigatorPage menuNavigatorPage = (MenuNavigatorPage) currentPage;
+						widget = menuNavigatorPage.getNavigator();
+					} else {
+						widget = null;
+					}
 				} else {
+					if (widget instanceof Composite) {
+						pages.add((Composite) widget);
+					}
 					widget = null;
 				}
-			} else {
-				if (widget instanceof Composite) {
-					pages.add((Composite) widget);
-				}
-				widget = null;
 			}
 		}
 		return pages;

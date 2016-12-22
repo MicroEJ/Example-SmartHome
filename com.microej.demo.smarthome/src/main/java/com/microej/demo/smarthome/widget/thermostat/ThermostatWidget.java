@@ -93,6 +93,7 @@ public class ThermostatWidget extends Grid {
 			}
 		});
 		composite.add(button);
+		button.setVisible(false);
 
 
 		add(createCurrentLabel());
@@ -135,6 +136,11 @@ public class ThermostatWidget extends Grid {
 		label.setAdjustedToChild(false);
 
 		return label;
+	}
+
+	@Override
+	public void setBounds(int x, int y, int width, int height) {
+		super.setBounds(x, y, width, height);
 	}
 
 	private void updateClassSelectors(int current, int target) {

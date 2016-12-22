@@ -24,6 +24,7 @@ import ej.microui.event.Event;
 import ej.microui.event.generator.Pointer;
 import ej.motion.Motion;
 import ej.motion.linear.LinearMotion;
+import ej.mwt.Composite;
 import ej.mwt.Panel;
 import ej.mwt.Widget;
 import ej.style.Style;
@@ -31,7 +32,6 @@ import ej.style.container.Rectangle;
 import ej.widget.StyledComposite;
 import ej.widget.StyledWidget;
 import ej.widget.basic.Image;
-import ej.widget.basic.Label;
 import ej.widget.composed.Button;
 import ej.widget.composed.Wrapper;
 import ej.widget.container.Dock;
@@ -42,6 +42,7 @@ import ej.widget.util.DrawScreenHelper;
 
 public class ColorPicker extends Dock implements Animation {
 
+	private static final int CIRCLE_DIAMETER = 120;
 	private static final int INPUT_RATE = 30;
 	private static final int SELECTED_CIRCLE_RADIUS = 5;
 	private static final int MAX_CIRCLE_RADIUS = 420;
@@ -55,7 +56,7 @@ public class ColorPicker extends Dock implements Animation {
 	private int sourceY;
 	private final List<OnValueChangeListener> listeners;
 	private OnClickListener closeButtonListener;
-	private final Label titleLabel;
+	private final Button titleLabel;
 	private final Button closeButton;
 	private final Image image;
 	private Motion motion;
@@ -68,12 +69,16 @@ public class ColorPicker extends Dock implements Animation {
 	private boolean pressedInside;
 	private long nextInput = -1;
 	private ej.microui.display.Image screenshot;
+	private final CircleWidget currentColorWidget;
+	private final Panel background;
+
 
 	/**
 	 * Constructor
 	 */
-	public ColorPicker(int sourceX, int sourceY) {
+	public ColorPicker(int sourceX, int sourceY, int initialColor, Panel background) {
 		super();
+		this.background = background;
 		// set class
 		addClassSelector(ClassSelectors.PICKER);
 
@@ -93,18 +98,30 @@ public class ColorPicker extends Dock implements Animation {
 		imageWrapper.setAdjustedToChild(false);
 		imageWrapper.setWidget(this.image);
 
-		// title label
-		this.titleLabel = new Label(Strings.COLOR_PICKER_TITLE);
-		this.titleLabel.addClassSelector(ClassSelectors.PICKER_TITLE_LABEL);
-
-		// close button
-		this.closeButton = new Button(Strings.OK);
-		this.closeButton.addOnClickListener(new OnClickListener() {
+		OnClickListener onClickCloseListener = new OnClickListener() {
 			@Override
 			public void onClick() {
 				playCloseAnimation();
 			}
-		});
+		};
+		OnClickListener onClickResetListener = new OnClickListener() {
+
+			@Override
+			public void onClick() {
+				notifyListeners(initialColor);
+				onClickCloseListener.onClick();
+
+			}
+		};
+
+		// title label
+		this.titleLabel = new Button(Strings.COLOR_PICKER_TITLE);
+		titleLabel.addOnClickListener(onClickResetListener);
+		this.titleLabel.addClassSelector(ClassSelectors.PICKER_TITLE_LABEL);
+
+		// close button
+		this.closeButton = new Button(Strings.OK);
+		this.closeButton.addOnClickListener(onClickCloseListener);
 		this.closeButton.addClassSelector(ClassSelectors.PICKER_CLOSE_BUTTON);
 
 		// top bar
@@ -114,7 +131,20 @@ public class ColorPicker extends Dock implements Animation {
 
 		// split
 		addTop(topBar);
+
+		CircleWidget initialColorWidget = new CircleWidget(onClickResetListener);
+		initialColorWidget.setColor(initialColor);
+		initialColorWidget.addClassSelector(ClassSelectors.LIGHT_PROGRESS);
+
+		currentColorWidget = new CircleWidget(onClickCloseListener);
+		currentColorWidget.setColor(initialColor);
+		currentColorWidget.addClassSelector(ClassSelectors.LIGHT_PROGRESS);
+
+		initialColorWidget.setPreferredSize(CIRCLE_DIAMETER, CIRCLE_DIAMETER);
+		addLeft(initialColorWidget);
 		setCenter(imageWrapper);
+		currentColorWidget.setPreferredSize(CIRCLE_DIAMETER, CIRCLE_DIAMETER);
+		addRight(currentColorWidget);
 
 		// set initial state
 		this.listeners = new ArrayList<OnValueChangeListener>();
@@ -264,9 +294,9 @@ public class ColorPicker extends Dock implements Animation {
 		this.motion = new LinearMotion(0, ANIM_NUM_STEPS, ANIM_DURATION);
 		this.currentAnimStep = 0;
 		this.closeAnim = false;
-		this.titleLabel.setVisible(false);
-		this.closeButton.setVisible(false);
-		this.image.setVisible(false);
+		for (Widget widget : getWidgets()) {
+			hideWidgets(widget);
+		}
 
 		Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
 		animator.startAnimation(this);
@@ -284,8 +314,7 @@ public class ColorPicker extends Dock implements Animation {
 	 */
 	private void playCloseAnimation() {
 		if (motion.isFinished()) {
-			Panel[] panels = getPanel().getDesktop().getPanels();
-			DrawScreenHelper.draw(screenshot.getGraphicsContext(), panels[0]);
+			DrawScreenHelper.draw(screenshot.getGraphicsContext(), background);
 			this.sourceX = clickX;
 			this.sourceY = clickY;
 			this.motion = new LinearMotion(ANIM_NUM_STEPS, 0, ANIM_DURATION);
@@ -311,50 +340,65 @@ public class ColorPicker extends Dock implements Animation {
 	public boolean tick(long currentTimeMillis) {
 		boolean finished = this.motion.isFinished();
 		this.currentAnimStep = this.motion.getCurrentValue();
-		showWidgets();
+		// showWidgets();
+		for (Widget widget : getWidgets()) {
+			showWidgets(widget);
+		}
 		repaint();
 		return !finished;
 	}
 
-	/**
-	 * Shows the widgets once they
-	 */
-	private void showWidgets() {
-		// when to show the widgets (animation ratios)
-		float[] showTitle = new float[] { 0.28f, 0.60f, 0.95f };
-		float[] showImage = new float[] { 0.65f, 0.35f, 0.65f };
-		float[] showClose = new float[] { 0.95f, 0.60f, 0.28f };
-
-		float[][] showRatios = new float[][] { showTitle, showImage, showClose };
-		Widget[] widgets = new Widget[] { this.titleLabel, this.image, this.closeButton };
-
-		// guess source position
-		int position = 1; // center
-		if (this.sourceX < getWidth()/3) {
-			position = 0; // left
-		} else if (this.sourceX >= getWidth()*2/3) {
-			position = 2; // right
+	private void showWidgets(Widget w) {
+		if (w instanceof Composite) {
+			for (Widget widget : ((Composite) w).getWidgets()) {
+				showWidgets(widget);
+			}
+			return;
 		}
-
-		// show/hide widgets
-		for (int w = 0; w < widgets.length; w++) {
-			Widget widget = widgets[w];
-			if (widget.isVisible() == this.closeAnim) {
-				boolean ratioReached = (this.currentAnimStep >= ANIM_NUM_STEPS*showRatios[w][position]);
-				if (ratioReached != this.closeAnim) {
-					widget.setVisible(!this.closeAnim);
-					if (widget instanceof StyledComposite) {
-						((StyledComposite) widget).partialRevalidate();
-					} else {
-						((StyledWidget) widget).partialRevalidate();
-					}
-				}
+		if (changeState(w)) {
+			w.setVisible(!this.closeAnim);
+			if (w instanceof StyledComposite) {
+				((StyledComposite) w).partialRevalidate();
+			} else {
+				((StyledWidget) w).partialRevalidate();
 			}
 		}
-
 		// close dialog
 		if (this.closeAnim && this.currentAnimStep == 0) {
 			this.closeButtonListener.onClick();
+		}
+	}
+
+	private void hideWidgets(Widget w) {
+		if (w instanceof Composite) {
+			for (Widget widget : ((Composite) w).getWidgets()) {
+				hideWidgets(widget);
+			}
+			return;
+		}
+		w.setVisible(false);
+	}
+
+	/**
+	 * @param w
+	 * @return
+	 */
+	private boolean changeState(Widget w) {
+		int r = MAX_CIRCLE_RADIUS * this.currentAnimStep / ANIM_NUM_STEPS;
+		int xStart = w.getAbsoluteX();
+		int xEnd = xStart + w.getWidth();
+		int yStart = w.getAbsoluteY();
+		int yEnd = xStart + w.getHeight();
+		int showStartX = sourceX - r;
+		int showEndX = sourceX + r;
+		int showStartY = sourceY - r;
+		int showEndY = sourceY + r;
+
+		if (closeAnim) {
+			return w.isVisible() && (xEnd > showEndX || xStart < showStartX || yEnd > showEndY || yStart < showStartY);
+		} else {
+			return !w.isVisible() && (xEnd < showEndX && xStart > showStartX)
+					&& (yEnd < showEndY && yStart > showStartY);
 		}
 	}
 
@@ -376,6 +420,7 @@ public class ColorPicker extends Dock implements Animation {
 	 * Notifies the listeners that a new color has been picked
 	 */
 	private void notifyListeners(int color) {
+		currentColorWidget.setColor(color);
 		ServiceLoaderFactory.getServiceLoader().getService(Executor.class).execute(new Runnable() {
 
 			@Override

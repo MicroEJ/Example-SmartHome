@@ -15,7 +15,7 @@ import ej.microui.display.Image;
 import ej.microui.event.Event;
 import ej.microui.event.generator.Pointer;
 import ej.motion.Motion;
-import ej.motion.quart.QuartEaseOutMotion;
+import ej.motion.linear.LinearMotion;
 import ej.style.Style;
 import ej.style.container.Rectangle;
 import ej.widget.navigation.Navigator;
@@ -108,7 +108,7 @@ public class HorizontalScreenshotTransitionManager extends TransitionManager {
 
 
 		long duration = DURATION - (DURATION * Math.abs(startX) / Math.abs(this.shift));
-		Motion motion = new QuartEaseOutMotion(startX, -this.shift, duration);
+		Motion motion = new LinearMotion(startX, -this.shift, duration);
 
 		this.animating = true;
 		Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class, Animator.class);
@@ -141,7 +141,8 @@ public class HorizontalScreenshotTransitionManager extends TransitionManager {
 		if (this.animating || this.dragged) {
 			g.translate(this.currentX, 0);
 			int contentX = this.contentX;
-			g.drawImage(this.oldImage, contentX, this.contentY, GraphicsContext.LEFT | GraphicsContext.TOP);
+			g.drawImage(this.oldImage, contentX, this.contentY,
+					GraphicsContext.LEFT | GraphicsContext.TOP);
 			g.drawImage(this.newImage, contentX + this.shift, this.contentY,
 					GraphicsContext.LEFT | GraphicsContext.TOP);
 		}
@@ -334,7 +335,6 @@ public class HorizontalScreenshotTransitionManager extends TransitionManager {
 		private final Page oldPage;
 		private final Navigator navigation;
 		private final Motion motion;
-		private final long startTimeMillis;
 		private final Display display;
 
 		private HorizontalScreenshotAnimation(Navigator navigation, Page newPage, Page oldPage, Motion motion) {
@@ -342,16 +342,16 @@ public class HorizontalScreenshotTransitionManager extends TransitionManager {
 			this.oldPage = oldPage;
 			this.navigation = navigation;
 			this.motion = motion;
-			this.startTimeMillis = System.currentTimeMillis();
 			this.display = Display.getDefaultDisplay();
 			startTransition();
 		}
 
 		@Override
 		public boolean tick(long currentTimeMillis) {
-			long elapsed = currentTimeMillis - this.startTimeMillis;
-			final int currentValue = this.motion.getValue(elapsed);
-			boolean finished = elapsed > DURATION;// motion.isFinished();
+			int currentValue = this.motion.getCurrentValue();
+			boolean finished = motion.isFinished();
+			HorizontalScreenshotTransitionManager.this.currentX = currentValue;
+			this.navigation.repaint();
 			if (finished) {
 				this.display.callSerially(new Runnable() {
 					@Override
@@ -359,10 +359,7 @@ public class HorizontalScreenshotTransitionManager extends TransitionManager {
 						end();
 					}
 				});
-			} else {
-				HorizontalScreenshotTransitionManager.this.currentX = currentValue;
 			}
-			this.navigation.repaint();
 			return !finished;
 		}
 

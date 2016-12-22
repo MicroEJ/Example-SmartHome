@@ -10,11 +10,8 @@ import com.microej.demo.smarthome.widget.CircularProgressWidget;
 
 import ej.microui.display.GraphicsContext;
 import ej.microui.display.shape.AntiAliasedShapes;
-import ej.microui.event.Event;
-import ej.microui.event.generator.Pointer;
 import ej.style.Style;
 import ej.style.container.Rectangle;
-import ej.widget.listener.OnClickListener;
 import ej.widget.model.BoundedRangeModel;
 
 /**
@@ -22,17 +19,13 @@ import ej.widget.model.BoundedRangeModel;
  */
 public class LightCircularProgress extends CircularProgressWidget {
 
-	/**
-	 * Attributes
-	 */
-	private final OnClickListener onClickListener;
+
 
 	/**
 	 * Constructor
 	 */
-	public LightCircularProgress(BoundedRangeModel model, OnClickListener onClickListener) {
+	public LightCircularProgress(BoundedRangeModel model) {
 		super(model);
-		this.onClickListener = onClickListener;
 	}
 
 	/**
@@ -67,40 +60,10 @@ public class LightCircularProgress extends CircularProgressWidget {
 	}
 
 	/**
-	 * Handles click events
-	 */
-	@Override
-	public boolean handleEvent(int event) {
-		if (isEnabled()) {
-			if (Event.getType(event) == Event.POINTER) {
-				Pointer pointer = (Pointer) Event.getGenerator(event);
-				int pointerX = this.getRelativeX(pointer.getX());
-				int pointerY = this.getRelativeY(pointer.getY());
-				int radius = diameter / 2;
-				int dX = pointerX - (x + radius);
-				int dY = pointerY - (y + radius);
-				int d2 = dX*dX + dY*dY;
-				int r = radius / 2;
-				if (d2 <= r * r) {
-					if (Pointer.getAction(event) == Pointer.RELEASED) {
-						performClick();
-					}
-					return true;
-				}
-			}
-		}
-		return super.handleEvent(event);
-	}
-
-	/**
 	 *
 	 */
 	public void setColor(int color) {
 		customColor = color;
 		repaint();
-	}
-
-	public void performClick() {
-		this.onClickListener.onClick();
 	}
 }

@@ -77,7 +77,6 @@ public abstract class BasicChart extends Chart implements Animation {
 	 */
 	@Override
 	public void showNotify() {
-		System.out.println("BasicChart.showNotify()");
 		super.showNotify();
 		if (isEnabled()) {
 			resetAnimation();
@@ -86,11 +85,6 @@ public abstract class BasicChart extends Chart implements Animation {
 		}
 	}
 
-	@Override
-	public void renderContent(GraphicsContext g, Style style, Rectangle bounds) {
-		System.out.println("BasicChart.renderContent()");
-		super.renderContent(g, style, bounds);
-	}
 	public void resetAnimation() {
 		this.currentApparitionStep = 0;
 	}

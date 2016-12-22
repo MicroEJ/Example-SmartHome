@@ -10,8 +10,10 @@ import com.microej.demo.smarthome.Main;
 import com.microej.demo.smarthome.data.light.Light;
 import com.microej.demo.smarthome.data.light.LightEventListener;
 import com.microej.demo.smarthome.style.ClassSelectors;
+import com.microej.demo.smarthome.widget.CircleWidget;
 import com.microej.demo.smarthome.widget.ColorPicker;
 import com.microej.demo.smarthome.widget.DeviceWidget;
+import com.microej.demo.smarthome.widget.OverlapingComposite;
 
 import ej.mwt.Panel;
 import ej.widget.basic.image.ImageSwitch;
@@ -31,6 +33,7 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 	 */
 	private final LightCircularProgress circular;
 	private final ImageSwitch switchButton;
+	private final CircleWidget circularButton;
 
 	/**
 	 * Constructor
@@ -40,14 +43,11 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 		model.addListener(this);
 		addClassSelector(ClassSelectors.LIGHT_WIDGET);
 
+		OverlapingComposite overlapingComposite = new OverlapingComposite();
 		// circular progress
 		BoundedRangeModel boundedRange = new DefaultBoundedRangeModel(0, 1000, 0);
-		circular = new LightCircularProgress(boundedRange, new OnClickListener() {
-			@Override
-			public void onClick() {
-				changeColor();
-			}
-		});
+		circular = new LightCircularProgress(boundedRange);
+
 		circular.addOnValueChangeListener(new OnValueChangeListener() {
 
 			@Override
@@ -66,6 +66,19 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 		});
 		circular.addClassSelector(ClassSelectors.LIGHT_PROGRESS);
 
+		overlapingComposite.add(circular);
+
+
+		circularButton = new CircleWidget(new OnClickListener() {
+			@Override
+			public void onClick() {
+				changeColor();
+			}
+		});
+		circularButton.setColor(model.getColor());
+		circularButton.addClassSelector(ClassSelectors.LIGHT_PROGRESS);
+		overlapingComposite.add(circularButton);
+
 		// toggle button
 		switchButton = new ImageSwitch();
 		switchButton.setChecked(model.isOn());
@@ -73,7 +86,7 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 		switchButton.addClassSelector(ClassSelectors.LIGHT_PROGRESS);
 
 		// place widgets
-		setCenter(circular);
+		setCenter(overlapingComposite);
 		addBottom(switchButton);
 
 		// set initial state
@@ -103,6 +116,7 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 	@Override
 	public void onStateChange(boolean on) {
 		circular.setEnabled(on);
+		circularButton.setEnabled(on);
 		if (on) {
 			circular.initAnimation();
 			circular.startAnimation();
@@ -139,6 +153,7 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 			@Override
 			public void onValueChange(int newValue) {
 				model.setColor(newValue);
+				circularButton.setColor(newValue);
 			}
 
 			@Override
@@ -151,7 +166,7 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 		};
 
 		// create color picker
-		ColorPicker picker = new ColorPicker(sourceX, sourceY);
+		ColorPicker picker = new ColorPicker(sourceX, sourceY, model.getColor(), getPanel());
 		picker.addOnValueChangeListener(listener);
 
 		// create dialog
@@ -162,6 +177,7 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 		OnClickListener closeButtonListener = new OnClickListener() {
 			@Override
 			public void onClick() {
+				getPanel().show(Main.getDesktop());
 				dialog.hide();
 			}
 		};
@@ -169,6 +185,7 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 
 		// show dialog
 		dialog.show(Main.getDesktop(), true);
+		getPanel().hide();
 	}
 
 	public void startAnimation() {
