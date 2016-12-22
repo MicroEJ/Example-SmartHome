@@ -274,10 +274,16 @@ public abstract class BasicChart extends Chart implements Animation {
 			double angle = Math.asin((double) (centerY - valueY) / fullRadius);
 			int moveX = (int) (Math.cos(angle) * fullRadius);
 			int centerX = valueX;
-			if (valueX + getX() < getPanel().getWidth()/2) {
+			if (centerX-moveX < fullRadius) {
 				centerX += moveX;
-			} else {
+			} else if(centerX+moveX >= getWidth()-fullRadius) {
 				centerX -= moveX;
+			} else {
+				if (valueX + getX() < getPanel().getWidth() / 2) {
+					centerX += moveX;
+				} else {
+					centerX -= moveX;
+				}
 			}
 
 			// calculate arrow position

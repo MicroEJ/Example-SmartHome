@@ -9,6 +9,7 @@ package com.microej.demo.smarthome.page;
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Strings;
 import com.microej.demo.smarthome.widget.Menu;
+import com.microej.demo.smarthome.widget.OverlapingComposite;
 import com.microej.demo.smarthome.widget.TimeWidget;
 
 import ej.mwt.Widget;
@@ -68,9 +69,9 @@ public class SmartHomePage extends MenuNavigatorPage {
 	 * @return
 	 */
 	private Widget createHeader() {
-		Dock dock = new Dock();
-		dock.setCenter(new Label(Strings.SMARTHOME_TITLE));
-		dock.addRight(new TimeWidget());
+		OverlapingComposite dock = new OverlapingComposite();
+		dock.add(new Label(Strings.SMARTHOME_TITLE));
+		dock.add(new TimeWidget());
 		dock.addClassSelector(ClassSelectors.HEADER);
 		return dock;
 	}

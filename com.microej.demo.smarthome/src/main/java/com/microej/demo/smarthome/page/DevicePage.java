@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.microej.demo.smarthome.data.Device;
+import com.microej.demo.smarthome.widget.NoDeviceWidget;
 
 import ej.mwt.Widget;
 import ej.widget.container.Grid;
@@ -22,6 +23,7 @@ public abstract class DevicePage<D extends Device<?>> extends MenuPage {
 	private final Object sync = new Object();
 	private final Map<D, Widget> devicesMap;
 	private final Grid devices;
+	private final NoDeviceWidget noDeviceWidget;
 
 	/**
 	 *
@@ -29,15 +31,22 @@ public abstract class DevicePage<D extends Device<?>> extends MenuPage {
 	public DevicePage() {
 		super();
 		devices = new Grid(false, 1);
-
 		devicesMap = new HashMap<>();
+		noDeviceWidget = new NoDeviceWidget();
+		devices.add(noDeviceWidget);
 		setWidget(devices);
 	}
 
 	public void addDevice(D element, Widget device) {
 		synchronized (sync) {
+			if (devices.getWidgetsCount() == 1 && devices.getWidgets()[0] == noDeviceWidget) {
+				devices.remove(noDeviceWidget);
+			}
+
 			devices.add(device);
 			devicesMap.put(element, device);
+
+			revalidate();
 		}
 	}
 
@@ -46,12 +55,21 @@ public abstract class DevicePage<D extends Device<?>> extends MenuPage {
 			Widget deviceWidget = devicesMap.get(device);
 			devices.remove(deviceWidget);
 			devicesMap.remove(device);
+
+			if (devices.getChildrenCount() == 0) {
+				devices.add(noDeviceWidget);
+				revalidate();
+			}
 		}
 	}
 
-	@Override
-	protected void removeAllWidgets() {
-		devices.removeAllWidgets();
-		devicesMap.clear();
+	protected void removeDevices() {
+		synchronized (sync) {
+			devices.removeAllWidgets();
+			devicesMap.clear();
+
+			devices.add(noDeviceWidget);
+			revalidate();
+		}
 	}
 }

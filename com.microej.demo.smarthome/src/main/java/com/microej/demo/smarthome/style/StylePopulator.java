@@ -9,6 +9,7 @@ package com.microej.demo.smarthome.style;
 import com.microej.demo.smarthome.util.Colors;
 import com.microej.demo.smarthome.util.Constants;
 import com.microej.demo.smarthome.widget.CircularPlainBackground;
+import com.microej.demo.smarthome.widget.TimeWidget;
 
 import ej.bon.Util;
 import ej.microui.display.GraphicsContext;
@@ -25,6 +26,7 @@ import ej.style.outline.Outline;
 import ej.style.outline.SimpleOutline;
 import ej.style.selector.ClassSelector;
 import ej.style.selector.StateSelector;
+import ej.style.selector.TypeSelector;
 import ej.style.selector.combinator.AndCombinator;
 import ej.style.text.ComplexTextManager;
 import ej.style.util.EditableStyle;
@@ -85,9 +87,16 @@ public class StylePopulator {
 
 		{ // Header
 			EditableStyle headerStyle = new EditableStyle();
+			headerStyle.setForegroundColor(Colors.WHITE);
 			headerStyle.setBackground(plainBackground);
 			headerStyle.setPadding(defaultOutline);
 			stylesheet.addRule(new ClassSelector(ClassSelectors.HEADER), headerStyle);
+		}
+
+		{ // Time widget
+			EditableStyle timeStyle = new EditableStyle();
+			timeStyle.setAlignment(GraphicsContext.RIGHT | GraphicsContext.VCENTER);
+			stylesheet.addRule(new TypeSelector(TimeWidget.class), timeStyle);
 		}
 
 		{ // Footer
