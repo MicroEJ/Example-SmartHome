@@ -380,4 +380,12 @@ public abstract class TransitionManager {
 		notifyTransitionStop();
 	}
 
+	public static void notifyGlobalListeners(int transitionsStart, int transitionsStop, Page from, Page to) {
+		for (TransitionListener transitionListener : GlobalListeners) {
+			transitionListener.onTransitionStart(transitionsStart, transitionsStop, from, to);
+		}
+		for (TransitionListener transitionListener : GlobalListeners) {
+			transitionListener.onTransitionStop();
+		}
+	}
 }

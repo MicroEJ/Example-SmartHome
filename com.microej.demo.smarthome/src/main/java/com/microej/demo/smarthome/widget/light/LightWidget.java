@@ -22,6 +22,7 @@ import ej.widget.listener.OnStateChangeListener;
 import ej.widget.listener.OnValueChangeListener;
 import ej.widget.model.BoundedRangeModel;
 import ej.widget.model.DefaultBoundedRangeModel;
+import ej.widget.navigation.TransitionManager;
 
 /**
  *
@@ -179,6 +180,7 @@ public class LightWidget extends DeviceWidget<Light> implements LightEventListen
 			public void onClick() {
 				getPanel().show(Main.getDesktop());
 				dialog.hide();
+				TransitionManager.notifyGlobalListeners(0, 0, null, null);
 			}
 		};
 		picker.setCloseButtonListener(closeButtonListener);
