@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Application-Id: SmartHome
+Application-Version: 0.1.0
+Application-PrintableName: SmartHome
+Application-Description: Description of applicationID
+Application-BackgroundServices: com.microej.demo.smarthome.ZWaveBackgroundService, 
+ com.microej.demo.smarthome.data.philipshue.PhilipsHueBackgroundService
+Application-Activities: com.microej.demo.smarthome.app.SmartHomeActivity
+

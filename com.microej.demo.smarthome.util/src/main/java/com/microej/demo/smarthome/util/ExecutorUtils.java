@@ -17,10 +17,10 @@ import ej.util.concurrent.SingleThreadExecutor;
  */
 public class ExecutorUtils {
 	private static final Map<Integer, Executor> executors = new HashMap<>();
-	// public static final int LOW_PRIORITY = Thread.NORM_PRIORITY - 1;
-	// public static final int VERY_LOW_PRIORITY = LOW_PRIORITY - 1;
-	public static final int LOW_PRIORITY = Thread.NORM_PRIORITY;
-	public static final int VERY_LOW_PRIORITY = LOW_PRIORITY;
+	public static final int LOW_PRIORITY = Thread.NORM_PRIORITY - 1;
+	public static final int VERY_LOW_PRIORITY = LOW_PRIORITY - 1;
+	// public static final int LOW_PRIORITY = Thread.NORM_PRIORITY;
+	// public static final int VERY_LOW_PRIORITY = LOW_PRIORITY;
 
 	public static Executor getExecutor(final int priority) {
 		Executor executor = executors.get(priority);
@@ -30,7 +30,7 @@ public class ExecutorUtils {
 
 				@Override
 				public void run() {
-					Thread currentThread = Thread.currentThread();
+					final Thread currentThread = Thread.currentThread();
 					currentThread.setName("Executor" + priority);
 					currentThread.setPriority(priority);
 				}

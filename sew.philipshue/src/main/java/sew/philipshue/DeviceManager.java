@@ -229,7 +229,8 @@ public class DeviceManager {
 		try {
 			Storage storage = ServiceLoaderFactory.getServiceLoader().getService(Storage.class);
 			if (storage != null) {
-				InputStream inputStream = storage.load(this.device.getUDN());
+				// InputStream inputStream = storage.load(this.device.getUDN());
+				InputStream inputStream = storage.load("HUE_BRIDGE");
 				if (inputStream == null) {
 					return null;
 				}
@@ -250,7 +251,8 @@ public class DeviceManager {
 			byte[] charArray = this.username.getBytes();
 			ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(charArray);
 			try {
-				storage.store(this.device.getUDN(), byteArrayInputStream);
+				// storage.store(this.device.getUDN(), byteArrayInputStream);
+				storage.store("HUE_BRIDGE", byteArrayInputStream);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -261,7 +263,8 @@ public class DeviceManager {
 		Storage storage = ServiceLoaderFactory.getServiceLoader().getService(Storage.class);
 		if (storage != null) {
 			try {
-				storage.remove(this.device.getUDN());
+				// storage.remove(this.device.getUDN());
+				storage.remove("HUE_BRIDGE");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

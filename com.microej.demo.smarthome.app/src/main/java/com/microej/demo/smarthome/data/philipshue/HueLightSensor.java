@@ -38,15 +38,8 @@ implements com.microej.demo.smarthome.data.light.Light, LightListener {
 
 		final Random rand = new Random(System.nanoTime());
 		color = new Color(rand.nextFloat() * 360, 0.8f, 1f);
-		isOn = true;
-		ExecutorUtils.getExecutor(ExecutorUtils.LOW_PRIORITY).execute(new Runnable() {
-
-			@Override
-			public void run() {
-				onLightUpdate(light);
-			}
-		});
 		rgbColor = color.toRGB();
+		isOn = true;
 		light.addListener(this);
 	}
 

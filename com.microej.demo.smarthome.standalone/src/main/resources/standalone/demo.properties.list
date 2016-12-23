@@ -1,3 +1,4 @@
 ej.bon.Timer=ej.bon.Timer
 ej.components.registry.BundleRegistry=ej.components.registry.impl.FileRegistry
 ej.components.registry.impl.FileRegistry.file=/standalone/demo.services.bundles
+ej.wadapps.storage.Storage=ej.wadapps.standalone.StorageStandalone
