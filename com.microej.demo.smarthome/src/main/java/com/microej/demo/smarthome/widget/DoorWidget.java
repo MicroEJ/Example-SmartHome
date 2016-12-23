@@ -66,7 +66,7 @@ public class DoorWidget extends DeviceWidget<Door> implements DoorEventListener,
 			this.open = open;
 			this.motion = new LinearMotion(animStep, ANIMATION_STEPS-animStep, ANIMATION_DURATION);
 			this.door.setSource(HomeImageLoader.getImageSource(image));
-			Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
+			Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class, Animator.class);
 			animator.startAnimation(this);
 		}
 	}

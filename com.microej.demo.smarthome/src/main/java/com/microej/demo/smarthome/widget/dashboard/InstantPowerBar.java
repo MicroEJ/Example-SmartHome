@@ -88,7 +88,7 @@ public class InstantPowerBar extends BoundedRange {
 				motion = new LinearMotion(getValue(), target, MOTION_DURATION);
 
 				motion.start();
-				Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
+				Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class, Animator.class);
 				animator.startAnimation(new Animation() {
 
 					@Override
@@ -114,7 +114,7 @@ public class InstantPowerBar extends BoundedRange {
 	private void stopAnimation() {
 		synchronized (sync) {
 			if (animation != null) {
-				Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
+				Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class, Animator.class);
 				animator.stopAnimation(animation);
 				animation = null;
 			}

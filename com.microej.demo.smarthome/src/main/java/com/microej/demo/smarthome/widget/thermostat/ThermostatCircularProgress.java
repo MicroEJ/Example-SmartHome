@@ -20,6 +20,9 @@ import ej.style.Style;
 import ej.style.container.Rectangle;
 import ej.style.util.ElementAdapter;
 import ej.widget.listener.OnValueChangeListener;
+import ej.widget.navigation.TransitionListener;
+import ej.widget.navigation.TransitionManager;
+import ej.widget.navigation.page.Page;
 
 /**
  *
@@ -34,6 +37,8 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	private final OnValueChangeListener listener;
 	private final ElementAdapter colors;
 	private final List<OnValueChangeListener> listeners;
+
+	private final TransitionListener transitionListener;
 
 	/**
 	 * @param model
@@ -73,6 +78,32 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 		// arc when colder
 		colors = new ElementAdapter(this);
 		colors.addClassSelector(ClassSelectors.THERMOSTAT_TARGET_COLOR);
+
+		transitionListener = new TransitionListener() {
+
+			@Override
+			public void onTransitionStop() {
+				if (isShown()) {
+					initAnimation();
+					startAnimation();
+				}
+
+			}
+
+			@Override
+			public void onTransitionStep(final int step) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onTransitionStart(final int transitionsSteps, final int transitionsStop, final Page from,
+					final Page to) {
+				stopAnimation();
+				initAnimation();
+
+			}
+		};
 	}
 
 	@Override
@@ -131,15 +162,19 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 
 	@Override
 	public void showNotify() {
-		super.showNotify();
+		transitionListener.onTransitionStart(0, 0, null, null);
+		TransitionManager.addGlobalTransitionListener(transitionListener);
 		setLocalTarget(model.getTargetValue());
 		model.addOnTargetValueChangeListener(listener);
 		model.register();
+		super.showNotify();
 	}
 
 	@Override
 	public void hideNotify() {
 		super.hideNotify();
+		transitionListener.onTransitionStart(0, 0, null, null);
+		TransitionManager.removeGlobalTransitionListener(transitionListener);
 		model.removeOnTargetValueChangeListener(listener);
 		model.unregister();
 	}

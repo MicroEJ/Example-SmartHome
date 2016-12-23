@@ -14,7 +14,7 @@ import ej.motion.Motion;
  */
 public class ValueAnimation implements Motion, Animation {
 
-	private static final int DURATION = 500;
+	public static final int DEFAULT_DURATION = 350;
 	private int start;
 	private int currentValue;
 	private int targetValue;
@@ -28,7 +28,7 @@ public class ValueAnimation implements Motion, Animation {
 	 * @param currentValue
 	 * @param targetValue
 	 */
-	public ValueAnimation(int start, int currentValue, int targetValue) {
+	public ValueAnimation(final int start, final int currentValue, final int targetValue) {
 		this(start, currentValue, targetValue, targetValue);
 	}
 
@@ -37,16 +37,26 @@ public class ValueAnimation implements Motion, Animation {
 	 * @param currentValue
 	 * @param targetValue
 	 */
-	public ValueAnimation(int start, int currentValue, int targetValue, int maxValue) {
+	public ValueAnimation(final int start, final int currentValue, final int targetValue, final int maxValue) {
+		this(start, currentValue, targetValue, maxValue, DEFAULT_DURATION);
+	}
+
+	/**
+	 * @param start
+	 * @param currentValue
+	 * @param targetValue
+	 */
+	public ValueAnimation(final int start, final int currentValue, final int targetValue, final int maxValue,
+			final int duration) {
 		super();
 		this.start = start;
 		this.currentValue = currentValue;
 		this.targetValue = targetValue;
-		this.valueProgress = ((float) maxValue) / DURATION;
+		this.valueProgress = ((float) maxValue) / duration;
 	}
 
 	@Override
-	public boolean tick(long currentTimeMillis) {
+	public boolean tick(final long currentTimeMillis) {
 		if (targetValue == currentValue) {
 			return false;
 		}
@@ -62,8 +72,8 @@ public class ValueAnimation implements Motion, Animation {
 	 * @param currentTimeMillis
 	 * @return
 	 */
-	private int getValueProgress(long currentTimeMillis) {
-		long elapsed = currentTimeMillis - lastTick;
+	private int getValueProgress(final long currentTimeMillis) {
+		final long elapsed = currentTimeMillis - lastTick;
 		lastTick = currentTimeMillis;
 		return (int) (elapsed * valueProgress);
 	}
@@ -88,7 +98,7 @@ public class ValueAnimation implements Motion, Animation {
 	 * @param targetValue
 	 *            the targetValue to set.
 	 */
-	public void setTargetValue(int targetValue) {
+	public void setTargetValue(final int targetValue) {
 		this.targetValue = targetValue;
 	}
 
@@ -116,7 +126,7 @@ public class ValueAnimation implements Motion, Animation {
 	/**
 	 * @param currentTimeMillis
 	 */
-	public void start(long currentTimeMillis) {
+	public void start(final long currentTimeMillis) {
 		lastTick = currentTimeMillis;
 
 	}
@@ -137,7 +147,7 @@ public class ValueAnimation implements Motion, Animation {
 	}
 
 	@Override
-	public int getValue(long elapsed) {
+	public int getValue(final long elapsed) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -152,7 +162,7 @@ public class ValueAnimation implements Motion, Animation {
 	/**
 	 * @param value
 	 */
-	public void setStart(int value) {
+	public void setStart(final int value) {
 		start = value;
 	}
 
