@@ -5,6 +5,7 @@
 	<classpathentry kind="src" path="src/.generated~/.java"/>
 	<classpathentry kind="src" path="src/.generated~/.resources"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/com.microej.demo.smarthome"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.microej.demo.smarthome.data.real"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/com.microej.demo.smarthome.util"/>
 	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=com.microej.demo.smarthome.app&amp;ivyXmlPath=module.ivy&amp;confs=*"/>
 	<classpathentry kind="output" path="bin"/>

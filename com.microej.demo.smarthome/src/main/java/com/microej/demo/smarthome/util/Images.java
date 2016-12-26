@@ -24,4 +24,6 @@ public interface Images {
 	String TOGGLE_ON = "toggle_on";
 	String TOGGLE_OFF = "toggle_off";
 	String COLOR_PICKER = "color_picker";
+
+	String STORE = "store";
 }

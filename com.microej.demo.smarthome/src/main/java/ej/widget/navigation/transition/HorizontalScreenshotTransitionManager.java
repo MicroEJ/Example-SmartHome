@@ -111,7 +111,7 @@ public class HorizontalScreenshotTransitionManager extends TransitionManager {
 		final Motion motion = new LinearMotion(startX, -this.shift, duration);
 
 		this.animating = true;
-		final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class, Animator.class);
+		final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
 		animator.startAnimation(new HorizontalScreenshotAnimation(navigation, newPage, oldPage, motion));
 	}
 

@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Application-Id: PhilipsHue
+Application-Version: 0.1.0
+Application-PrintableName: PhilipsHue
+Application-Description: Description of applicationID
+Application-BackgroundServices: sew.philipshue.app.PhilipsHueBackgroundService

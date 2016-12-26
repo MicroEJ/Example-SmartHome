@@ -6,7 +6,6 @@
  */
 package com.microej.demo.smarthome.standalone;
 
-import com.microej.demo.smarthome.data.philipshue.PhilipsHueBackgroundService;
 import com.microej.demo.smarthome.data.zwave.ZwaveControllerManager;
 
 import ej.components.dependencyinjection.ServiceLoaderFactory;

@@ -166,7 +166,7 @@ public class SoftWatchDog {
 		if (timer != null) {
 			return timer;
 		} else {
-			return ServiceLoaderFactory.getServiceLoader().getService(Timer.class, Timer.class);
+			return ServiceLoaderFactory.getServiceLoader().getService(Timer.class);
 		}
 	}
 }

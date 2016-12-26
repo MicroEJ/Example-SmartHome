@@ -97,6 +97,7 @@ implements LightEventListener, OnStateChangeListener, OnAnimationEndListener {
 
 		// set initial state
 		onColorChange(model.getColor());
+		onStateChange(model.isOn());
 	}
 
 	/**

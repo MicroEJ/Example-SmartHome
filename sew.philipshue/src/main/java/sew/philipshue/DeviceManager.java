@@ -27,10 +27,13 @@ import ej.components.dependencyinjection.ServiceLoaderFactory;
 import ej.wadapps.storage.Storage;
 import sew.light.LightManager;
 import sew.light.util.Color;
+import sew.light.util.HSVColor;
 import sew.upnp.Device;
 import sun.net.www.protocol.http.HttpURLConnection;
 
 public class DeviceManager {
+
+	private static final String HUE_BRIDGE = "HUE_BRIDGE";
 
 	private static final String NEW_BRIDGE_MESSAGE = "New Philips Hue bridge detected.\nPlease press the button.";
 
@@ -186,14 +189,15 @@ public class DeviceManager {
 			httpURLConnection.setRequestMethod("PUT");
 			// System.out.println("Send Philips Hue set color request.");
 			httpURLConnection.connect();
-			OutputStreamWriter outputStreamWriter = new OutputStreamWriter(httpURLConnection.getOutputStream());
-			String frame = "{\"on\":" + Boolean.toString(on) + ", \"sat\":" + (int) (color.getSaturation() * 254)
-					+ ", \"bri\":" + (int) (color.getValue() * 254) + ",\"hue\":" + (int) (color.getHue() * 65535 / 360)
-					+ "}";
-			// System.out.println("DeviceManager.updateLight() " + frame);
-			outputStreamWriter.write(frame);
-			outputStreamWriter.flush();
-			InputStream inputStream = httpURLConnection.getInputStream();
+			try (OutputStreamWriter outputStreamWriter = new OutputStreamWriter(httpURLConnection.getOutputStream());) {
+				String frame = "{\"on\":" + Boolean.toString(on) + ", \"sat\":" + (int) (color.getSaturation() * 254)
+						+ ", \"bri\":" + (int) (color.getValue() * 254) + ",\"hue\":"
+						+ (int) (color.getHue() * 65535 / 360) + "}";
+				// System.out.println("DeviceManager.updateLight() " + frame);
+				outputStreamWriter.write(frame);
+				outputStreamWriter.flush();
+			}
+			// InputStream inputStream = httpURLConnection.getInputStream();
 			// System.out.println("Philips Hue set color request sent.");
 			// String string = new String(StreamUtilities.readFully(inputStream));
 			// System.out.println(
@@ -204,6 +208,7 @@ public class DeviceManager {
 	}
 
 	public void readLight(JSONObject lightObject, String id) throws JSONException {
+		// System.out.println("DeviceManager.readLight()");
 		String name = lightObject.getString("name");
 		JSONObject state = lightObject.getJSONObject("state");
 		float hue = (float) Integer.parseInt(state.getString("hue")) * 360 / 65535;
@@ -216,7 +221,7 @@ public class DeviceManager {
 			philipsHueLight = new PhilipsHueLight(id, name, this);
 			this.lights.put(name, philipsHueLight);
 		}
-		philipsHueLight.simpleUpdate(new Color(hue, saturation, brightness), 10000, on);
+		philipsHueLight.simpleUpdate(new HSVColor(hue, saturation, brightness), 10000, on);
 		LightManager lightManager = ServiceLoaderFactory.getServiceLoader().getService(LightManager.class);
 		// if (on) {
 		lightManager.addLight(philipsHueLight);
@@ -226,33 +231,30 @@ public class DeviceManager {
 	}
 
 	public String getUsername() {
-		try {
-			Storage storage = ServiceLoaderFactory.getServiceLoader().getService(Storage.class);
-			if (storage != null) {
-				// InputStream inputStream = storage.load(this.device.getUDN());
-				InputStream inputStream = storage.load("HUE_BRIDGE");
+		Storage storage = ServiceLoaderFactory.getServiceLoader().getService(Storage.class);
+		if (storage != null) {
+			// InputStream inputStream = storage.load(this.device.getUDN());
+			try (InputStream inputStream = storage.load(HUE_BRIDGE)) {
 				if (inputStream == null) {
 					return null;
 				}
 				BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 				return reader.readLine();
+			} catch (IOException | IllegalArgumentException e) {
+				e.printStackTrace();
 			}
-		} catch (Throwable t) {
-			t.printStackTrace();
 		}
 
 		return null;
 	}
 
 	public void saveUsername() {
-
 		Storage storage = ServiceLoaderFactory.getServiceLoader().getService(Storage.class);
 		if (storage != null) {
 			byte[] charArray = this.username.getBytes();
-			ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(charArray);
-			try {
+			try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(charArray);) {
 				// storage.store(this.device.getUDN(), byteArrayInputStream);
-				storage.store("HUE_BRIDGE", byteArrayInputStream);
+				storage.store(HUE_BRIDGE, byteArrayInputStream);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -264,7 +266,7 @@ public class DeviceManager {
 		if (storage != null) {
 			try {
 				// storage.remove(this.device.getUDN());
-				storage.remove("HUE_BRIDGE");
+				storage.remove(HUE_BRIDGE);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

@@ -221,7 +221,7 @@ public abstract class Robot implements WatchDogCallBack {
 		if (timer != null) {
 			return timer;
 		} else {
-			return ServiceLoaderFactory.getServiceLoader().getService(Timer.class, Timer.class);
+			return ServiceLoaderFactory.getServiceLoader().getService(Timer.class);
 		}
 	}
 

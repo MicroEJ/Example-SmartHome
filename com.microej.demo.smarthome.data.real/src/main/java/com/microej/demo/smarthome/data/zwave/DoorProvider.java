@@ -40,21 +40,21 @@ implements com.microej.demo.smarthome.data.door.DoorProvider {
 		listener = new RegistrationListener<DryContact>() {
 
 			@Override
-			public void deviceRegistered(RegistrationEvent<DryContact> event) {
+			public void deviceRegistered(final RegistrationEvent<DryContact> event) {
 				addDevice(event.getDevice());
 			}
 
 
 			@Override
-			public void deviceUnregistered(RegistrationEvent<DryContact> event) {
+			public void deviceUnregistered(final RegistrationEvent<DryContact> event) {
 				removeDevice(event.getDevice());
 			}
 		};
 
 		DeviceManager.addRegistrationListener(listener, DryContact.class);
-		Iterator<DryContact> list = DeviceManager.list(DryContact.class);
-		while (list.hasNext()) {
-			addDevice(list.next());
+		final Iterator<DryContact> list2 = DeviceManager.list(DryContact.class);
+		while (list2.hasNext()) {
+			addDevice(list2.next());
 		}
 	}
 
@@ -66,10 +66,11 @@ implements com.microej.demo.smarthome.data.door.DoorProvider {
 		return list;
 	}
 
-	private void addDevice(DryContact device) {
+	private void addDevice(final DryContact device) {
 		// Only add "pure" dry contact to avoid adding thermostat as a dry contact.
-		if (device.getParent().getChildren().length == 1) {
-			ZwaveDoorSensor zwaveDoorSensor = new ZwaveDoorSensor(getController(device), generateName(), device);
+		final Device parent = device.getParent();
+		if (parent == null || parent.getChildren().length == 1) {
+			final ZwaveDoorSensor zwaveDoorSensor = new ZwaveDoorSensor(getController(device), generateName(), device);
 			sensors.put(device, zwaveDoorSensor);
 			add(zwaveDoorSensor);
 		}
@@ -82,8 +83,8 @@ implements com.microej.demo.smarthome.data.door.DoorProvider {
 		return "Entrance";
 	}
 
-	private void removeDevice(DryContact device) {
-		ZwaveDoorSensor zwaveDoorSensor = sensors.get(device);
+	private void removeDevice(final DryContact device) {
+		final ZwaveDoorSensor zwaveDoorSensor = sensors.get(device);
 		if (zwaveDoorSensor != null) {
 			remove(zwaveDoorSensor);
 		}
@@ -93,18 +94,16 @@ implements com.microej.demo.smarthome.data.door.DoorProvider {
 	 * @param device
 	 * @return
 	 */
-	private EventControllerListener getController(Device device) {
+	private EventControllerListener getController(final Device device) {
 		if (device == null) {
 			return null;
 		}
 		if (device instanceof Controller) {
-			ControllerListener controllerListener = ((Controller) device).getListener();
+			final ControllerListener controllerListener = ((Controller) device).getListener();
 			if (controllerListener instanceof EventControllerListener) {
 				return (EventControllerListener) controllerListener;
 			}
 		}
 		return getController(device.getParent());
 	}
-
-
 }

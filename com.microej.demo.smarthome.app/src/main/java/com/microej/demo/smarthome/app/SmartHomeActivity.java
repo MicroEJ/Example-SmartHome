@@ -6,7 +6,10 @@
  */
 package com.microej.demo.smarthome.app;
 
+import ej.components.dependencyinjection.ServiceLoaderFactory;
+import ej.exit.ExitHandler;
 import ej.wadapps.app.Activity;
+import ej.widget.listener.OnClickListener;
 
 /**
  *
@@ -21,7 +24,14 @@ public class SmartHomeActivity implements Activity {
 
 	@Override
 	public void onCreate() {
-		// TODO Auto-generated method stub
+		com.microej.demo.smarthome.Main.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick() {
+				ServiceLoaderFactory.getServiceLoader().getService(ExitHandler.class).exit();
+
+			}
+		});
 
 	}
 
@@ -51,7 +61,7 @@ public class SmartHomeActivity implements Activity {
 
 	@Override
 	public void onStop() {
-		// TODO Auto-generated method stub
+		com.microej.demo.smarthome.Main.stopRobot();
 
 	}
 

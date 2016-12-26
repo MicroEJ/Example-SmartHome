@@ -35,7 +35,9 @@
         <dependency org="com.microej.demo" name="smarthome"  rev="[0.0.0-RC0,1.0.0-RC0[" />
 		<dependency org="com.microej.demo.smarthome.data" name="fake"  rev="[0.0.0-RC0,1.0.0-RC0[" />
 		<dependency org="com.microej.demo.smarthome.data" name="real"  rev="[0.0.0-RC0,1.0.0-RC0[" />
+		<dependency org="sew.library" name="light.si"  rev="[0.0.0-RC0,1.0.0-RC0[" />
         
+		<dependency org="ej.library.wadapps" name="exit" rev="[1.0.0,2.0.0["/>
         <!-- 
         	Additionnal dependencies only used by MicroEJ standalone application launches
         --> 

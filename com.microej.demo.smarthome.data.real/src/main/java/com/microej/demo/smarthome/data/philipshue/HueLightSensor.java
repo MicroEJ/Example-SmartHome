@@ -15,6 +15,7 @@ import com.microej.demo.smarthome.util.ExecutorUtils;
 import sew.light.Light;
 import sew.light.LightListener;
 import sew.light.util.Color;
+import sew.light.util.HSVColor;
 
 /**
  *
@@ -22,7 +23,7 @@ import sew.light.util.Color;
 public class HueLightSensor extends Device<LightEventListener>
 implements com.microej.demo.smarthome.data.light.Light, LightListener {
 
-	private static final float MIN_DIFF = 0.95f;
+	private static final double MIN_DIFF = 0.95f;
 	private final Light light;
 	private final Color color;
 	private int rgbColor;
@@ -37,7 +38,7 @@ implements com.microej.demo.smarthome.data.light.Light, LightListener {
 		this.light = light;
 
 		final Random rand = new Random(System.nanoTime());
-		color = new Color(rand.nextFloat() * 360, 0.8f, 1f);
+		color = new HSVColor(rand.nextDouble() * 360, 0.8f, 1f);
 		isOn = true;
 		ExecutorUtils.getExecutor(ExecutorUtils.LOW_PRIORITY).execute(new Runnable() {
 
@@ -57,7 +58,7 @@ implements com.microej.demo.smarthome.data.light.Light, LightListener {
 
 	@Override
 	public float getBrightness() {
-		return color.getValue();
+		return (float) color.getValue();
 	}
 
 	@Override
@@ -79,9 +80,9 @@ implements com.microej.demo.smarthome.data.light.Light, LightListener {
 
 	@Override
 	public void setBrightness(final float brightness) {
-		final float value = color.getValue();
-		final float f = value * MIN_DIFF;
-		final float g = value * (2 - MIN_DIFF);
+		final double value = color.getValue();
+		final double f = value * MIN_DIFF;
+		final double g = value * (2 - MIN_DIFF);
 		if (brightness < f || brightness > g) {
 			color.setValue(brightness);
 			updateHueColor();
@@ -109,7 +110,7 @@ implements com.microej.demo.smarthome.data.light.Light, LightListener {
 	public void onLightUpdate(final Light light) {
 		final Color newColor = light.getColor();
 		final int rgb = newColor.toRGB();
-		final float brightness = newColor.getValue();
+		final double brightness = newColor.getValue();
 		final boolean on = light.isOn();
 
 		if (on != isOn) {
@@ -150,9 +151,9 @@ implements com.microej.demo.smarthome.data.light.Light, LightListener {
 	/**
 	 *
 	 */
-	private void notifyBrightness(final float value) {
+	private void notifyBrightness(final double value) {
 		for (final LightEventListener listener : listeners) {
-			listener.onBrightnessChange(value);
+			listener.onBrightnessChange((float) value);
 		}
 
 	}

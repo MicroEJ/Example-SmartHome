@@ -300,7 +300,7 @@ public class ColorPicker extends Dock implements Animation {
 			hideWidgets(widget);
 		}
 
-		final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class, Animator.class);
+		final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
 		animator.startAnimation(this);
 	}
 
@@ -323,7 +323,7 @@ public class ColorPicker extends Dock implements Animation {
 			this.currentAnimStep = ANIM_NUM_STEPS;
 			this.closeAnim = true;
 
-			final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class, Animator.class);
+			final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
 			animator.startAnimation(this);
 		}
 	}

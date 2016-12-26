@@ -98,7 +98,7 @@ public class TimeWidget extends StyledWidget {
 	@Override
 	public void showNotify() {
 		super.showNotify();
-		Timer timer = ServiceLoaderFactory.getServiceLoader().getService(Timer.class, Timer.class);
+		Timer timer = ServiceLoaderFactory.getServiceLoader().getService(Timer.class);
 		synchronized (sync) {
 			if (update == null) {
 				update = new TimerTask() {

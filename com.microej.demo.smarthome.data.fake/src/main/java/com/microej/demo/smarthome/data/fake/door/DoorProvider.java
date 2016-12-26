@@ -25,7 +25,7 @@ implements com.microej.demo.smarthome.data.door.DoorProvider {
 		super();
 		final Door door = new Door("Entrance");
 		add(door);
-		ServiceLoaderFactory.getServiceLoader().getService(Timer.class, Timer.class).schedule(new TimerTask() {
+		ServiceLoaderFactory.getServiceLoader().getService(Timer.class).schedule(new TimerTask() {
 
 			boolean open = true;
 

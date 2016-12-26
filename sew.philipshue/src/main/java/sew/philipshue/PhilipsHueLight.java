@@ -41,13 +41,11 @@ public class PhilipsHueLight extends DefaultLight {
 	@Override
 	public void setColor(Color color) {
 		// if (!color.equals(getColor())) {
-		// System.out.println("PhilipsHueLight.setColor()");
 		super.setColor(color);
 		requestUpdateOnDevice();
 	}
 
 	private void requestUpdateOnDevice() {
-		// System.out.println("PhilipsHueLight.requestUpdateOnDevice() " + this.dirty);
 		if (this.dirty) {
 			return;
 		}
@@ -63,9 +61,9 @@ public class PhilipsHueLight extends DefaultLight {
 
 	private void updateOnDevice() {
 		try {
-			// System.out.println("PhilipsHueLight.updateOnDevice()");
 			this.dirty = false;
-			this.manager.updateLight(this.id, isOn(), getColor());
+			Color color = getColor();
+			this.manager.updateLight(this.id, isOn(), color);
 			// TODO update intensity?
 		} catch (IOException e) {
 			e.printStackTrace();

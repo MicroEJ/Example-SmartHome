@@ -13,7 +13,7 @@ public interface LightManager {
 
 	void removeLight(Light light);
 
-	Iterable<Light> getLights();
+	Light[] getLights();
 
 	void addMessageListener(MessageListener messageListener);
 

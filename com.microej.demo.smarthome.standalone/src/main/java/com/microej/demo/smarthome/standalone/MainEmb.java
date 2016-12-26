@@ -7,7 +7,6 @@
 package com.microej.demo.smarthome.standalone;
 
 import com.microej.demo.smarthome.Main;
-import com.microej.demo.smarthome.data.philipshue.PhilipsHueBackgroundService;
 
 import ej.components.dependencyinjection.ServiceLoaderFactory;
 import ej.components.registry.BundleRegistry;

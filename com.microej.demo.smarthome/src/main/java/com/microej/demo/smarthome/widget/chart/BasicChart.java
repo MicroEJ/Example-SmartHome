@@ -92,7 +92,7 @@ public abstract class BasicChart extends Chart implements Animation {
 	public void startAnimation() {
 		this.motion = new LinearMotion(0, APPARITION_STEPS, APPARITION_DURATION);
 		resetAnimation();
-		final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class, Animator.class);
+		final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
 		animator.startAnimation(this);
 	}
 
@@ -103,7 +103,7 @@ public abstract class BasicChart extends Chart implements Animation {
 	}
 
 	public void stopAnimation() {
-		final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class, Animator.class);
+		final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
 		animator.stopAnimation(this);
 	}
 
@@ -180,7 +180,7 @@ public abstract class BasicChart extends Chart implements Animation {
 		}
 		bubbleAnimationStep = bubbleMotion.getStartValue();
 
-		final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class, Animator.class);
+		final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
 		animator.startAnimation(new Animation() {
 			@Override
 			public boolean tick(final long currentTimeMillis) {

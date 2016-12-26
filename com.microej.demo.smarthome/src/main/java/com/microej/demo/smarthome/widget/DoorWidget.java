@@ -65,8 +65,8 @@ public class DoorWidget extends DeviceWidget<Door> implements DoorEventListener,
 
 			this.open = open;
 			this.motion = new LinearMotion(animStep, ANIMATION_STEPS-animStep, ANIMATION_DURATION);
-			this.door.setSource(HomeImageLoader.getImageSource(image));
-			Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class, Animator.class);
+			this.door.setSource(HomeImageLoader.loadImageRoot(image));
+			Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
 			animator.startAnimation(this);
 		}
 	}
@@ -90,7 +90,7 @@ public class DoorWidget extends DeviceWidget<Door> implements DoorEventListener,
 	@Override
 	public boolean tick(long currentTimeMillis) {
 		String image = getImage(this.motion.getCurrentValue());
-		this.door.setSource(HomeImageLoader.getImageSource(image));
+		this.door.setSource(HomeImageLoader.loadImageRoot(image));
 		return !this.motion.isFinished();
 	}
 
