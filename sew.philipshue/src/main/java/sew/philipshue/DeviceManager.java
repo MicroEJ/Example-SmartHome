@@ -14,12 +14,11 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 import org.json.me.JSONArray;
 import org.json.me.JSONException;
 import org.json.me.JSONObject;
-
-import com.microej.demo.smarthome.util.ExecutorUtils;
 
 import ej.bon.Timer;
 import ej.bon.TimerTask;
@@ -51,7 +50,7 @@ public class DeviceManager {
 	}
 
 	public void update() {
-		ExecutorUtils.getExecutor(ExecutorUtils.VERY_LOW_PRIORITY).execute(new Runnable() {
+		ServiceLoaderFactory.getServiceLoader().getService(Executor.class).execute(new Runnable() {
 			@Override
 			public void run() {
 				updateSynchronous();
