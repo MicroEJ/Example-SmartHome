@@ -15,6 +15,7 @@ import com.microej.demo.smarthome.util.ExecutorUtils;
 import sew.light.Light;
 import sew.light.LightListener;
 import sew.light.util.Color;
+import sew.light.util.HSVColor;
 
 /**
  *
@@ -22,6 +23,7 @@ import sew.light.util.Color;
 public class HueLightSensor extends Device<LightEventListener>
 implements com.microej.demo.smarthome.data.light.Light, LightListener {
 
+	private static final double MIN_DIFF = 0.95f;
 	private final Light light;
 	private final Color color;
 	private int rgbColor;
@@ -35,8 +37,8 @@ implements com.microej.demo.smarthome.data.light.Light, LightListener {
 		super(light.getName());
 		this.light = light;
 
-		Random rand = new Random(System.nanoTime());
-		color = new Color(rand.nextFloat() * 360, 0.8f, 1f);
+		final Random rand = new Random(System.nanoTime());
+		color = new HSVColor(rand.nextDouble() * 360, 0.8f, 1f);
 		isOn = true;
 		ExecutorUtils.getExecutor(ExecutorUtils.LOW_PRIORITY).execute(new Runnable() {
 
@@ -56,7 +58,7 @@ implements com.microej.demo.smarthome.data.light.Light, LightListener {
 
 	@Override
 	public float getBrightness() {
-		return color.getValue();
+		return (float) color.getValue();
 	}
 
 	@Override
@@ -65,7 +67,7 @@ implements com.microej.demo.smarthome.data.light.Light, LightListener {
 	}
 
 	@Override
-	public void setColor(int rgbColor) {
+	public void setColor(final int rgbColor) {
 		if (this.rgbColor != rgbColor) {
 			this.rgbColor = rgbColor;
 			notifyColorChange(rgbColor);
@@ -77,8 +79,11 @@ implements com.microej.demo.smarthome.data.light.Light, LightListener {
 
 
 	@Override
-	public void setBrightness(float brightness) {
-		if (brightness != color.getValue()) {
+	public void setBrightness(final float brightness) {
+		final double value = color.getValue();
+		final double f = value * MIN_DIFF;
+		final double g = value * (2 - MIN_DIFF);
+		if (brightness < f || brightness > g) {
 			color.setValue(brightness);
 			updateHueColor();
 			notifyBrightness(brightness);
@@ -87,7 +92,7 @@ implements com.microej.demo.smarthome.data.light.Light, LightListener {
 
 
 	@Override
-	public void switchOn(boolean on) {
+	public void switchOn(final boolean on) {
 		if (isOn != on) {
 			isOn = on;
 			ExecutorUtils.getExecutor(ExecutorUtils.LOW_PRIORITY).execute(new Runnable() {
@@ -102,11 +107,11 @@ implements com.microej.demo.smarthome.data.light.Light, LightListener {
 	}
 
 	@Override
-	public void onLightUpdate(Light light) {
-		Color newColor = light.getColor();
-		int rgb = newColor.toRGB();
-		float brightness = newColor.getValue();
-		boolean on = light.isOn();
+	public void onLightUpdate(final Light light) {
+		final Color newColor = light.getColor();
+		final int rgb = newColor.toRGB();
+		final double brightness = newColor.getValue();
+		final boolean on = light.isOn();
 
 		if (on != isOn) {
 			isOn = on;
@@ -137,8 +142,8 @@ implements com.microej.demo.smarthome.data.light.Light, LightListener {
 	/**
 	 *
 	 */
-	private void notifyState(boolean isOn) {
-		for (LightEventListener listener : listeners) {
+	private void notifyState(final boolean isOn) {
+		for (final LightEventListener listener : listeners) {
 			listener.onStateChange(isOn);
 		}
 	}
@@ -146,15 +151,15 @@ implements com.microej.demo.smarthome.data.light.Light, LightListener {
 	/**
 	 *
 	 */
-	private void notifyBrightness(float value) {
-		for (LightEventListener listener : listeners) {
-			listener.onBrightnessChange(value);
+	private void notifyBrightness(final double value) {
+		for (final LightEventListener listener : listeners) {
+			listener.onBrightnessChange((float) value);
 		}
 
 	}
 
-	private void notifyColorChange(int rgbColor) {
-		for (LightEventListener lightEventListener : listeners) {
+	private void notifyColorChange(final int rgbColor) {
+		for (final LightEventListener lightEventListener : listeners) {
 			lightEventListener.onColorChange(rgbColor);
 		}
 	}

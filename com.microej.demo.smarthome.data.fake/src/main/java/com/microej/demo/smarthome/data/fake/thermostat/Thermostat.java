@@ -39,7 +39,7 @@ implements com.microej.demo.smarthome.data.thermostat.Thermostat {
 	public Thermostat(String name) {
 		super(name);
 
-		ServiceLoaderFactory.getServiceLoader().getService(Timer.class, Timer.class).schedule(new TimerTask() {
+		ServiceLoaderFactory.getServiceLoader().getService(Timer.class).schedule(new TimerTask() {
 
 			@Override
 			public void run() {
@@ -52,7 +52,7 @@ implements com.microej.demo.smarthome.data.thermostat.Thermostat {
 			}
 		}, 1_000, 10_000);
 
-		ServiceLoaderFactory.getServiceLoader().getService(Timer.class, Timer.class).schedule(new TimerTask() {
+		ServiceLoaderFactory.getServiceLoader().getService(Timer.class).schedule(new TimerTask() {
 			Random rand = new Random();
 
 			@Override

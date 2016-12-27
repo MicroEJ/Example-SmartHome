@@ -27,12 +27,12 @@ public class HomeImageTheme implements ImageTheme {
 
 	@Override
 	public String getSwitchCheckedPath() {
-		return HomeImageLoader.getImageSource(Images.TOGGLE_ON);
+		return HomeImageLoader.loadImageRoot(Images.TOGGLE_ON);
 	}
 
 	@Override
 	public String getSwitchUncheckedPath() {
-		return HomeImageLoader.getImageSource(Images.TOGGLE_OFF);
+		return HomeImageLoader.loadImageRoot(Images.TOGGLE_OFF);
 	}
 
 	@Override

@@ -46,7 +46,7 @@ public class HomeImageLoader extends DefaultImageLoader {
 		return loadImage(name);
 	}
 
-	public static String getImageSource(String name) {
+	public static String loadImageRoot(String name) {
 		return BASE + name + SUFFIX;
 	}
 
@@ -55,6 +55,6 @@ public class HomeImageLoader extends DefaultImageLoader {
 	 * @return
 	 */
 	public static Image loadImage(String name) {
-		return StyleHelper.getImage(getImageSource(name));
+		return StyleHelper.getImage(loadImageRoot(name));
 	}
 }

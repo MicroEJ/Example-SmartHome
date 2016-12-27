@@ -7,14 +7,17 @@
 package com.microej.demo.smarthome.page;
 
 import com.microej.demo.smarthome.style.ClassSelectors;
+import com.microej.demo.smarthome.style.HomeImageLoader;
+import com.microej.demo.smarthome.util.Images;
 import com.microej.demo.smarthome.util.Strings;
 import com.microej.demo.smarthome.widget.Menu;
-import com.microej.demo.smarthome.widget.OverlapingComposite;
 import com.microej.demo.smarthome.widget.TimeWidget;
 
 import ej.mwt.Widget;
 import ej.widget.basic.Label;
+import ej.widget.composed.ButtonImage;
 import ej.widget.container.Dock;
+import ej.widget.listener.OnClickListener;
 import ej.widget.navigation.page.Page;
 import ej.widget.navigation.transition.HorizontalScreenshotTransitionManager;
 
@@ -31,6 +34,8 @@ public class SmartHomePage extends MenuNavigatorPage {
 
 	private final Dock mainDock;
 
+	private ButtonImage storeButton;
+
 	/**
 	 *
 	 */
@@ -39,7 +44,7 @@ public class SmartHomePage extends MenuNavigatorPage {
 
 		mainDock = new Dock();
 		mainDock.addTop(createHeader());
-		Menu menu = initMenu();
+		final Menu menu = initMenu();
 		menu.addClassSelector(ClassSelectors.FOOTER);
 		mainDock.addBottom(menu);
 		mainDock.setCenter(createMainContent());
@@ -57,7 +62,7 @@ public class SmartHomePage extends MenuNavigatorPage {
 		// navigator.setTransitionManager(new HorizontalTransitionManager() {
 		navigator.setTransitionManager(new HorizontalScreenshotTransitionManager() {
 			@Override
-			protected void setCurrentPage(Page newPage) {
+			protected void setCurrentPage(final Page newPage) {
 				super.setCurrentPage(newPage);
 			}
 		});
@@ -69,12 +74,17 @@ public class SmartHomePage extends MenuNavigatorPage {
 	 * @return
 	 */
 	private Widget createHeader() {
-		OverlapingComposite dock = new OverlapingComposite();
-		dock.add(new Label(Strings.SMARTHOME_TITLE));
-		dock.add(new TimeWidget());
+		final Dock dock = new Dock();
+		dock.setCenter(new Label(Strings.SMARTHOME_TITLE));
+		dock.addRight(new TimeWidget());
+		storeButton = new ButtonImage(HomeImageLoader.loadImageRoot(Images.STORE));
+		dock.addLeft(storeButton);
 		dock.addClassSelector(ClassSelectors.HEADER);
 		return dock;
 	}
 
 
+	public void addOnClickListener(final OnClickListener onClickListener) {
+		storeButton.addOnClickListener(onClickListener);
+	}
 }

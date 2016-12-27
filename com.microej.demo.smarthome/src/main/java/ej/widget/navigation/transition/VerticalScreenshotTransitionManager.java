@@ -89,7 +89,7 @@ public class VerticalScreenshotTransitionManager extends TransitionManager {
 		final Motion motion = new LinearMotion(startY, -this.shift, duration);
 
 		this.animating = true;
-		final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class, Animator.class);
+		final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
 		animator.startAnimation(new VerticalScreenshotAnimation(navigation, newPage, oldPage, motion));
 	}
 

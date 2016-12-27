@@ -54,7 +54,7 @@ implements com.microej.demo.smarthome.data.power.Power {
 			addInstantPower();
 		}
 
-		ServiceLoaderFactory.getServiceLoader().getService(Timer.class, Timer.class).schedule(new TimerTask() {
+		ServiceLoaderFactory.getServiceLoader().getService(Timer.class).schedule(new TimerTask() {
 			@Override
 			public void run() {
 				addInstantPower();

@@ -1,3 +1,4 @@
 com.microej.demo.iot.ConnectivityManagerActivator
 ej.components.registry.impl.FileRegistry
 ej.bon.Timer
+ej.wadapps.standalone.StorageStandalone

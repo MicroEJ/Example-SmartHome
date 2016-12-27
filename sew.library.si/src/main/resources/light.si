@@ -1,0 +1,8 @@
+<sharedInterfaces>
+	<sharedInterface name="sew.light.LightManager"/>
+	<sharedInterface name="sew.light.Light"/>
+	<sharedInterface name="sew.light.LightsListener"/>
+	<sharedInterface name="sew.light.MessageListener"/>
+	<sharedInterface name="sew.light.util.Color"/>
+	<sharedInterface name="sew.light.LightListener"/>
+</sharedInterfaces>

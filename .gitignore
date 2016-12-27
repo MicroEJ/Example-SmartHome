@@ -1,2 +1,7 @@
 */target~/
 */Launches/*.properties
+*/__*__.generated.*
+com.microej.demo.smarthome.app/filesystem/
+*/bin/
+*/filesystem/
+*/src/.generated~/

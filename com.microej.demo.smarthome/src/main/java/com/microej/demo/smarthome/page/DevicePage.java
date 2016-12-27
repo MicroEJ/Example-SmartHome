@@ -22,7 +22,7 @@ import ej.widget.container.Grid;
 public abstract class DevicePage<D extends Device<?>> extends MenuPage {
 
 	private final Object sync = new Object();
-	private final Map<D, Widget> devicesMap;
+	protected final Map<D, Widget> devicesMap;
 	private final Grid devices;
 	private final Label noDeviceWidget;
 
@@ -38,7 +38,7 @@ public abstract class DevicePage<D extends Device<?>> extends MenuPage {
 		setWidget(devices);
 	}
 
-	public void addDevice(D element, Widget device) {
+	public void addDevice(final D element, final Widget device) {
 		synchronized (sync) {
 			if (devices.getWidgetsCount() == 1 && devices.getWidgets()[0] == noDeviceWidget) {
 				devices.remove(noDeviceWidget);
@@ -51,9 +51,9 @@ public abstract class DevicePage<D extends Device<?>> extends MenuPage {
 		}
 	}
 
-	public void removeDevice(D device) {
+	public void removeDevice(final D device) {
 		synchronized (sync) {
-			Widget deviceWidget = devicesMap.get(device);
+			final Widget deviceWidget = devicesMap.get(device);
 			devices.remove(deviceWidget);
 			devicesMap.remove(device);
 

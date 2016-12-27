@@ -16,6 +16,7 @@ import ej.components.dependencyinjection.ServiceLoaderFactory;
 import ej.microui.MicroUI;
 import ej.mwt.Desktop;
 import ej.mwt.Panel;
+import ej.widget.listener.OnClickListener;
 
 /**
  *
@@ -23,13 +24,15 @@ import ej.mwt.Panel;
 public class Main {
 
 	private static Desktop desktop;
+	private static OnClickListener onClickListener;
+	private static HomeRobot homeRobot;
 
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 
-		ServiceLoaderFactory.getServiceLoader().getService(Timer.class, Timer.class).schedule(new TimerTask() {
+		ServiceLoaderFactory.getServiceLoader().getService(Timer.class).schedule(new TimerTask() {
 
 			@Override
 			public void run() {
@@ -42,21 +45,40 @@ public class Main {
 
 		StylePopulator.initializeStylesheet();
 
-		SmartHomePage mainPage = new SmartHomePage();
-		DirectNavigator navigator = new DirectNavigator();
+		final SmartHomePage mainPage = new SmartHomePage();
+		if (onClickListener != null) {
+			mainPage.addOnClickListener(onClickListener);
+		}
+		final DirectNavigator navigator = new DirectNavigator();
 		navigator.show(mainPage, true);
 
 		desktop = new Desktop();
-		Panel panel = new Panel();
+		final Panel panel = new Panel();
 		panel.setWidget(navigator);
 		panel.show(desktop, true);
 		desktop.show();
 
 		// Starts robot.
-		new HomeRobot();
+		homeRobot = new HomeRobot();
 	}
 
 	public static Desktop getDesktop() {
 		return desktop;
+	}
+
+	/**
+	 * Sets the onClickListener.
+	 *
+	 * @param onClickListener
+	 *            the onClickListener to set.
+	 */
+	public static void setOnClickListener(final OnClickListener onClickListener) {
+		Main.onClickListener = onClickListener;
+	}
+
+	public static void stopRobot() {
+		if (homeRobot != null) {
+			homeRobot.cancel();
+		}
 	}
 }

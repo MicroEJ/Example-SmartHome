@@ -1,5 +1,6 @@
 com.microej.demo.smarthome.data.zwave.DoorProvider
 com.microej.demo.smarthome.data.zwave.ZwaveThermostatSensor
 com.microej.demo.smarthome.data.philipshue.PhilipsHueLightProvider
+ej.basedriver.Node
 
 ej.util.concurrent.SingleThreadExecutor

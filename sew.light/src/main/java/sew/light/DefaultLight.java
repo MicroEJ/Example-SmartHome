@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import sew.light.util.Color;
+import sew.light.util.HSVColor;
 
 public class DefaultLight implements Light {
 
@@ -19,7 +20,7 @@ public class DefaultLight implements Light {
 	public DefaultLight(String name) {
 		this.name = name;
 		this.listeners = new ArrayList<>();
-		this.color = new Color(0f, 1f, 1f);
+		this.color = new HSVColor(0f, 1f, 1f);
 	}
 
 	@Override

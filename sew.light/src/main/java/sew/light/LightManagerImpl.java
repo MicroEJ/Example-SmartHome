@@ -48,8 +48,9 @@ public class LightManagerImpl implements LightManager {
 	}
 
 	@Override
-	public Iterable<Light> getLights() {
-		return this.lights;
+	public Light[] getLights() {
+		Light[] lightsArray = new Light[this.lights.size()];
+		return this.lights.toArray(lightsArray);
 	}
 
 	@Override

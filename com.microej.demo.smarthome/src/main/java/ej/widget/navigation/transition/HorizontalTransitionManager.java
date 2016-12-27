@@ -89,7 +89,7 @@ public class HorizontalTransitionManager extends TransitionManager {
 		long duration = DURATION - (DURATION * Math.abs(startX) / Math.abs(shift));
 		Motion motion = new QuartEaseOutMotion(startX, -shift, duration);
 
-		Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class, Animator.class);
+		Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
 		animator.startAnimation(
 				new HorizontalAnimation(navigation, newPage, oldPage, motion, contentX, contentY, shift, forward));
 	}

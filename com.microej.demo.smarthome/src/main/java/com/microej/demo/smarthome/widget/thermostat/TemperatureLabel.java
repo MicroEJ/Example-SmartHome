@@ -24,7 +24,7 @@ public class TemperatureLabel extends ButtonWrapper {
 	/**
 	 * @param maxText
 	 */
-	public TemperatureLabel(int maxTemperature) {
+	public TemperatureLabel(final int maxTemperature) {
 		super();
 		label = new MaxWidthLabel(toTemperatureString(convert(maxTemperature, false)));
 		setWidget(label);
@@ -35,7 +35,7 @@ public class TemperatureLabel extends ButtonWrapper {
 	 * @param value
 	 * @param maximum
 	 */
-	public TemperatureLabel(int value, int maximum) {
+	public TemperatureLabel(final int value, final int maximum) {
 		this(maximum);
 		setTemperature(value);
 	}
@@ -43,7 +43,7 @@ public class TemperatureLabel extends ButtonWrapper {
 	/**
 	 * @param temperature
 	 */
-	public void setTemperature(int temperature) {
+	public void setTemperature(final int temperature) {
 		this.temperature = temperature;
 		updateText();
 
@@ -53,7 +53,7 @@ public class TemperatureLabel extends ButtonWrapper {
 	 *
 	 */
 	private void updateText() {
-		String temperatureString = toTemperatureString(convert(temperature, celsius));
+		final String temperatureString = toTemperatureString(convert(temperature, celsius));
 		label.setText(temperatureString);
 	}
 
@@ -62,16 +62,16 @@ public class TemperatureLabel extends ButtonWrapper {
 	 * @param temperature2
 	 * @return
 	 */
-	private int convert(int temperature, boolean celsius) {
+	private int convert(final int temperature, final boolean celsius) {
 		if (celsius) {
 			return temperature;
 		}
 		return (int) (temperature * 1.8 + 32);
 	}
 
-	private String toTemperatureString(int temperature) {
-		StringBuilder builder = new StringBuilder();
-		builder.append(temperature / 10);
+	private String toTemperatureString(final int temperature) {
+		final StringBuilder builder = new StringBuilder();
+		builder.append((temperature + 5) / 10);
 		if (celsius) {
 			builder.append(Strings.DEGREE_CELSIUS);
 		} else {
@@ -88,13 +88,13 @@ public class TemperatureLabel extends ButtonWrapper {
 	}
 
 	@Override
-	public void addClassSelector(String classSelector) {
+	public void addClassSelector(final String classSelector) {
 		super.addClassSelector(classSelector);
 		label.addClassSelector(classSelector);
 	}
 
 	@Override
-	public void removeClassSelector(String classSelector) {
+	public void removeClassSelector(final String classSelector) {
 		super.removeClassSelector(classSelector);
 		label.removeClassSelector(classSelector);
 	}
