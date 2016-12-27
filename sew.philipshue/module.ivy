@@ -2,7 +2,7 @@
 	Sébastien Eon 2016 / CC0-1.0
 -->
 <ivy-module version="2.0" xmlns:ea="http://www.easyant.org"> 
-	<info organisation="com.microej.demo.smarthome.sew" module="light.philipshue" status="integration" revision="0.1.0">
+	<info organisation="com.microej.demo.smarthome.sew" module="light.philipshue" status="integration" revision="1.0.0">
 		<ea:build organisation="com.is2t.easyant.buildtypes" module="build-microej-javalib" revision="1.+">
 		</ea:build>
 	</info>
@@ -25,7 +25,7 @@
 		<dependency org="ej.library.eclasspath" name="httpclient" rev="[1.0.0-RC0,2.0.0-RC0[" />
 		<dependency org="ej.library.eclasspath" name="executor" rev="[1.0.0-RC0,2.0.0-RC0[" />
 		<dependency org="org.json.me" name="json" rev="[1.0.0-RC0,2.0.0-RC0[" />
-		<dependency org="com.microej.demo.smarthome.sew" name="upnp" rev="+" />
-		<dependency org="com.microej.demo.smarthome.sew" name="light" rev="+" />
+		<dependency org="com.microej.demo.smarthome.sew" name="upnp" rev="[3.0.0-RC0,4.0.0-RC0[" />
+		<dependency org="com.microej.demo.smarthome.sew" name="light" rev="[1.0.0-RC0,2.0.0-RC0[" />
 	</dependencies>
 </ivy-module>

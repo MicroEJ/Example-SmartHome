@@ -2,7 +2,7 @@
 	Ivy
 -->
 <ivy-module version="2.0" xmlns:ea="http://www.easyant.org" xmlns:m="http://ant.apache.org/ivy/extra"> 
-    <info organisation="com.microej.demo.smarthome" module="app" status="integration" revision="0.1.0">
+    <info organisation="com.microej.demo.smarthome" module="app" status="integration" revision="1.0.0">
         <ea:build organisation="com.is2t.easyant.buildtypes" module="build-application" revision="5.+">
         </ea:build>
     </info>
@@ -32,10 +32,10 @@
         <dependency org="ej.library.wadapps" name="framework" rev="[1.2.0-RC0,2.0.0-RC0[" />
         
         <dependency org="ej.library.iot.basedriver" name="zwave" rev="[1.0.0-RC0,2.0.0-RC0["/>
-        <dependency org="com.microej.demo" name="smarthome"  rev="[0.0.0-RC0,1.0.0-RC0[" />
-		<dependency org="com.microej.demo.smarthome.data" name="fake"  rev="[0.0.0-RC0,1.0.0-RC0[" />
-		<dependency org="com.microej.demo.smarthome.data" name="real"  rev="[0.0.0-RC0,1.0.0-RC0[" />
-		<dependency org="com.microej.demo.smarthome.sew" name="light.si"  rev="[0.0.0-RC0,1.0.0-RC0[" />
+        <dependency org="com.microej.demo" name="smarthome"  rev="[1.0.0-RC0,2.0.0-RC0[" />
+		<dependency org="com.microej.demo.smarthome.data" name="fake"  rev="[1.0.0-RC0,2.0.0-RC0[" />
+		<dependency org="com.microej.demo.smarthome.data" name="real"  rev="[1.0.0-RC0,2.0.0-RC0[" />
+		<dependency org="com.microej.demo.smarthome.sew" name="light.si"  rev="[1.0.0-RC0,2.0.0-RC0[" />
         
 		<dependency org="ej.library.wadapps" name="exit" rev="[1.0.0,2.0.0["/>
         <!-- 

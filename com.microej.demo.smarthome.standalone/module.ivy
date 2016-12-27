@@ -5,7 +5,7 @@
 	Use of this source code is subject to license terms.
 -->
 <ivy-module version="2.0" xmlns:ea="http://www.easyant.org"> 
-	<info organisation="com.microej.demo.smarthome" module="standalone" status="integration" revision="0.1.0">
+	<info organisation="com.microej.demo.smarthome" module="standalone" status="integration" revision="1.0.0">
 		<ea:build organisation="com.is2t.easyant.buildtypes" module="build-microej-javalib" revision="3.+">
 		</ea:build>
 	</info>
@@ -46,9 +46,9 @@
 		<dependency org="ej.library.iot.basedriver" name="basedriver-util" rev="[1.0.0-RC0,2.0.0-RC0["/>
 		<dependency org="ej.library.eclasspath" name="executor" rev="[1.0.0-RC0,2.0.0-RC0["/>
 		
-		<dependency org="com.microej.demo" name="smarthome"  rev="[0.0.0-RC0,1.0.0-RC0[" />
-		<dependency org="com.microej.demo.smarthome.data" name="fake" rev="[0.0.0-RC0,1.0.0-RC0[" />
-		<dependency org="com.microej.demo.smarthome.data" name="real" rev="[0.0.0-RC0,1.0.0-RC0[" /> 
+		<dependency org="com.microej.demo" name="smarthome"  rev="[1.0.0-RC0,2.0.0-RC0[" />
+		<dependency org="com.microej.demo.smarthome.data" name="fake" rev="[1.0.0-RC0,2.0.0-RC0[" />
+		<dependency org="com.microej.demo.smarthome.data" name="real" rev="[1.0.0-RC0,2.0.0-RC0[" /> 
 		
 		</dependencies>
 </ivy-module>
