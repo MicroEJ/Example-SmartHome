@@ -26,6 +26,5 @@
 		<dependency org="ej.library.eclasspath" name="queues" rev="[1.0.0-RC0,2.0.0-RC0[" />
 		<dependency org="org.kxml2" name="kxml2" rev="[2.3.0-RC0,3.0.0-RC0[" />
 		<dependency org="com.is2t.libraries" name="checkHelper" rev="[1.0.0-RC0,2.0.0-RC0[" conf="test->*" />
-		<dependency org="com.microej.demo.smarthome" name="util" rev="[0.0.0,1.0.0[" />
 	</dependencies>
 </ivy-module>

@@ -44,9 +44,11 @@
 		<dependency org="ej.library.iot.basedriver" name="basedriver-api" rev="[1.0.0-RC0,2.0.0-RC0["/>
 		<dependency org="ej.library.iot.basedriver" name="basedriver-event" rev="[1.0.0-RC0,2.0.0-RC0["/>
 		<dependency org="ej.library.iot.basedriver" name="basedriver-util" rev="[1.0.0-RC0,2.0.0-RC0["/>
+		<dependency org="ej.library.eclasspath" name="executor" rev="[1.0.0-RC0,2.0.0-RC0["/>
 		
 		<dependency org="com.microej.demo" name="smarthome"  rev="[0.0.0-RC0,1.0.0-RC0[" />
-		<dependency org="com.microej.demo.smarthome.data" name="fake"  rev="[0.0.0-RC0,1.0.0-RC0[" />
-		<dependency org="com.microej.demo.smarthome.data" name="real"  rev="[0.0.0-RC0,1.0.0-RC0[" />
-	</dependencies>
+		<dependency org="com.microej.demo.smarthome.data" name="fake" rev="[0.0.0-RC0,1.0.0-RC0[" />
+		<dependency org="com.microej.demo.smarthome.data" name="real" rev="[0.0.0-RC0,1.0.0-RC0[" /> 
+		
+		</dependencies>
 </ivy-module>

@@ -143,6 +143,7 @@ implements LightEventListener, OnStateChangeListener, OnAnimationEndListener {
 	public void showNotify() {
 		super.showNotify();
 		onColorChange(model.getColor());
+		setEnabled(model.isOn());
 	}
 
 	/**

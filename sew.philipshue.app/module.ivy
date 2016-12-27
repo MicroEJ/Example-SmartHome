@@ -31,7 +31,6 @@
         <dependency org="ej.api" name="net" rev="1.0.+" conf="provided->*" />
         <dependency org="ej.library.wadapps" name="framework" rev="[1.2.0-RC0,2.0.0-RC0[" />
         <dependency org="sew.library" name="light.philipshue" rev="[0.1.0-RC0,1.0.0-RC0[" />
-        <dependency org="sew.library" name="light.philipshue" rev="[0.1.0-RC0,1.0.0-RC0[" />
         <dependency org="sew.library" name="light.si" rev="[0.1.0-RC0,1.0.0-RC0[" />
 		<dependency org="ej.library.iot" name="connectivity" rev="[1.0.0-RC,2.0.0-RC["/>
          

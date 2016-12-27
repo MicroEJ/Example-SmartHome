@@ -193,15 +193,23 @@ public class DeviceManager {
 				String frame = "{\"on\":" + Boolean.toString(on) + ", \"sat\":" + (int) (color.getSaturation() * 254)
 						+ ", \"bri\":" + (int) (color.getValue() * 254) + ",\"hue\":"
 						+ (int) (color.getHue() * 65535 / 360) + "}";
-				// System.out.println("DeviceManager.updateLight() " + frame);
 				outputStreamWriter.write(frame);
-				outputStreamWriter.flush();
 			}
+			// Force send.
+			httpURLConnection.getResponseCode();
+			// Thread.sleep(100);
 			// InputStream inputStream = httpURLConnection.getInputStream();
+			// inputStream.close();
+			// while (inputStream.available() > 0) {
+			// System.out.print((char) inputStream.read());
+			// }
 			// System.out.println("Philips Hue set color request sent.");
 			// String string = new String(StreamUtilities.readFully(inputStream));
 			// System.out.println(
 			// "DeviceManager.updateLightColor() " + color.getHue() + " REQ\n" + frame /* + "\nREP\n" + string */);
+			// } catch (InterruptedException e) {
+			// // TODO Auto-generated catch block
+			// e.printStackTrace();
 		} finally {
 			httpURLConnection.disconnect();
 		}

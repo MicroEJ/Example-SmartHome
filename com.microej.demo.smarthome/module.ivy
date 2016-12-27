@@ -16,6 +16,7 @@
 		<conf name="dist" visibility="public" description="Contains extra files like README.md, licenses"/>
 		<conf name="source" visibility="public" description="Source code"/>
  		<conf name="test" visibility="private" description="Dependencies for test execution. It is not required for normal use of the application, and is only available for the test compilation and execution phases."/>
+		<conf name="microej.launch.standalone" visibility="private" description="Dependencies for standalone application. It is not required for normal use of the application, and is only available when launching the main entry point on a standalone MicroEJ launch."/>
 	</configurations>
 
 	
@@ -35,6 +36,8 @@
 		<dependency org="ej.library.eclasspath" name="executor" rev="[1.0.0-RC0,2.0.0-RC0[" />
 		<dependency org="com.microej.demo.smarthome" name="data"  rev="[0.0.0-RC0,1.0.0-RC0[" />
 		<dependency org="com.microej.demo.smarthome" name="util"  rev="[0.0.0-RC0,1.0.0-RC0[" />
+		<dependency org="com.microej.demo.smarthome" name="util.simu" rev="[0.0.0-RC0,1.0.0-RC0[" conf="microej.launch.standalone->*" />
+	 
 		<!-- 
 			Put your project dependencies here. An example of project dependency declaration 
 			is provided below:

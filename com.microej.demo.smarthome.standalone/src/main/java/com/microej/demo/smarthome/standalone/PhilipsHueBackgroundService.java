@@ -58,6 +58,7 @@ public class PhilipsHueBackgroundService implements BackgroundService {
 	}
 
 	private synchronized void startManager() {
+
 		ExecutorUtils.getExecutor(ExecutorUtils.LOW_PRIORITY).execute(new Runnable() {
 
 			@Override

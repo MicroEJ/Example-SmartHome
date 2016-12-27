@@ -4,7 +4,6 @@
 	<classpathentry kind="src" path="src/main/resources"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/sew.upnp"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/sew.light"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.microej.demo.smarthome.util"/>
 	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=sew.philipshue&amp;ivyXmlPath=module.ivy&amp;confs=*"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
