@@ -38,7 +38,7 @@
 		<dependency org="ej.library.iot.basedriver" name="basedriver-event" rev="[1.0.0-RC0,2.0.0-RC0["/>
 		<dependency org="ej.library.iot.basedriver" name="basedriver-util" rev="[1.0.0-RC0,2.0.0-RC0["/>		
 
-		<dependency org="sew.library" name="light.philipshue" rev="+" />
+		<dependency org="com.microej.demo.smarthome.sew" name="light.philipshue" rev="+" />
 
 		<dependency org="org.kxml2" name="kxml2" rev="[2.3.0-RC0,3.0.0-RC0[" />
 		<dependency org="org.json.me" name="json" rev="[1.0.0-RC0,2.0.0-RC0[" />
