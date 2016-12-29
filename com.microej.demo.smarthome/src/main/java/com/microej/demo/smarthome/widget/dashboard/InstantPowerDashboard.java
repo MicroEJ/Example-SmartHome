@@ -36,22 +36,22 @@ public class InstantPowerDashboard extends Grid {
 	 */
 	public InstantPowerDashboard() {
 		super(true, 2);
-		Flow text = new Flow(true);
-		Power myPower = ServiceLoaderFactory.getServiceLoader().getService(Power.class);
+		final Flow text = new Flow(true);
+		final Power myPower = ServiceLoaderFactory.getServiceLoader().getService(Power.class);
 		power = new MaxWidthLabel(String.valueOf(myPower.getMaxPowerConsumption()));
 		power.addClassSelector(ClassSelectors.DASHBOARD_HUGE_TEXT);
 		power.addClassSelector(ClassSelectors.DASHBOARD_POWER_CONSUMPTION);
 		powerEventListener = new PowerEventListener() {
 
 			@Override
-			public void onInstantPower(InstantPower instantPower) {
+			public void onInstantPower(final InstantPower instantPower) {
 				updateInstantPower(instantPower);
 
 			}
 
 		};
 		text.add(power);
-		Label watt = new Label(Strings.WATT);
+		final Label watt = new Label(Strings.WATT);
 		watt.addClassSelector(ClassSelectors.DASHBOARD_HUGE_TEXT);
 		text.add(watt);
 
@@ -66,7 +66,7 @@ public class InstantPowerDashboard extends Grid {
 			@Override
 			public void onTransitionStop() {
 				if (isShown()) {
-					Power myPower = ServiceLoaderFactory.getServiceLoader().getService(Power.class);
+					final Power myPower = ServiceLoaderFactory.getServiceLoader().getService(Power.class);
 					myPower.addListener(powerEventListener);
 					updateInstantPower(myPower.getInstantPowerConsumption());
 				}
@@ -74,12 +74,12 @@ public class InstantPowerDashboard extends Grid {
 			}
 
 			@Override
-			public void onTransitionStep(int step) {
+			public void onTransitionStep(final int step) {
 
 			}
 
 			@Override
-			public void onTransitionStart(int transitionsSteps, int transitionsStop, Page from, Page to) {
+			public void onTransitionStart(final int transitionsSteps, final int transitionsStop, final Page from, final Page to) {
 
 			}
 		};
@@ -90,7 +90,7 @@ public class InstantPowerDashboard extends Grid {
 	@Override
 	public void showNotify() {
 		super.showNotify();
-		Power myPower = ServiceLoaderFactory.getServiceLoader().getService(Power.class);
+		final Power myPower = ServiceLoaderFactory.getServiceLoader().getService(Power.class);
 		updateInstantPower(myPower.getInstantPowerConsumption());
 		TransitionManager.addGlobalTransitionListener(transitionListener);
 	}
@@ -98,19 +98,19 @@ public class InstantPowerDashboard extends Grid {
 	@Override
 	public void hideNotify() {
 		super.hideNotify();
-		Power myPower = ServiceLoaderFactory.getServiceLoader().getService(Power.class);
+		final Power myPower = ServiceLoaderFactory.getServiceLoader().getService(Power.class);
 		myPower.removeListener(powerEventListener);
 		TransitionManager.removeGlobalTransitionListener(transitionListener);
 	}
 
-	private void updateInstantPower(InstantPower instantPower) {
-		int value = instantPower.getPower();
+	private void updateInstantPower(final InstantPower instantPower) {
+		final int value = instantPower.getPower();
 		power.setText(String.valueOf(value));
 		powerBar.setValue(value);
 	}
 
-	@Override
-	public boolean handleEvent(int event) {
-		return false;
-	}
+	// @Override
+	// public boolean handleEvent(int event) {
+	// return false;
+	// }
 }
