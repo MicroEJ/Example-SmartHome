@@ -82,7 +82,7 @@
 <stringAttribute key="com.is2t.microej.workbench.stdMicroEJLaunchConfigurationJPFConfigurationTabCSTART_com.is2t.microej.workbench.std.launch.ext.TextFieldOption_CENDs3.mock.uart.com0.socket.port" value="12400"/>
 <stringAttribute key="com.is2t.microej.workbench.stdMicroEJLaunchConfigurationJPFConfigurationTabCSTART_com.is2t.microej.workbench.std.launch.ext.TextFieldOption_CENDs3.slow" value="0"/>
 <stringAttribute key="com.is2t.microej.workbench.stdMicroEJLaunchConfigurationJPFConfigurationTabCSTART_com.is2t.microej.workbench.std.launch.ext.TextFieldOption_CENDsp.server.port" value="10082"/>
-<stringAttribute key="com.is2t.microej.workbench.stdMicroEJLaunchConfigurationMainClass" value="__PhilipsHue__.generated.BackgroundServicesStandalone"/>
+<stringAttribute key="com.is2t.microej.workbench.stdMicroEJLaunchConfigurationMainClass" value="__Lights__.generated.BackgroundServicesStandalone"/>
 <stringAttribute key="com.is2t.microej.workbench.stdMicroEJLaunchConfigurationMicroJVM" value="MICROJVM"/>
 <stringAttribute key="com.is2t.microej.workbench.stdMicroEJLaunchConfigurationOutputDir" value="${workspace_loc}/sew.philipshue.app"/>
 <stringAttribute key="com.is2t.microej.workbench.stdMicroEJLaunchConfigurationPlatformArchitecture" value="CM7"/>
@@ -108,6 +108,6 @@
 <booleanAttribute key="org.eclipse.jdt.launching.ALLOW_TERMINATE" value="true"/>
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="false"/>
 <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="__PhilipsHue__.generated.BackgroundServicesStandalone"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="__Lights__.generated.BackgroundServicesStandalone"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="sew.philipshue.app"/>
 </launchConfiguration>

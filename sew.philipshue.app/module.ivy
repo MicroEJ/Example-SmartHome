@@ -33,6 +33,7 @@
         <dependency org="com.microej.demo.smarthome.sew" name="light.philipshue" rev="[1.0.0-RC0,2.0.0-RC0[" />
         <dependency org="com.microej.demo.smarthome.sew" name="light.si" rev="[1.0.0-RC0,2.0.0-RC0[" />
 		<dependency org="ej.library.iot" name="connectivity" rev="[1.0.0-RC,2.0.0-RC["/>
+		<dependency org="ej.library.util" name="concurrent.executor" rev="[1.0.0-RC0,2.0.0-RC0[" />
          
         <!-- 
         	Additionnal dependencies only used by MicroEJ standalone application launches

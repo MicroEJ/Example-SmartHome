@@ -6,8 +6,6 @@
  */
 package com.microej.demo.smarthome.data.fake.thermostat;
 
-import java.util.Random;
-
 import com.microej.demo.smarthome.data.impl.Device;
 import com.microej.demo.smarthome.data.thermostat.ThermostatEventListener;
 
@@ -36,7 +34,7 @@ implements com.microej.demo.smarthome.data.thermostat.Thermostat {
 	/**
 	 * @param name
 	 */
-	public Thermostat(String name) {
+	public Thermostat(final String name) {
 		super(name);
 
 		ServiceLoaderFactory.getServiceLoader().getService(Timer.class).schedule(new TimerTask() {
@@ -52,21 +50,21 @@ implements com.microej.demo.smarthome.data.thermostat.Thermostat {
 			}
 		}, 1_000, 10_000);
 
-		ServiceLoaderFactory.getServiceLoader().getService(Timer.class).schedule(new TimerTask() {
-			Random rand = new Random();
-
-			@Override
-			public void run() {
-				// int target = thermostat.getTargetTemperature();
-				// target--;
-				// if (target < thermostat.getMinTemperature()) {
-				// target = thermostat.getMaxTemperature();
-				// }
-				int dif = getMaxTemperature() - getMinTemperature();
-				int target = rand.nextInt(dif);
-				setTargetTemperature(target + getMinTemperature());
-			}
-		}, 1_500, 20_000);
+		// ServiceLoaderFactory.getServiceLoader().getService(Timer.class).schedule(new TimerTask() {
+		// Random rand = new Random();
+		//
+		// @Override
+		// public void run() {
+		// // int target = thermostat.getTargetTemperature();
+		// // target--;
+		// // if (target < thermostat.getMinTemperature()) {
+		// // target = thermostat.getMaxTemperature();
+		// // }
+		// int dif = getMaxTemperature() - getMinTemperature();
+		// int target = rand.nextInt(dif);
+		// setTargetTemperature(target + getMinTemperature());
+		// }
+		// }, 1_500, 20_000);
 	}
 
 	@Override
@@ -90,16 +88,16 @@ implements com.microej.demo.smarthome.data.thermostat.Thermostat {
 	}
 
 	@Override
-	public void setTargetTemperature(int temperature) {
+	public void setTargetTemperature(final int temperature) {
 		this.target = temperature;
-		for (ThermostatEventListener thermostatEventListener : listeners) {
+		for (final ThermostatEventListener thermostatEventListener : listeners) {
 			thermostatEventListener.onTargetTemperatureChange(temperature);
 		}
 	}
 
-	public void setTemperature(int temperature) {
+	public void setTemperature(final int temperature) {
 		this.temperature = temperature;
-		for (ThermostatEventListener thermostatEventListener : listeners) {
+		for (final ThermostatEventListener thermostatEventListener : listeners) {
 			thermostatEventListener.onTemperatureChange(temperature);
 		}
 	}

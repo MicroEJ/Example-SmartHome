@@ -1,7 +1,8 @@
 Manifest-Version: 1.0
-Application-Id: PhilipsHue
+Application-Id: Lights
 Application-Version: 1.0.0
-Application-PrintableName: Philips Hue
+Application-PrintableName: Lights
+Comment: Seen with legal : Make sure it is very clear from all you do that your app belongs to you and not to Philips Lighting. You take sole responsibility for your app. Do not use any hue or Philips Lighting branding trademarks or trade dress or hue or Philips Lighting in any logo or graphics.
 Application-Description: This service controls the famous LED color changing lightbulbs Philips Hue. 
 Application-BackgroundServices: sew.philipshue.app.PhilipsHueBackgroundService
 Application-IconsDirectory: icons/
