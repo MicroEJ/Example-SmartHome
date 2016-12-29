@@ -3,5 +3,5 @@ Application-Id: PhilipsHue
 Application-Version: 1.0.0
 Application-PrintableName: Philips Hue
 Application-Description: This service controls the famous LED color changing lightbulbs Philips Hue. 
-Application-IconsDirectory: icons/
 Application-BackgroundServices: sew.philipshue.app.PhilipsHueBackgroundService
+Application-IconsDirectory: icons/
