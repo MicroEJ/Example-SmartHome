@@ -1,6 +1,7 @@
 Manifest-Version: 1.0
 Application-Id: SmartHome
-Application-Version: 0.1.0
+Application-Version: 1.0.0
 Application-PrintableName: SmartHome
-Application-Description: Description of applicationID
+Application-Description: Connect to various appliances (thermostats, lights, doors, power controls...), monitor and control them with useful services including home status overview, and various control for temperature, light and door. 
 Application-Activities: com.microej.demo.smarthome.app.SmartHomeActivity
+Application-IconsDirectory: icons/

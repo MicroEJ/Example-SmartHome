@@ -14,13 +14,13 @@ import com.microej.demo.smarthome.data.light.LightEventListener;
  */
 public class Light extends Device<LightEventListener> implements com.microej.demo.smarthome.data.light.Light {
 
-	private boolean on = true;
-	private int color = 0x556644;
-	private float brightness = 0.4f;
+	private boolean on;
+	private int color;
+	private float brightness;
 	/**
 	 * @param name
 	 */
-	public Light(String name) {
+	public Light(final String name) {
 		super(name);
 	}
 
@@ -35,28 +35,28 @@ public class Light extends Device<LightEventListener> implements com.microej.dem
 	}
 
 	@Override
-	public void setColor(int color) {
+	public void setColor(final int color) {
 		this.color = color;
-		for (LightEventListener lightEventListener : listeners) {
+		for (final LightEventListener lightEventListener : listeners) {
 			lightEventListener.onColorChange(color);
 		}
 	}
 
 	@Override
-	public void setBrightness(float brightness) {
+	public void setBrightness(final float brightness) {
 		if (this.brightness != brightness) {
 			this.brightness = brightness;
-			for (LightEventListener lightEventListener : listeners) {
+			for (final LightEventListener lightEventListener : listeners) {
 				lightEventListener.onBrightnessChange(brightness);
 			}
 		}
 	}
 
 	@Override
-	public void switchOn(boolean on) {
+	public void switchOn(final boolean on) {
 		if (this.on != on) {
 			this.on = on;
-			for (LightEventListener lightEventListener : listeners) {
+			for (final LightEventListener lightEventListener : listeners) {
 				lightEventListener.onStateChange(on);
 			}
 		}
