@@ -45,7 +45,7 @@
 		
 		<dependency org="ej.library.iot" name="connectivity" rev="[1.0.0-RC,2.0.0-RC["/>
 		
-		<dependency org="com.microej.demo.smarthome" name="data" rev="[1.0.0,2.0.0[" />
-		<dependency org="com.microej.demo.smarthome" name="util" rev="[1.0.0,2.0.0[" />
+		<dependency org="com.microej.demo.smarthome" name="data" rev="[1.0.0-RC,2.0.0-RC[" />
+		<dependency org="com.microej.demo.smarthome" name="util" rev="[1.0.0-RC,2.0.0-RC[" />
 	</dependencies>
 </ivy-module>
