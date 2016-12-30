@@ -38,13 +38,13 @@
 		<dependency org="ej.library.runtime" name="components" rev="[3.0.0-RC,4.0.0-RC["/>
 		<dependency org="ej.library.iot" name="connectivity" rev="[1.0.0-RC,2.0.0-RC["/>
 		
-		<dependency org="org.kxml2" name="kxml2" rev="[2.3.0-RC0,3.0.0-RC0[" />
-		
 		<dependency org="ej.library.iot.basedriver" name="zwave" rev="[1.0.0-RC0,2.0.0-RC0["/>
 		<dependency org="ej.library.iot.basedriver" name="basedriver-api" rev="[1.0.0-RC0,2.0.0-RC0["/>
 		<dependency org="ej.library.iot.basedriver" name="basedriver-event" rev="[1.0.0-RC0,2.0.0-RC0["/>
 		<dependency org="ej.library.iot.basedriver" name="basedriver-util" rev="[1.0.0-RC0,2.0.0-RC0["/>
 		<dependency org="ej.library.eclasspath" name="executor" rev="[1.0.0-RC0,2.0.0-RC0["/>
+		
+		<dependency org="com.microej.demo.smarthome.sew" name="light.philipshue" rev="[1.0.0-RC0,2.0.0-RC0["/>
 		
 		<dependency org="com.microej.demo" name="smarthome"  rev="[1.0.0-RC0,2.0.0-RC0[" />
 		<dependency org="com.microej.demo.smarthome.data" name="fake" rev="[1.0.0-RC0,2.0.0-RC0[" />

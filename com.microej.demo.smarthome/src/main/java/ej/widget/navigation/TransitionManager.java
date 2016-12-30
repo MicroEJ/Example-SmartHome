@@ -70,16 +70,16 @@ public abstract class TransitionManager {
 	 * Notifies that the transition is started.
 	 */
 	protected void startTransition() {
-		// final EventGenerator[] eventGenerators = EventGenerator.get(EventGenerator.class);
-		// for (final EventGenerator eventGenerator : eventGenerators) {
-		// this.eventHandlers.put(eventGenerator, eventGenerator.getEventHandler());
-		// try {
-		// eventGenerator.setEventHandler(null);
-		// } catch (final SecurityException e) {
-		// // Cannot change this event generator handler… forget it!.
-		// this.eventHandlers.remove(eventGenerator);
-		// }
-		// }
+		final EventGenerator[] eventGenerators = EventGenerator.get(EventGenerator.class);
+		for (final EventGenerator eventGenerator : eventGenerators) {
+			this.eventHandlers.put(eventGenerator, eventGenerator.getEventHandler());
+			try {
+				eventGenerator.setEventHandler(null);
+			} catch (final SecurityException e) {
+				// Cannot change this event generator handler… forget it!.
+				this.eventHandlers.remove(eventGenerator);
+			}
+		}
 
 	}
 
