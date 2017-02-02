@@ -8,6 +8,7 @@ package com.microej.demo.smarthome;
 
 import com.microej.demo.smarthome.navigator.DirectNavigator;
 import com.microej.demo.smarthome.page.SmartHomePage;
+import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.style.StylePopulator;
 
 import ej.bon.Timer;
@@ -17,6 +18,8 @@ import ej.microui.MicroUI;
 import ej.mwt.Desktop;
 import ej.mwt.Panel;
 import ej.widget.listener.OnClickListener;
+import ej.widget.navigation.transition.CircleSplashTransitionManager;
+import ej.widget.navigation.transition.SplashTransitionManager;
 
 /**
  *
@@ -26,6 +29,9 @@ public class Main {
 	private static Desktop desktop;
 	private static OnClickListener onClickListener;
 	private static HomeRobot homeRobot;
+	private static SplashTransitionManager transitionManager;
+	private static DirectNavigator navigator;
+	private static SmartHomePage mainPage;
 
 	/**
 	 * @param args
@@ -45,17 +51,22 @@ public class Main {
 
 		StylePopulator.initializeStylesheet();
 
-		final SmartHomePage mainPage = new SmartHomePage();
+		mainPage = new SmartHomePage();
 		if (onClickListener != null) {
 			mainPage.addOnClickListener(onClickListener);
 		}
-		final DirectNavigator navigator = new DirectNavigator();
+		navigator = new DirectNavigator();
+		navigator.addClassSelector(ClassSelectors.PICKER);
+		transitionManager = new CircleSplashTransitionManager();
+		navigator.setTransitionManager(transitionManager);
+		transitionManager.setDuration(300);
+		// transitionManager.setDuration(3000);
 		navigator.show(mainPage, true);
 
 		desktop = new Desktop();
 		final Panel panel = new Panel();
 		panel.setWidget(navigator);
-		panel.show(desktop, true);
+		panel.showFullScreen(desktop);
 		desktop.show();
 
 		// Starts robot.
@@ -80,5 +91,30 @@ public class Main {
 		if (homeRobot != null) {
 			homeRobot.cancel();
 		}
+	}
+
+	/**
+	 * Gets the navigator.
+	 *
+	 * @return the navigator.
+	 */
+	public static DirectNavigator getNavigator() {
+		return navigator;
+	}
+
+	/**
+	 * Gets the transitionManager.
+	 *
+	 * @return the transitionManager.
+	 */
+	public static SplashTransitionManager getTransitionManager() {
+		return transitionManager;
+	}
+
+	/**
+	 * Go back to the main page.
+	 */
+	public static void goToMainPage() {
+		navigator.show(mainPage, false);
 	}
 }

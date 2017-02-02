@@ -13,13 +13,13 @@ import com.microej.demo.smarthome.util.Strings;
 import com.microej.demo.smarthome.widget.Menu;
 import com.microej.demo.smarthome.widget.TimeWidget;
 
+import ej.mwt.MWT;
 import ej.mwt.Widget;
 import ej.widget.basic.Label;
 import ej.widget.composed.ButtonImage;
 import ej.widget.container.Dock;
 import ej.widget.listener.OnClickListener;
-import ej.widget.navigation.page.Page;
-import ej.widget.navigation.transition.HorizontalScreenshotTransitionManager;
+import ej.widget.navigation.transition.PushScreenshotTransitionManager;
 
 /**
  *
@@ -59,13 +59,10 @@ public class SmartHomePage extends MenuNavigatorPage {
 	private Widget createMainContent() {
 		navigator.addClassSelector(ClassSelectors.BODY);
 		// create navigator
-		// navigator.setTransitionManager(new HorizontalTransitionManager() {
-		navigator.setTransitionManager(new HorizontalScreenshotTransitionManager() {
-			@Override
-			protected void setCurrentPage(final Page newPage) {
-				super.setCurrentPage(newPage);
-			}
-		});
+		final PushScreenshotTransitionManager manager = new PushScreenshotTransitionManager(MWT.LEFT);
+		navigator.setTransitionManager(manager);
+
+		manager.setDuration(300);
 
 		return navigator;
 	}

@@ -31,10 +31,11 @@
 		-->
 		<dependency conf="provided->*" org="ej.api" name="edc" rev="[1.2.0-RC0,2.0.0-RC0["/>
 		<dependency conf="provided->*" org="ej.api" name="microui" rev="[2.0.0-RC0,3.0.0-RC0["/>
-		<dependency conf="provided->*" org="ej.api" name="mwt" rev="[2.0.0-RC0,3.0.0-RC0["/>
-		<dependency org="ej.library.ui" name="widget" rev="[2.0.0-RC0,3.0.0-RC0["/>
+		<dependency org="ej.library.ui" name="mwt" rev="[2.2.0-RC0,3.0.0-RC0[" />
+		<dependency org="ej.library.ui" name="widget" rev="[2.2.0-RC0,3.0.0-RC0["/>
 		<dependency org="ej.library.eclasspath" name="executor" rev="[1.0.0-RC0,2.0.0-RC0[" />
 		<dependency org="com.microej.demo.smarthome" name="data"  rev="[1.0.0-RC0,2.0.0-RC0[" />
+		<dependency org="com.microej.demo.smarthome.data" name="default"  rev="[2.0.0-RC0,3.0.0-RC0[" />
 		<dependency org="com.microej.demo.smarthome" name="util"  rev="[1.0.0-RC0,2.0.0-RC0[" />
 		<dependency org="com.microej.demo.smarthome" name="util.simu" rev="[1.0.0-RC0,2.0.0-RC0[" conf="microej.launch.standalone->*" />
 	 

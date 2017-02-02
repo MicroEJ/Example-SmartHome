@@ -17,7 +17,6 @@ import ej.mwt.Widget;
 import ej.widget.basic.Label;
 import ej.widget.navigation.TransitionListener;
 import ej.widget.navigation.TransitionManager;
-import ej.widget.navigation.page.Page;
 
 /**
  * This class represents the page which shows the power chart
@@ -38,24 +37,19 @@ public class GraphPage extends MenuPage {
 		listener = new TransitionListener() {
 
 			@Override
-			public void onTransitionStop() {
+			public void onTransitionStart(final TransitionManager transitionManager) {
+				if (isInHierarchy(GraphPage.this, transitionManager.getTo())) {
+					powerWidget.reload();
+				}
+
+			}
+
+			@Override
+			public void onTransitionStop(final TransitionManager manager) {
 				if (isShown()) {
 					powerWidget.startAnimation();
 				}
 
-			}
-
-			@Override
-			public void onTransitionStep(final int step) {
-
-			}
-
-
-			@Override
-			public void onTransitionStart(final int transitionsSteps, final int transitionsStop, final Page from, final Page to) {
-				if (isInHierarchy(GraphPage.this, to)) {
-					powerWidget.reload();
-				}
 			}
 
 		};
@@ -74,14 +68,14 @@ public class GraphPage extends MenuPage {
 
 	@Override
 	public void showNotify() {
-		TransitionManager.addGlobalTransitionListener(listener);
+		TransitionManager.addTransitionListener(listener);
 		super.showNotify();
 	}
 
 	@Override
 	public void hideNotify() {
 		super.hideNotify();
-		TransitionManager.removeGlobalTransitionListener(listener);
+		TransitionManager.removeTransitionListener(listener);
 	}
 
 	private boolean isInHierarchy(Widget widget, final Widget hierarchy) {

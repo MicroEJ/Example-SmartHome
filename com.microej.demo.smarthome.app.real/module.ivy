@@ -36,7 +36,7 @@
         <dependency org="ej.library.iot.basedriver" name="zwave" rev="[1.0.0-RC0,2.0.0-RC0["/>
         <dependency org="ej.library.iot.basedriver" name="basedriver-util" rev="[1.0.0-RC0,2.0.0-RC0["/>
         <dependency org="com.microej.demo.smarthome" name="app"  rev="[1.0.0-RC0,2.0.0-RC0[" />
-		<dependency org="com.microej.demo.smarthome.data" name="fake"  rev="[1.0.0-RC0,2.0.0-RC0[" />
+		<dependency org="com.microej.demo.smarthome.data" name="default"  rev="[2.0.0-RC0,3.0.0-RC0[" />
 		<dependency org="com.microej.demo.smarthome.data" name="real"  rev="[1.0.0-RC0,2.0.0-RC0[" />
 		<dependency org="com.microej.demo.smarthome.sew" name="light.si"  rev="[1.0.0-RC0,2.0.0-RC0[" />
         

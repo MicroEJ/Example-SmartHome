@@ -53,12 +53,9 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 	protected int diameter;
 	protected int offset;
 	protected int currentArcAngle;
-	protected Integer customColor;
 	protected final ValueAnimation valueAnimation;
 
 	private long nextEvent;
-
-	// private final TransitionListener transitionListener;
 
 	private boolean animated;
 
@@ -122,11 +119,7 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 		shapes.drawCircleArc(g, x, y, diameter, startAngle, arcAngle);
 
 		if (isEnabled() && currentArcAngle != 0) {
-			if (customColor != null) {
-				g.setColor(customColor);
-			} else {
-				g.setColor(style.getForegroundColor());
-			}
+			g.setColor(getColor(style));
 
 			shapes.setFade(fade);
 			shapes.setThickness(thickness);
@@ -135,6 +128,9 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 		}
 	}
 
+	protected int getColor(final Style style) {
+		return style.getForegroundColor();
+	}
 
 	@Override
 	public void setBounds(final int x, final int y, final int width, final int height) {
@@ -353,21 +349,18 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 
 	@Override
 	public void showNotify() {
-		// transitionListener.onTransitionStart(0, 0, null, null);
 		addOnValueChangeListener(listener);
-		// TransitionManager.addGlobalTransitionListener(transitionListener);
 		super.showNotify();
 	}
 
 	@Override
 	public void hideNotify() {
-		// transitionListener.onTransitionStart(0, 0, null, null);
 		super.hideNotify();
 		removeOnValueChangeListener(listener);
-		// TransitionManager.removeGlobalTransitionListener(transitionListener);
 	}
 
-	public void initAnimation() {
+	public void resetAnimation() {
+		stopAnimation();
 		valueAnimation.reset();
 		currentArcAngle = computeAngle(valueAnimation.getCurrentValue());
 	}
@@ -375,13 +368,9 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 	public void startAnimation() {
 		if (!animated) {
 			animated = true;
-			// if (isShown()) {
 			valueAnimation.start();
 			final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
 			animator.startAnimation(this);
-			// } else {
-			// currentArcAngle = computeAngle(valueAnimation.getCurrentValue());
-			// }
 		}
 	}
 

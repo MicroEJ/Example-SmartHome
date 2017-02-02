@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.microej.demo.smarthome.page.ColorPickerPage;
 import com.microej.demo.smarthome.page.DoorPage;
 import com.microej.demo.smarthome.page.GraphPage;
 import com.microej.demo.smarthome.page.InformationPage;
@@ -18,7 +19,6 @@ import com.microej.demo.smarthome.page.MenuNavigatorPage;
 import com.microej.demo.smarthome.page.MenuPage;
 import com.microej.demo.smarthome.page.ThermostatPage;
 import com.microej.demo.smarthome.util.ExecutorUtils;
-import com.microej.demo.smarthome.widget.CircleWidget;
 import com.microej.demo.smarthome.widget.ColorPicker;
 import com.microej.demo.smarthome.widget.Menu;
 import com.microej.demo.smarthome.widget.MenuButton;
@@ -41,8 +41,8 @@ import ej.mwt.Panel;
 import ej.mwt.Widget;
 import ej.widget.basic.BoundedRange;
 import ej.widget.basic.Box;
-import ej.widget.basic.image.ImageSwitch;
 import ej.widget.composed.ButtonWrapper;
+import ej.widget.composed.ToggleWrapper;
 import ej.widget.container.Grid;
 import ej.widget.container.Scroll;
 import ej.widget.navigation.Navigator;
@@ -53,7 +53,7 @@ import ej.widget.navigation.page.Page;
  */
 public class HomeRobot extends Robot {
 
-	private static final int DELAY = 40_000;
+	private static final int DELAY = 4_000;
 	private static final int PERIOD = 2_500;
 	private static final Timer timer = new Timer();
 	private static final int INITIAL_STATE = 0;
@@ -104,10 +104,10 @@ public class HomeRobot extends Robot {
 				automate(hierrary, (ThermostatPage) lastPage);
 			} else if (lastPage instanceof LightPage) {
 				automate(hierrary, (LightPage) lastPage);
-			} else if (lastPage instanceof ColorPicker) {
-				automate(hierrary, (ColorPicker) lastPage);
 			} else if (lastPage instanceof DoorPage) {
 				automate(hierrary, (DoorPage) lastPage);
+			} else if (lastPage instanceof ColorPickerPage) {
+				automate(hierrary, (ColorPickerPage) lastPage);
 			} else {
 				System.out.println("Unsupported: " + lastPage);
 			}
@@ -119,7 +119,8 @@ public class HomeRobot extends Robot {
 	 * @param hierrary
 	 * @param lastPage
 	 */
-	private void automate(final List<Composite> hierrary, final ColorPicker colorPicker) {
+	private void automate(final List<Composite> hierrary, final ColorPickerPage lastPage) {
+		final ColorPicker colorPicker = (ColorPicker) lastPage.getWidget(0);
 		switch (state) {
 		case INITIAL_STATE + 2:
 			final int width = colorPicker.getImage().getWidth();
@@ -161,8 +162,8 @@ public class HomeRobot extends Robot {
 		}
 
 		Box switchButton = null;
+		ButtonWrapper buttonWrapper = null;
 		BoundedRange lightCircularProgress = null;
-		CircleWidget circleWidget = null;
 		LightWidget light = null;
 		final int nextInt = rand.nextInt(widgetsCount);
 		final Widget widget = lights.getWidget(nextInt);
@@ -170,8 +171,9 @@ public class HomeRobot extends Robot {
 			light = (LightWidget) widget;
 			final OverlapingComposite composite = (OverlapingComposite) light.getWidget(1);
 			lightCircularProgress = (LightCircularProgress) composite.getWidget(0);
-			circleWidget = (CircleWidget) composite.getWidget(1);
-			switchButton = (ImageSwitch) light.getWidget(2);
+			buttonWrapper = (ButtonWrapper) composite.getWidget(1);
+			final ToggleWrapper toggleWrapper = (ToggleWrapper) light.getWidget(2);
+			switchButton = (Box) toggleWrapper.getWidget(0);
 		} else if (state < INITIAL_STATE + 4) {
 			state = INITIAL_STATE + 4;
 			return;
@@ -182,11 +184,15 @@ public class HomeRobot extends Robot {
 			if (switchButton.isChecked()) {
 				final int value = (int) ((lightCircularProgress.getMaximum() - lightCircularProgress.getMinimum()) * rand.nextFloat() + lightCircularProgress.getMinimum());
 				lightCircularProgress.setValue(value);
+			} else {
+				light.onStateChange((rand.nextInt() & 1) == 0);
 			}
 			break;
 		case INITIAL_STATE + 1:
 			if (switchButton.isChecked()) {
-				circleWidget.performClick();
+				buttonWrapper.performClick();
+			} else {
+				light.onStateChange((rand.nextInt() & 1) == 0);
 			}
 		break;
 		case INITIAL_STATE + 2:

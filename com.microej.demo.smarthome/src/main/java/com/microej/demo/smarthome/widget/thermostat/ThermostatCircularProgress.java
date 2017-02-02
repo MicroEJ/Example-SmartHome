@@ -22,7 +22,6 @@ import ej.style.util.ElementAdapter;
 import ej.widget.listener.OnValueChangeListener;
 import ej.widget.navigation.TransitionListener;
 import ej.widget.navigation.TransitionManager;
-import ej.widget.navigation.page.Page;
 
 /**
  *
@@ -82,25 +81,18 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 		transitionListener = new TransitionListener() {
 
 			@Override
-			public void onTransitionStop() {
+			public void onTransitionStart(final TransitionManager transitionManager) {
+				stopAnimation();
+				resetAnimation();
+
+			}
+
+			@Override
+			public void onTransitionStop(final TransitionManager manager) {
 				if (isShown()) {
-					initAnimation();
+					resetAnimation();
 					startAnimation();
 				}
-
-			}
-
-			@Override
-			public void onTransitionStep(final int step) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void onTransitionStart(final int transitionsSteps, final int transitionsStop, final Page from,
-					final Page to) {
-				stopAnimation();
-				initAnimation();
 
 			}
 		};
@@ -162,8 +154,8 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 
 	@Override
 	public void showNotify() {
-		transitionListener.onTransitionStart(0, 0, null, null);
-		TransitionManager.addGlobalTransitionListener(transitionListener);
+		transitionListener.onTransitionStart(null);
+		TransitionManager.addTransitionListener(transitionListener);
 		setLocalTarget(model.getTargetValue());
 		model.addOnTargetValueChangeListener(listener);
 		model.register();
@@ -173,8 +165,8 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	@Override
 	public void hideNotify() {
 		super.hideNotify();
-		transitionListener.onTransitionStart(0, 0, null, null);
-		TransitionManager.removeGlobalTransitionListener(transitionListener);
+		transitionListener.onTransitionStart(null);
+		TransitionManager.addTransitionListener(transitionListener);
 		model.removeOnTargetValueChangeListener(listener);
 		model.unregister();
 	}
@@ -194,8 +186,8 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	}
 
 	@Override
-	public void initAnimation() {
-		super.initAnimation();
+	public void resetAnimation() {
+		super.resetAnimation();
 		target.reset();
 		targetAngle = 0;
 	}
@@ -211,7 +203,6 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 			updateAngle();
 		} else {
 			// So the animation starts at the end of the first one.
-			// TODO call it only once.
 			target.start(currentTimeMillis);
 		}
 		return true;

@@ -1,6 +1,0 @@
-#com.microej.demo.smarthome.data.fake.door.DoorProvider
-#com.microej.demo.smarthome.data.fake.thermostat.Thermostat
-#com.microej.demo.smarthome.data.fake.light.LightProvider
-com.microej.demo.smarthome.data.fake.power.Power
-
-ej.util.concurrent.SingleThreadExecutor

@@ -6,11 +6,10 @@
  */
 package com.microej.demo.smarthome.standalone;
 
-import com.microej.demo.smarthome.data.zwave.ZwaveControllerManager;
-
 import ej.components.dependencyinjection.ServiceLoaderFactory;
 import ej.components.registry.BundleRegistry;
 import ej.components.registry.util.BundleRegistryHelper;
+import ej.widget.listener.OnClickListener;
 
 /**
  *
@@ -22,15 +21,22 @@ public class Main {
 		BundleRegistryHelper.startup(registry);
 
 
-		new ZwaveControllerManager();
+		// new ZwaveControllerManager();
 
-		final ZwaveSimuBackgroundService bg = new ZwaveSimuBackgroundService();
-		bg.onStart();
+		// final ZwaveSimuBackgroundService bg = new ZwaveSimuBackgroundService();
+		// bg.onStart();
+		//
+		// final PhilipsHueBackgroundService philipsHueBackgroundService = new PhilipsHueBackgroundService();
+		// philipsHueBackgroundService.onStart();
 
-		final PhilipsHueBackgroundService philipsHueBackgroundService = new PhilipsHueBackgroundService();
-		philipsHueBackgroundService.onStart();
+		com.microej.demo.smarthome.Main.setOnClickListener(new OnClickListener() {
 
+			@Override
+			public void onClick() {
+				//System.out.println("Main.onClick()");
 
+			}
+		});
 		com.microej.demo.smarthome.Main.main(args);
 	}
 }

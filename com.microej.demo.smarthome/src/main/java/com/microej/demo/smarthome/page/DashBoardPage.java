@@ -12,9 +12,10 @@ import com.microej.demo.smarthome.widget.ImageMenuButton;
 import com.microej.demo.smarthome.widget.Menu;
 import com.microej.demo.smarthome.widget.MenuButton;
 
+import ej.mwt.MWT;
 import ej.widget.container.Dock;
 import ej.widget.navigation.TransitionManager;
-import ej.widget.navigation.transition.VerticalScreenshotTransitionManager;
+import ej.widget.navigation.transition.OverlapScreenshotTransitionManager;
 
 /**
  *
@@ -29,12 +30,13 @@ public class DashBoardPage extends MenuNavigatorPage {
 	public DashBoardPage() {
 		super(pagesURL);
 
-		Dock mainDock = new Dock();
-		TransitionManager manager = new VerticalScreenshotTransitionManager();
+		final Dock mainDock = new Dock();
+		final TransitionManager manager = new OverlapScreenshotTransitionManager(MWT.BOTTOM);
+		manager.setDuration(300);
 		navigator.setTransitionManager(manager);
 
 		mainDock.setCenter(navigator);
-		Menu menu = initMenu();
+		final Menu menu = initMenu();
 		menu.addClassSelector(ClassSelectors.DASHBOARD_MENU);
 		mainDock.addTop(menu);
 		setWidget(mainDock);
@@ -43,7 +45,7 @@ public class DashBoardPage extends MenuNavigatorPage {
 
 	@Override
 	protected MenuButton createMenuButton() {
-		ImageMenuButton imageMenuButton = new ImageMenuButton(Images.DASHBOARD);
+		final ImageMenuButton imageMenuButton = new ImageMenuButton(Images.DASHBOARD);
 		imageMenuButton.addClassSelector(ClassSelectors.FOOTER_MENU_BUTTON);
 		return imageMenuButton;
 	}

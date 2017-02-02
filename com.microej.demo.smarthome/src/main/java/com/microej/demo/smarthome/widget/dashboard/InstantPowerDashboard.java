@@ -19,7 +19,6 @@ import ej.widget.container.Flow;
 import ej.widget.container.Grid;
 import ej.widget.navigation.TransitionListener;
 import ej.widget.navigation.TransitionManager;
-import ej.widget.navigation.page.Page;
 
 /**
  *
@@ -64,22 +63,17 @@ public class InstantPowerDashboard extends Grid {
 		transitionListener = new TransitionListener() {
 
 			@Override
-			public void onTransitionStop() {
+			public void onTransitionStart(final TransitionManager transitionManager) {
+
+			}
+
+			@Override
+			public void onTransitionStop(final TransitionManager manager) {
 				if (isShown()) {
 					final Power myPower = ServiceLoaderFactory.getServiceLoader().getService(Power.class);
 					myPower.addListener(powerEventListener);
 					updateInstantPower(myPower.getInstantPowerConsumption());
 				}
-
-			}
-
-			@Override
-			public void onTransitionStep(final int step) {
-
-			}
-
-			@Override
-			public void onTransitionStart(final int transitionsSteps, final int transitionsStop, final Page from, final Page to) {
 
 			}
 		};
@@ -92,7 +86,7 @@ public class InstantPowerDashboard extends Grid {
 		super.showNotify();
 		final Power myPower = ServiceLoaderFactory.getServiceLoader().getService(Power.class);
 		updateInstantPower(myPower.getInstantPowerConsumption());
-		TransitionManager.addGlobalTransitionListener(transitionListener);
+		TransitionManager.addTransitionListener(transitionListener);
 	}
 
 	@Override
@@ -100,7 +94,7 @@ public class InstantPowerDashboard extends Grid {
 		super.hideNotify();
 		final Power myPower = ServiceLoaderFactory.getServiceLoader().getService(Power.class);
 		myPower.removeListener(powerEventListener);
-		TransitionManager.removeGlobalTransitionListener(transitionListener);
+		TransitionManager.removeTransitionListener(transitionListener);
 	}
 
 	private void updateInstantPower(final InstantPower instantPower) {

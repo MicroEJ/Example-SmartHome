@@ -1,1 +1,1 @@
-com.microej.demo.smarthome.data.fake.door.DoorProvider
+com.microej.demo.smarthome.data.door.DefaultDoorProvider

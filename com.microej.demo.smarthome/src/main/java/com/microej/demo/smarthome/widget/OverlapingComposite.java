@@ -22,15 +22,15 @@ public class OverlapingComposite extends StyledComposite {
 	private long nextEvent;
 
 	@Override
-	public Rectangle validateContent(Style style, Rectangle bounds) {
-		int widthHint = bounds.getWidth();
-		int heightHint = bounds.getHeight();
+	public Rectangle validateContent(final Style style, final Rectangle bounds) {
+		final int widthHint = bounds.getWidth();
+		final int heightHint = bounds.getHeight();
 		int width = widthHint;
 		int height = heightHint;
-		boolean maxWidth = (widthHint == MWT.NONE);
-		boolean maxHeight = (heightHint == MWT.NONE);
+		final boolean maxWidth = (widthHint == MWT.NONE);
+		final boolean maxHeight = (heightHint == MWT.NONE);
 
-		for (Widget w : getWidgets()) {
+		for (final Widget w : getWidgets()) {
 			w.validate(widthHint, heightHint);
 			if (maxWidth) {
 				width = Math.max(width, w.getPreferredWidth());
@@ -44,31 +44,31 @@ public class OverlapingComposite extends StyledComposite {
 	}
 
 	@Override
-	protected void setBoundsContent(Rectangle bounds) {
-		int boundsX = bounds.getX();
-		int boundsY = bounds.getY();
-		int boundsWidth = bounds.getWidth();
-		int boundsHeight = bounds.getHeight();
-		for (Widget w : getWidgets()) {
-			w.setBounds(boundsX, boundsY, boundsWidth, boundsHeight);
-			// int preferredWidth = w.getPreferredWidth();
-			// int preferredHeight = w.getPreferredHeight();
-			// int alignment = getStyle().getAlignment();
-			// int x = AlignmentHelper.computeXLeftCorner(preferredWidth, boundsX, boundsWidth, alignment);
-			// int y = AlignmentHelper.computeYTopCorner(preferredHeight, boundsY, boundsHeight, alignment);
-			// w.setBounds(x, y, preferredWidth, preferredHeight);
+	protected void setBoundsContent(final Rectangle bounds) {
+		final int boundsX = bounds.getX();
+		final int boundsY = bounds.getY();
+		final int boundsWidth = bounds.getWidth();
+		final int boundsHeight = bounds.getHeight();
+		for (final Widget w : getWidgets()) {
+			final int preferredWidth = w.getPreferredWidth();
+			final int preferredHeight = w.getPreferredHeight();
+			if (preferredWidth != 0 && preferredHeight != 0) {
+				w.setBounds(boundsX, boundsY, boundsWidth, boundsHeight);
+			} else {
+				w.setBounds(0, 0, 0, 0);
+			}
 		}
 	}
 
 	@Override
-	public void add(Widget widget) throws NullPointerException, IllegalArgumentException {
+	public void add(final Widget widget) throws NullPointerException, IllegalArgumentException {
 		super.add(widget);
 	}
 
 	@Override
-	public boolean handleEvent(int event) {
+	public boolean handleEvent(final int event) {
 		// Avoid OutOfEvent exception.
-		long currentTime = System.currentTimeMillis();
+		final long currentTime = System.currentTimeMillis();
 		if (currentTime > nextEvent) {
 			nextEvent = currentTime + EVENT_RATE;
 			int i = getWidgetsCount();

@@ -40,7 +40,7 @@ public class ThermostatWidget extends Grid {
 	 * @param thermostat
 	 */
 	public ThermostatWidget(final Thermostat thermostat) {
-		super(false, 1);
+		super(true, 3);
 		this.thermostat = thermostat;
 		model = new ThermostatBoundedRangeModel(thermostat);
 
@@ -49,39 +49,16 @@ public class ThermostatWidget extends Grid {
 		final ThermostatCircularProgress thermostatCircularProgress = new ThermostatCircularProgress(model);
 		thermostatCircularProgress.addClassSelector(ClassSelectors.THERMOSTAT);
 		composite.add(thermostatCircularProgress);
-		final OnValueChangeListener onValueChangeListener = new OnValueChangeListener() {
-
-			@Override
-			public void onValueChange(final int newValue) {
-				desiredTemperature.setTemperature(thermostatCircularProgress.getTargetValue());
-				currentTemperature.setTemperature(thermostat.getTemperature());
-				final int localTarget = thermostatCircularProgress.getTargetValue() / 10;
-				final int target = thermostat.getTargetTemperature() / 10;
-				updateClassSelectors(thermostat.getTemperature() / 10,
-						localTarget);
-				updateButton(target, localTarget);
-			}
-
-			@Override
-			public void onMinimumValueChange(final int newMinimum) {
-				// Not used.
-
-			}
-
-			@Override
-			public void onMaximumValueChange(final int newMaximum) {
-				// Not used.
-
-			}
-		};
+		final OnValueChangeListener onValueChangeListener = new ThermostatValueChangeListener(
+				thermostatCircularProgress);
 		thermostatCircularProgress.addOnTargetValueChangeListener(onValueChangeListener);
 		thermostatCircularProgress.addOnValueChangeListener(onValueChangeListener);
 
 		button = new LimitedButtonWrapper();
 		button.setAdjustedToChild(false);
-		final Label widget = new Label(Strings.OK);
-		widget.addClassSelector(ClassSelectors.THERMOSTAT_VALIDATE);
-		button.setWidget(widget);
+		final Label okLabel = new Label(Strings.OK);
+		okLabel.addClassSelector(ClassSelectors.THERMOSTAT_VALIDATE);
+		button.setWidget(okLabel);
 		button.addOnClickListener(new OnClickListener() {
 
 			@Override
@@ -172,15 +149,48 @@ public class ThermostatWidget extends Grid {
 		if (targetTemperature == targetValue && button.isVisible()) {
 			button.setVisible(false);
 			if (isShown()) {
-				composite.partialRevalidate();
-				composite.repaint();
+				composite.revalidateSubTree();
 			}
 		} else if (targetTemperature != targetValue && !button.isVisible()) {
 			button.setVisible(true);
 			if (isShown()) {
-				composite.partialRevalidate();
-				composite.repaint();
+				composite.revalidateSubTree();
 			}
 		}
 	}
+
+	private class ThermostatValueChangeListener implements OnValueChangeListener
+	{
+
+		private final ThermostatCircularProgress thermostatCircularProgress;
+
+		/**
+		 * @param thermostatCircularProgress
+		 */
+		public ThermostatValueChangeListener(final ThermostatCircularProgress thermostatCircularProgress) {
+			this.thermostatCircularProgress = thermostatCircularProgress;
+		}
+
+		@Override
+		public void onValueChange(final int newValue) {
+			desiredTemperature.setTemperature(thermostatCircularProgress.getTargetValue());
+			currentTemperature.setTemperature(thermostat.getTemperature());
+			final int localTarget = thermostatCircularProgress.getTargetValue() / 10;
+			final int target = thermostat.getTargetTemperature() / 10;
+			updateClassSelectors(thermostat.getTemperature() / 10, localTarget);
+			updateButton(target, localTarget);
+		}
+
+		@Override
+		public void onMinimumValueChange(final int newMinimum) {
+			// Not used.
+
+		}
+
+		@Override
+		public void onMaximumValueChange(final int newMaximum) {
+			// Not used.
+
+		}
+	};
 }

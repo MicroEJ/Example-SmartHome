@@ -17,7 +17,6 @@ import ej.style.container.Rectangle;
 import ej.style.util.StyleHelper;
 import ej.widget.navigation.TransitionListener;
 import ej.widget.navigation.TransitionManager;
-import ej.widget.navigation.page.Page;
 
 /** IPR start **/
 
@@ -36,22 +35,16 @@ public class LineChart extends BasicChart {
 	public LineChart() {
 		super();
 		listener = new TransitionListener() {
+			@Override
+			public void onTransitionStart(final TransitionManager transitionManager) {
+				isInTransition = true;
+
+			}
 
 			@Override
-			public void onTransitionStop() {
+			public void onTransitionStop(final TransitionManager manager) {
 				isInTransition = false;
 
-			}
-
-			@Override
-			public void onTransitionStep(int step) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void onTransitionStart(int transitionsSteps, int transitionsStop, Page from, Page to) {
-				isInTransition = true;
 			}
 		};
 	}
@@ -60,28 +53,28 @@ public class LineChart extends BasicChart {
 	 * Render widget
 	 */
 	@Override
-	public void renderContent(GraphicsContext g, Style style, Rectangle bounds) {
-		int clipStart = g.getClipX();
-		int clipEnd = clipStart + g.getClipWidth();
-		Font font = StyleHelper.getFont(style);
-		int fontHeight = font.getHeight();
+	public void renderContent(final GraphicsContext g, final Style style, final Rectangle bounds) {
+		final int clipStart = g.getClipX();
+		final int clipEnd = clipStart + g.getClipWidth();
+		final Font font = StyleHelper.getFont(style);
+		final int fontHeight = font.getHeight();
 
-		int yBarBottom = getBarBottom(fontHeight, bounds);
-		int yBarTop = getBarTop(fontHeight, bounds);
+		final int yBarBottom = getBarBottom(fontHeight, bounds);
+		final int yBarTop = getBarTop(fontHeight, bounds);
 
-		float topValue = getMaxScaleValue();
-		float graphHeightRatio = (yBarBottom - yBarTop) / topValue;
+		final float topValue = getMaxScaleValue();
+		final float graphHeightRatio = (yBarBottom - yBarTop) / topValue;
 
-		float animationRatio = getAnimationRatio();
+		final float animationRatio = getAnimationRatio();
 
-		int foregroundColor = style.getForegroundColor();
+		final int foregroundColor = style.getForegroundColor();
 
 		// draw scale
 		g.setFont(font);
 		renderScale(g, style, bounds, topValue);
 
 		// draw points
-		AntiAliasedShapes antiAliasedShapes = AntiAliasedShapes.Singleton;
+		final AntiAliasedShapes antiAliasedShapes = AntiAliasedShapes.Singleton;
 		antiAliasedShapes.setThickness(1);
 		antiAliasedShapes.setFade(1);
 
@@ -93,15 +86,15 @@ public class LineChart extends BasicChart {
 		int nextX = LEFT_PADDING;
 
 		// Draw the line.
-		List<ChartPoint> points = getPoints();
+		final List<ChartPoint> points = getPoints();
 		if (animationRatio == 0) {
 			firstPointIndexDisplayed = 0;
 			g.setColor(foregroundColor);
 			g.removeBackgroundColor();
 			antiAliasedShapes.drawLine(g, LEFT_PADDING, yBarBottom, LEFT_PADDING * points.size(), yBarBottom);
 		} else {
-			for (ChartPoint chartPoint : points) {
-				int currentX = nextX;
+			for (final ChartPoint chartPoint : points) {
+				final int currentX = nextX;
 
 				// Comput the position of the next point.
 				pointIndex++;
@@ -111,16 +104,16 @@ public class LineChart extends BasicChart {
 					if (firstPointIndexDisplayed == -1) {
 						firstPointIndexDisplayed = pointIndex - 1;
 					}
-					float value = chartPoint.getValue();
+					final float value = chartPoint.getValue();
 
 					if (value < 0.0f) {
 						previousX = -1;
 						previousY = -1;
 					} else {
-						int finalLength = (int) (graphHeightRatio * value);
-						int apparitionLength = (int) (finalLength * animationRatio);
-						int yTop = yBarBottom - apparitionLength;
-						int currentY = yTop;
+						final int finalLength = (int) (graphHeightRatio * value);
+						final int apparitionLength = (int) (finalLength * animationRatio);
+						final int yTop = yBarBottom - apparitionLength;
+						final int currentY = yTop;
 
 						if (previousY != -1) {
 							g.setColor(foregroundColor);
@@ -150,11 +143,11 @@ public class LineChart extends BasicChart {
 		// draw circles
 		pointIndex = firstPointIndexDisplayed;
 		if (firstPointIndexDisplayed != -1) {
-			int radius = 4;
+			final int radius = 4;
 			nextX = LEFT_PADDING + pointIndex * STEP_X;
-			for (Iterator<ChartPoint> iterator = points.listIterator(pointIndex); iterator.hasNext();) {
-				ChartPoint chartPoint = iterator.next();
-				int currentX = nextX;
+			for (final Iterator<ChartPoint> iterator = points.listIterator(pointIndex); iterator.hasNext();) {
+				final ChartPoint chartPoint = iterator.next();
+				final int currentX = nextX;
 
 				// Comput the position of the next point.
 				pointIndex++;
@@ -162,25 +155,25 @@ public class LineChart extends BasicChart {
 				// Draw only if next point is visible.
 				if (nextX > clipStart) {
 					// Draw only if next point is visible.
-					float value = chartPoint.getValue();
+					final float value = chartPoint.getValue();
 					if (value < 0.0f) {
 						pointIndex++;
 						continue;
 					}
 
-					Style pointStyle = chartPoint.getStyle();
-					int backgroundColor = pointStyle.getBackgroundColor();
-					int chartPointForegroundColor = pointStyle.getForegroundColor();
+					final Style pointStyle = chartPoint.getStyle();
+					final int backgroundColor = pointStyle.getBackgroundColor();
+					final int chartPointForegroundColor = pointStyle.getForegroundColor();
 
-					int finalLength = (int) (graphHeightRatio * value);
-					int apparitionLength = (int) (finalLength * animationRatio);
-					int yTop = yBarBottom - apparitionLength;
-					int currentY = yTop;
+					final int finalLength = (int) (graphHeightRatio * value);
+					final int apparitionLength = (int) (finalLength * animationRatio);
+					final int yTop = yBarBottom - apparitionLength;
+					final int currentY = yTop;
 
 					g.setColor(backgroundColor);
-					int x = currentX - radius;
-					int y = currentY - radius;
-					int diameter = radius << 1;
+					final int x = currentX - radius;
+					final int y = currentY - radius;
+					final int diameter = radius << 1;
 					g.fillCircle(x, y + 1, diameter);
 					g.setColor(chartPointForegroundColor);
 
@@ -204,14 +197,14 @@ public class LineChart extends BasicChart {
 
 	@Override
 	public void showNotify() {
-		TransitionManager.addGlobalTransitionListener(listener);
+		TransitionManager.addTransitionListener(listener);
 		super.showNotify();
 
 	}
 
 	@Override
 	public void hideNotify() {
-		TransitionManager.removeGlobalTransitionListener(listener);
+		TransitionManager.removeTransitionListener(listener);
 		resetAnimation();
 		super.hideNotify();
 	}

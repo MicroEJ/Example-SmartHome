@@ -1,0 +1,4 @@
+com.microej.demo.smarthome.data.door.DefaultDoorProvider
+com.microej.demo.smarthome.data.thermostat.DefaultThermostat
+com.microej.demo.smarthome.data.light.DefaultLightProvider
+com.microej.demo.smarthome.data.power.DefaultPower
