@@ -11,8 +11,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
-import com.microej.demo.smarthome.util.ExecutorUtils;
+import java.util.concurrent.Executor;
 
 import android.net.ConnectivityManager;
 import android.net.ConnectivityManager.NetworkCallback;
@@ -59,7 +58,7 @@ public class PhilipsHueBackgroundService implements BackgroundService {
 
 	private synchronized void startManager() {
 
-		ExecutorUtils.getExecutor(ExecutorUtils.LOW_PRIORITY).execute(new Runnable() {
+		ServiceLoaderFactory.getServiceLoader().getService(Executor.class).execute(new Runnable() {
 
 			@Override
 			public void run() {

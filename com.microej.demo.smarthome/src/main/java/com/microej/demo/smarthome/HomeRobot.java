@@ -27,12 +27,9 @@ import com.microej.demo.smarthome.widget.light.LightCircularProgress;
 import com.microej.demo.smarthome.widget.light.LightWidget;
 import com.microej.demo.smarthome.widget.thermostat.ThermostatCircularProgress;
 import com.microej.demo.smarthome.widget.thermostat.ThermostatWidget;
-import com.microej.demo.util.Robot;
 
-import ej.bon.Timer;
-import ej.bon.TimerTask;
+import ej.automaton.Automaton;
 import ej.microui.display.Display;
-import ej.microui.event.EventGenerator;
 import ej.microui.event.generator.Pointer;
 import ej.mwt.Composite;
 import ej.mwt.Panel;
@@ -49,42 +46,30 @@ import ej.widget.navigation.page.Page;
 /**
  *
  */
-public class HomeRobot extends Robot {
+public class HomeRobot implements Automaton {
 
-	private static final int DELAY = 40_000;
 	private static final int PERIOD = 2_500;
-	private static final Timer timer = new Timer();
 	private static final int INITIAL_STATE = 0;
 	private static final Random rand = new Random();
 
-	private int state = INITIAL_STATE;
-	private boolean dashBoardForward = true;
+	private int state;
+	private boolean dashBoardForward;
 
-	static {
-		timer.schedule(new TimerTask() {
-
-			@Override
-			public void run() {
-				Thread.currentThread().setName("Robot");
-
-			}
-		}, 0);
-	}
-
-	/**
-	 */
-	public HomeRobot() {
-		super(PERIOD, DELAY, timer);
-
-		// Reset on pointer events.
-		addEventGeneratorTrigger(EventGenerator.get(Pointer.class, 0));
-
-		// Automatically starts.
-		startWatchdog();
+	@Override
+	public void onStart() {
+		System.out.println("HomeRobot.onStart()");
+		state = INITIAL_STATE;
+		dashBoardForward = true;
 	}
 
 	@Override
-	protected void automate() {
+	public void onStop() {
+		// Nothing to do.
+
+	}
+
+	@Override
+	public void run() {
 		final Display display = Display.getDefaultDisplay();
 		display.waitForEvent();
 		display.waitForEvent();
@@ -313,5 +298,10 @@ public class HomeRobot extends Robot {
 			}
 		}
 		return pages;
+	}
+
+	@Override
+	public long getPeriod() {
+		return PERIOD;
 	}
 }

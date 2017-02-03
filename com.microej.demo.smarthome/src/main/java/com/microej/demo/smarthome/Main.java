@@ -11,6 +11,8 @@ import com.microej.demo.smarthome.page.SmartHomePage;
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.style.StylePopulator;
 
+import ej.automaton.Automaton;
+import ej.automaton.impl.AutomatonManagerImpl;
 import ej.bon.Timer;
 import ej.bon.TimerTask;
 import ej.components.dependencyinjection.ServiceLoaderFactory;
@@ -28,10 +30,11 @@ public class Main {
 
 	private static Desktop desktop;
 	private static OnClickListener onClickListener;
-	private static HomeRobot homeRobot;
+	private static AutomatonManagerImpl<Automaton> homeRobotManager;
 	private static SplashTransitionManager transitionManager;
 	private static DirectNavigator navigator;
 	private static SmartHomePage mainPage;
+	private static Timer timer;
 
 	/**
 	 * @param args
@@ -69,8 +72,9 @@ public class Main {
 		panel.showFullScreen(desktop);
 		desktop.show();
 
-		// Starts robot.
-		homeRobot = new HomeRobot();
+		timer = new Timer();
+		homeRobotManager = new AutomatonManagerImpl<Automaton>(timer, new HomeRobot(), 40_000);
+		homeRobotManager.arm();
 	}
 
 	public static Desktop getDesktop() {
@@ -88,8 +92,12 @@ public class Main {
 	}
 
 	public static void stopRobot() {
-		if (homeRobot != null) {
-			homeRobot.cancel();
+		if (homeRobotManager != null) {
+			homeRobotManager.stop();
+		}
+		if (timer != null) {
+			timer.cancel();
+			timer = null;
 		}
 	}
 

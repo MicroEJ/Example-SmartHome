@@ -33,6 +33,7 @@
 		<dependency conf="provided->*" org="ej.api" name="microui" rev="[2.0.0-RC0,3.0.0-RC0["/>
 		<dependency org="ej.library.ui" name="mwt" rev="[2.2.0-RC0,3.0.0-RC0[" />
 		<dependency org="ej.library.ui" name="widget" rev="[2.2.0-RC0,3.0.0-RC0["/>
+		<dependency org="ej.library.ui" name="automaton" rev="[2.0.0-RC0,3.0.0-RC0["/>
 		<dependency org="ej.library.eclasspath" name="executor" rev="[1.0.0-RC0,2.0.0-RC0[" />
 		<dependency org="com.microej.demo.smarthome" name="data"  rev="[1.0.0-RC0,2.0.0-RC0[" />
 		<dependency org="com.microej.demo.smarthome.data" name="default"  rev="[2.0.0-RC0,3.0.0-RC0[" />
