@@ -69,5 +69,4 @@ public class HomeImageTheme implements ImageTheme {
 	public String getProgressBarVerticalPath() {
 		throw new UnsupportedOperationException();
 	}
-
 }

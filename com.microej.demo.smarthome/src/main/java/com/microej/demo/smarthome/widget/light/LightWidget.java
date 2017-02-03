@@ -27,7 +27,7 @@ import ej.widget.model.DefaultBoundedRangeModel;
 import ej.widget.toggle.ToggleModel;
 
 /**
- *
+ * A widget displaying the state of a light.
  */
 public class LightWidget extends DeviceWidget<Light>
 implements OnStateChangeListener, OnAnimationEndListener {
@@ -39,7 +39,10 @@ implements OnStateChangeListener, OnAnimationEndListener {
 	private final ImageSwitch switchButton;
 
 	/**
-	 * Constructor
+	 * Instantiates a LightWidget.
+	 *
+	 * @param light
+	 *            the model.
 	 */
 	public LightWidget(final Light light) {
 		super(light);
@@ -139,15 +142,23 @@ implements OnStateChangeListener, OnAnimationEndListener {
 		Main.getNavigator().show(page, true);
 	}
 
+	/**
+	 * Starts the animation.
+	 */
 	public void startAnimation() {
 		progress.startAnimation();
 	}
 
+	/**
+	 * Resets the animation.
+	 */
 	public void resetAnimation() {
 		progress.resetAnimation();
 	}
 
-
+	/**
+	 * Stops the animation.
+	 */
 	public void stopAnimation() {
 		progress.stopAnimation();
 	}

@@ -6,10 +6,6 @@
  */
 package com.microej.demo.smarthome.widget;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Executor;
-
 import com.microej.demo.smarthome.Main;
 import com.microej.demo.smarthome.data.light.DefaultLight;
 import com.microej.demo.smarthome.data.light.Light;
@@ -19,7 +15,6 @@ import com.microej.demo.smarthome.util.Images;
 import com.microej.demo.smarthome.util.Strings;
 import com.microej.demo.smarthome.widget.light.LightCircleWidget;
 
-import ej.components.dependencyinjection.ServiceLoaderFactory;
 import ej.microui.display.GraphicsContext;
 import ej.microui.display.shape.AntiAliasedShapes;
 import ej.microui.event.Event;
@@ -32,8 +27,10 @@ import ej.widget.composed.Wrapper;
 import ej.widget.container.Dock;
 import ej.widget.container.Grid;
 import ej.widget.listener.OnClickListener;
-import ej.widget.listener.OnValueChangeListener;
 
+/**
+ * A color picker.
+ */
 public class ColorPicker extends Dock {
 
 	private static final int CIRCLE_DIAMETER = 120;
@@ -43,7 +40,6 @@ public class ColorPicker extends Dock {
 	/**
 	 * Attributes
 	 */
-	private final List<OnValueChangeListener> listeners;
 	private final Button titleLabel;
 	private final Button closeButton;
 	private final Image image;
@@ -59,7 +55,10 @@ public class ColorPicker extends Dock {
 
 
 	/**
-	 * Constructor
+	 * Instantiates a ColorPicker.
+	 *
+	 * @param light
+	 *            the light model to use.
 	 */
 	public ColorPicker(final Light light) {
 		super();
@@ -86,14 +85,14 @@ public class ColorPicker extends Dock {
 		final OnClickListener onClickCloseListener = new OnClickListener() {
 			@Override
 			public void onClick() {
-				Main.goToMainPage();
+				Main.backToMainPage();
 			}
 		};
 		final OnClickListener onClickResetListener = new OnClickListener() {
 
 			@Override
 			public void onClick() {
-				notifyListeners(initialLight.getColor());
+				light.setColor(initialLight.getColor());
 				onClickCloseListener.onClick();
 
 			}
@@ -137,27 +136,14 @@ public class ColorPicker extends Dock {
 		addRight(currentColorWidgetButton);
 
 		// set initial state
-		this.listeners = new ArrayList<OnValueChangeListener>();
 		this.selectedX = -1;
 		this.selectedY = -1;
 	}
 
-	// /**
-	// * Renders the widget
-	// */
-	// @Override
-	// public void renderContent(final GraphicsContext g, final Style style, final Rectangle bounds) {
-	// // render parent
-	// g.setColor(style.getBackgroundColor());
-	// final int x = g.getClipX();
-	// final int y = g.getClipY();
-	// g.fillRect(x, y, x + g.getClipWidth(), y + g.getClipHeight());
-	// }
-
 	/**
 	 * Renders the selected circle
 	 */
-	public void renderSelectedCircle(final GraphicsContext g, final Style style, final Rectangle bounds) {
+	private void renderSelectedCircle(final GraphicsContext g, final Style style, final Rectangle bounds) {
 		// draw selected circle
 		if (this.selectedX != -1 && this.selectedY != -1) {
 			final int circleX = this.selectedX - SELECTED_CIRCLE_RADIUS;
@@ -198,7 +184,7 @@ public class ColorPicker extends Dock {
 					final int pointerY = this.image.getRelativeY(clickY);
 					if (pointerX > 0 && pointerX < this.image.getWidth() && pointerY > 0
 							&& pointerY < this.image.getHeight()) {
-						performClick(action, pointerX, pointerY);
+						performTouch(action, pointerX, pointerY);
 						return true;
 					}
 				}
@@ -209,10 +195,17 @@ public class ColorPicker extends Dock {
 	}
 
 	/**
+	 * Perform a touch event.
+	 *
+	 * @param action
+	 *            the action of the event.
 	 * @param pointerX
+	 *            the x coordinate.
 	 * @param pointerY
+	 *            the y coordinate.
+	 * @return true if the event has been handled.
 	 */
-	public boolean performClick(final int action, int pointerX, int pointerY) {
+	public boolean performTouch(final int action, int pointerX, int pointerY) {
 		final int centerX = (this.image.getWidth() >> 1);
 		final int centerY = this.image.getHeight() >> 1;
 		final int dX = pointerX - centerX;
@@ -242,7 +235,7 @@ public class ColorPicker extends Dock {
 		this.selectedY = pointerY;
 		image.repaint();
 		final int readPixel = image.getSource().readPixel(selectedX, selectedY);
-		notifyListeners(readPixel);
+		light.setColor(readPixel);
 		return true;
 	}
 
@@ -251,29 +244,6 @@ public class ColorPicker extends Dock {
 	 */
 	public int getRadius() {
 		return (this.image.getWidth() >> 1) - (SELECTED_CIRCLE_RADIUS + 1);
-	}
-
-	/**
-	 * Adds a listener
-	 */
-	public void addOnValueChangeListener(final OnValueChangeListener listener) {
-		this.listeners.add(listener);
-	}
-
-	/**
-	 * Notifies the listeners that a new color has been picked
-	 */
-	private void notifyListeners(final int color) {
-		light.setColor(color);
-		ServiceLoaderFactory.getServiceLoader().getService(Executor.class).execute(new Runnable() {
-
-			@Override
-			public void run() {
-				for (final OnValueChangeListener listener : listeners) {
-					listener.onValueChange(color);
-				}
-			}
-		});
 	}
 
 	/**

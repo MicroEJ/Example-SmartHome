@@ -6,38 +6,36 @@
  */
 package com.microej.demo.smarthome.page;
 
-import com.microej.demo.smarthome.navigator.DirectNavigator;
 import com.microej.demo.smarthome.widget.Menu;
 
 import ej.widget.composed.ToggleWrapper;
-import ej.widget.navigation.Navigator;
+import ej.widget.navigation.navigator.SimpleNavigator;
 import ej.widget.navigation.page.ClassNameURLResolver;
 
 /**
- *
+ * Abstract page providing a navigator and a menu.
  */
 public class MenuNavigatorPage extends MenuPage {
 
 	private MenuPage[] pages;
-	protected final DirectNavigator navigator;
-	protected final Menu menu;
+	private final SimpleNavigator navigator;
+	private final Menu menu;
 
 	/**
+	 * Instantiates the page.
+	 *
 	 * @param pagesURL
+	 *            url of the pages to display.
 	 */
 	public MenuNavigatorPage(final String[] pagesURL) {
 		super();
-		navigator = new DirectNavigator();
+		navigator = new SimpleNavigator();
 		menu = new Menu(navigator);
 		initPages(pagesURL);
 
-		navigator.show(pages[0], true);
+		getNavigator().show(pages[0], true);
 	}
 
-	/**
-	 * @param pagesURL
-	 *
-	 */
 	private void initPages(final String[] pagesURL) {
 		pages = new MenuPage[pagesURL.length];
 		final ClassNameURLResolver urlResolver = new ClassNameURLResolver();
@@ -49,8 +47,11 @@ public class MenuNavigatorPage extends MenuPage {
 		}
 	}
 
+
 	/**
-	 * @return
+	 * Initialize the menu.
+	 *
+	 * @return The menu.
 	 */
 	protected Menu initMenu() {
 		for (final MenuPage page : pages) {
@@ -65,9 +66,11 @@ public class MenuNavigatorPage extends MenuPage {
 	}
 
 	/**
-	 * @return
+	 * Gets the navigator of the page.
+	 * 
+	 * @return the navigator.
 	 */
-	public Navigator getNavigator() {
+	public SimpleNavigator getNavigator() {
 		return navigator;
 	}
 

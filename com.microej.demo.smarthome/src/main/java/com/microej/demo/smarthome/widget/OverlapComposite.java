@@ -13,7 +13,7 @@ import ej.style.container.Rectangle;
 import ej.widget.StyledComposite;
 
 /**
- *
+ * Composite positioning all its childs one over the other.
  */
 public class OverlapComposite extends StyledComposite {
 
@@ -54,6 +54,9 @@ public class OverlapComposite extends StyledComposite {
 		}
 	}
 
+	/**
+	 * provides access to its child.
+	 */
 	@Override
 	public void add(final Widget widget) throws NullPointerException, IllegalArgumentException {
 		super.add(widget);

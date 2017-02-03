@@ -13,10 +13,19 @@ import com.microej.demo.smarthome.widget.ColorPicker;
 import ej.widget.navigation.page.Page;
 
 
+/**
+ * A page presenting the color picker.
+ */
 public class ColorPickerPage extends Page {
 
 	private final ColorPicker colorPicker;
 
+	/**
+	 * Instantiates the page.
+	 * 
+	 * @param light
+	 *            the light to update.
+	 */
 	public ColorPickerPage(final Light light) {
 		colorPicker = new ColorPicker(light);
 		addClassSelector(ClassSelectors.BODY);

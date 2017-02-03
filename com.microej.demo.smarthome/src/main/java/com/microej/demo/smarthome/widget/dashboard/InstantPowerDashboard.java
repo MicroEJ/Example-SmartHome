@@ -21,7 +21,7 @@ import ej.widget.navigation.TransitionListener;
 import ej.widget.navigation.TransitionManager;
 
 /**
- *
+ * A dashboard tile displaing the current power consumption.
  */
 public class InstantPowerDashboard extends Grid {
 
@@ -31,7 +31,7 @@ public class InstantPowerDashboard extends Grid {
 	private final TransitionListener transitionListener;
 
 	/**
-	 *
+	 * Instantiates an InstantPowerDashboard.
 	 */
 	public InstantPowerDashboard() {
 		super(true, 2);
@@ -102,9 +102,4 @@ public class InstantPowerDashboard extends Grid {
 		power.setText(String.valueOf(value));
 		powerBar.setValue(value);
 	}
-
-	// @Override
-	// public boolean handleEvent(int event) {
-	// return false;
-	// }
 }

@@ -6,27 +6,30 @@
  */
 package com.microej.demo.smarthome.widget;
 
-import com.microej.demo.smarthome.navigator.DirectNavigator;
 import com.microej.demo.smarthome.page.MenuPage;
 
 import ej.mwt.Widget;
 import ej.widget.composed.ToggleWrapper;
 import ej.widget.container.Grid;
+import ej.widget.navigation.navigator.SimpleNavigator;
 import ej.widget.toggle.ToggleGroup;
 
 /**
- *
+ * A menu between pages.
  */
 public class Menu extends Grid {
 
-	private final DirectNavigator navigator;
+	private final SimpleNavigator navigator;
 	private final ToggleGroup group;
 	private ToggleWrapper currentButton;
 
 	/**
+	 * Instantiates a Menu.
+	 *
 	 * @param navigator
+	 *            the navigator.
 	 */
-	public Menu(final DirectNavigator navigator) {
+	public Menu(final SimpleNavigator navigator) {
 		super(false, 1);
 		group = new ToggleGroup();
 		this.navigator = navigator;
@@ -37,6 +40,12 @@ public class Menu extends Grid {
 		throw new IllegalArgumentException();
 	}
 
+	/**
+	 * Adds a button.
+	 *
+	 * @param button
+	 *            the button to add.
+	 */
 	public void add(final ToggleWrapper button) {
 		if (getWidgetsCount() == 0) {
 			currentButton = button;
@@ -47,23 +56,28 @@ public class Menu extends Grid {
 	}
 
 	/**
-	 * @param menuPage
+	 * Shows a page.
+	 *
+	 * @param page
+	 *            the page to show.
 	 */
-	public void show(final MenuPage menuPage) {
-		final ToggleWrapper button = menuPage.getMenuButton();
+	public void show(final MenuPage page) {
+		final ToggleWrapper button = page.getMenuButton();
 		boolean forward = false;
 
-		for (final Widget widget : getWidgets()) {
-			if (widget == button) {
-				forward = false;
-				break;
+		if (button != currentButton) {
+			for (final Widget widget : getWidgets()) {
+				if (widget == button) {
+					forward = false;
+					break;
+				}
+				if (widget == currentButton) {
+					forward = true;
+					break;
+				}
 			}
-			if (widget == currentButton) {
-				forward = true;
-				break;
-			}
+			currentButton = button;
+			navigator.show(page, forward);
 		}
-		currentButton = button;
-		navigator.show(menuPage, forward);
 	}
 }

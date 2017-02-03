@@ -23,7 +23,7 @@ import ej.widget.listener.OnClickListener;
 import ej.widget.listener.OnValueChangeListener;
 
 /**
- *
+ * A thermostat widget.
  */
 public class ThermostatWidget extends Grid {
 
@@ -37,7 +37,10 @@ public class ThermostatWidget extends Grid {
 	private final OverlapComposite composite;
 
 	/**
+	 * Instantiates a ThermostatWidget.
+	 *
 	 * @param thermostat
+	 *            the model.
 	 */
 	public ThermostatWidget(final Thermostat thermostat) {
 		super(true, 3);
@@ -80,9 +83,6 @@ public class ThermostatWidget extends Grid {
 		updateClassSelectors(model.getValue(), model.getTargetValue());
 	}
 
-	/**
-	 * @return
-	 */
 	private Widget createDesiredLabel() {
 		desiredLabel = new Label(Strings.DESIRED);
 		desiredLabel.addClassSelector(ClassSelectors.THERMOSTAT_TOP_LABEL);
@@ -91,9 +91,6 @@ public class ThermostatWidget extends Grid {
 		return createLabel(desiredLabel, desiredTemperature);
 	}
 
-	/**
-	 * @return
-	 */
 	private Widget createCurrentLabel() {
 		final Label topLabel = new Label(Strings.CURRENT);
 		topLabel.addClassSelector(ClassSelectors.THERMOSTAT_TOP_LABEL);

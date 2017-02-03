@@ -17,7 +17,7 @@ import ej.widget.basic.Label;
 import ej.widget.container.Grid;
 
 /**
- *
+ * An abstract page to display a type of device.
  */
 public abstract class DevicePage<D extends Device<?>> extends MenuPage {
 
@@ -27,7 +27,7 @@ public abstract class DevicePage<D extends Device<?>> extends MenuPage {
 	private final Label noDeviceWidget;
 
 	/**
-	 *
+	 * Instantiates a DevicePage.
 	 */
 	public DevicePage() {
 		super();
@@ -38,6 +38,14 @@ public abstract class DevicePage<D extends Device<?>> extends MenuPage {
 		setWidget(devices);
 	}
 
+	/**
+	 * Adds a device to the page.
+	 *
+	 * @param element
+	 *            the device.
+	 * @param device
+	 *            The assiciated widget.
+	 */
 	public void addDevice(final D element, final Widget device) {
 		synchronized (sync) {
 			if (devices.getWidgetsCount() == 1 && devices.getWidgets()[0] == noDeviceWidget) {
@@ -51,6 +59,12 @@ public abstract class DevicePage<D extends Device<?>> extends MenuPage {
 		}
 	}
 
+	/**
+	 * Removes a device.
+	 *
+	 * @param device
+	 *            the device.
+	 */
 	public void removeDevice(final D device) {
 		synchronized (sync) {
 			final Widget deviceWidget = devicesMap.get(device);
@@ -64,6 +78,9 @@ public abstract class DevicePage<D extends Device<?>> extends MenuPage {
 		}
 	}
 
+	/**
+	 * Removes all the devices.
+	 */
 	protected void removeDevices() {
 		synchronized (sync) {
 			devices.removeAllWidgets();

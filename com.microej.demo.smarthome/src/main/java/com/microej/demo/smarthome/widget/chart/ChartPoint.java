@@ -9,8 +9,6 @@ package com.microej.demo.smarthome.widget.chart;
 import ej.style.Element;
 import ej.style.util.ElementAdapter;
 
-/** IPR start **/
-
 /**
  * Represents a point of a Chart
  */
@@ -33,7 +31,7 @@ public class ChartPoint extends ElementAdapter {
 	 * @param value
 	 *          the value.
 	 */
-	public ChartPoint(String name, String fullName, float value) {
+	public ChartPoint(final String name, final String fullName, final float value) {
 		super();
 		this.name = name;
 		this.fullName = fullName;
@@ -54,7 +52,7 @@ public class ChartPoint extends ElementAdapter {
 	 * @param name
 	 *          the name to set.
 	 */
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -71,7 +69,7 @@ public class ChartPoint extends ElementAdapter {
 	 * @param fullName
 	 *          the full name to set.
 	 */
-	public void setFullName(String fullName) {
+	public void setFullName(final String fullName) {
 		this.fullName = fullName;
 	}
 
@@ -88,7 +86,7 @@ public class ChartPoint extends ElementAdapter {
 	 * @param value
 	 *          the value to set.
 	 */
-	public void setValue(float value) {
+	public void setValue(final float value) {
 		this.value = value;
 	}
 
@@ -107,9 +105,7 @@ public class ChartPoint extends ElementAdapter {
 	 * @param parentElement
 	 *          the parentElement to set.
 	 */
-	public void setParentElement(Element parentElement) {
+	public void setParentElement(final Element parentElement) {
 		this.parentElement = parentElement;
 	}
 }
-
-/** IPR end **/

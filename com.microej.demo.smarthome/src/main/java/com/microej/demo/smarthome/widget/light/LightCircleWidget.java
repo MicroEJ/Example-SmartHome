@@ -13,13 +13,17 @@ import com.microej.demo.smarthome.widget.CircleWidget;
 import ej.style.Style;
 
 /**
- *
+ * A CircleWidget using a light as a model.
  */
 public class LightCircleWidget extends CircleWidget implements LightEventListener {
 
 	private final Light light;
+
 	/**
-	 * @param onClickListener
+	 * Instantiates a LightCircleWidget.
+	 * 
+	 * @param light
+	 *            the model.
 	 */
 	public LightCircleWidget(final Light light) {
 		super();

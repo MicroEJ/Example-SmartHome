@@ -13,7 +13,7 @@ import ej.style.container.AlignmentHelper;
 import ej.style.container.Rectangle;
 
 /**
- *
+ * A circular background.
  */
 public class CircularPlainBackground implements Background {
 
@@ -26,13 +26,13 @@ public class CircularPlainBackground implements Background {
 	}
 
 	@Override
-	public void apply(GraphicsContext g, Rectangle bounds, int color) {
-		int width = bounds.getWidth();
-		int height = bounds.getHeight();
-		int diameter = Math.min(width, height) - (THICKNESS << 1);
-		int x = AlignmentHelper.computeXLeftCorner(diameter, bounds.getX(), width,
+	public void apply(final GraphicsContext g, final Rectangle bounds, final int color) {
+		final int width = bounds.getWidth();
+		final int height = bounds.getHeight();
+		final int diameter = Math.min(width, height) - (THICKNESS << 1);
+		final int x = AlignmentHelper.computeXLeftCorner(diameter, bounds.getX(), width,
 				GraphicsContext.HCENTER | GraphicsContext.VCENTER);
-		int y = AlignmentHelper.computeYTopCorner(diameter, bounds.getY(), height,
+		final int y = AlignmentHelper.computeYTopCorner(diameter, bounds.getY(), height,
 				GraphicsContext.HCENTER | GraphicsContext.VCENTER);
 		g.setColor(color);
 		g.fillCircle(x, y, diameter);

@@ -14,7 +14,7 @@ import ej.style.container.Rectangle;
 import ej.widget.StyledWidget;
 
 /**
- *
+ * A widget displaying a circle with a border.
  */
 public class CircleWidget extends StyledWidget {
 

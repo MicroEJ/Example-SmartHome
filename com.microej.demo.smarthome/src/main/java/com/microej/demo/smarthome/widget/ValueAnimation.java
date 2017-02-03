@@ -10,10 +10,13 @@ import ej.animation.Animation;
 import ej.motion.Motion;
 
 /**
- *
+ * Value changing over the time.
  */
 public class ValueAnimation implements Motion, Animation {
 
+	/**
+	 * The default duration of the animation.
+	 */
 	public static final int DEFAULT_DURATION = 350;
 	private int start;
 	private int currentValue;
@@ -24,27 +27,48 @@ public class ValueAnimation implements Motion, Animation {
 
 
 	/**
+	 * Instantiates a ValueAnimation.
+	 *
 	 * @param start
+	 *            the starting value.
 	 * @param currentValue
+	 *            the current value
 	 * @param targetValue
+	 *            the target value.
 	 */
 	public ValueAnimation(final int start, final int currentValue, final int targetValue) {
 		this(start, currentValue, targetValue, targetValue);
 	}
 
 	/**
+	 * Instantiates a ValueAnimation.
+	 *
 	 * @param start
+	 *            the starting value.
 	 * @param currentValue
+	 *            the current value
 	 * @param targetValue
+	 *            the target value.
+	 * @param maxValue
+	 *            the maximum value.
 	 */
 	public ValueAnimation(final int start, final int currentValue, final int targetValue, final int maxValue) {
 		this(start, currentValue, targetValue, maxValue, DEFAULT_DURATION);
 	}
 
 	/**
+	 * Instantiates a ValueAnimation.
+	 *
 	 * @param start
+	 *            the starting value.
 	 * @param currentValue
+	 *            the current value
 	 * @param targetValue
+	 *            the target value.
+	 * @param maxValue
+	 *            the maximum value.
+	 * @param duration
+	 *            the duration of the animation.
 	 */
 	public ValueAnimation(final int start, final int currentValue, final int targetValue, final int maxValue,
 			final int duration) {
@@ -68,10 +92,6 @@ public class ValueAnimation implements Motion, Animation {
 		return true;
 	}
 
-	/**
-	 * @param currentTimeMillis
-	 * @return
-	 */
 	private int getValueProgress(final long currentTimeMillis) {
 		final long elapsed = currentTimeMillis - lastTick;
 		lastTick = currentTimeMillis;
@@ -102,11 +122,6 @@ public class ValueAnimation implements Motion, Animation {
 		this.targetValue = targetValue;
 	}
 
-	/**
-	 * Gets the currentValue.
-	 *
-	 * @return the currentValue.
-	 */
 	@Override
 	public int getCurrentValue() {
 		return currentValue;
@@ -124,13 +139,19 @@ public class ValueAnimation implements Motion, Animation {
 	}
 
 	/**
+	 * Starts the animation.
+	 *
 	 * @param currentTimeMillis
+	 *            the currentTime.
 	 */
 	public void start(final long currentTimeMillis) {
 		lastTick = currentTimeMillis;
 
 	}
 
+	/**
+	 * Reset the animation.
+	 */
 	public void reset() {
 		currentValue = start;
 
@@ -152,7 +173,7 @@ public class ValueAnimation implements Motion, Animation {
 	}
 
 	/**
-	 *
+	 * Stops the animation.
 	 */
 	public void stop() {
 		currentValue = targetValue;
@@ -160,7 +181,10 @@ public class ValueAnimation implements Motion, Animation {
 	}
 
 	/**
+	 * Set the start value.
+	 * 
 	 * @param value
+	 *            the start value to set.
 	 */
 	public void setStart(final int value) {
 		start = value;

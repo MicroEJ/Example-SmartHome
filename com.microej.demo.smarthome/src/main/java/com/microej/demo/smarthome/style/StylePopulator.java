@@ -7,11 +7,9 @@
 package com.microej.demo.smarthome.style;
 
 import com.microej.demo.smarthome.util.Colors;
-import com.microej.demo.smarthome.util.Constants;
 import com.microej.demo.smarthome.widget.CircularPlainBackground;
 import com.microej.demo.smarthome.widget.TimeWidget;
 
-import ej.bon.Util;
 import ej.microui.display.Font;
 import ej.microui.display.GraphicsContext;
 import ej.style.State;
@@ -34,7 +32,7 @@ import ej.style.util.EditableStyle;
 import ej.style.util.StyleHelper;
 
 /**
- *
+ * The populator of the stylesheet.
  */
 public class StylePopulator {
 
@@ -42,9 +40,12 @@ public class StylePopulator {
 	private static final int HALF_OUTLINE = SIMPLE_OUTLINE / 2;
 	private static final int DOUBLE_OUTLINE = SIMPLE_OUTLINE * 2;
 
+
+	/**
+	 * Initialize the stylesheet.
+	 */
 	public static void initializeStylesheet() {
 
-		Util.setCurrentTimeMillis(Constants.START_TIME);
 		final Stylesheet stylesheet = StyleHelper.getStylesheet();
 
 		final FontProfile fpXSmall = new FontProfile(FontFamilies.SOURCE_SANS_PRO, FontSize.X_SMALL, Font.STYLE_PLAIN);

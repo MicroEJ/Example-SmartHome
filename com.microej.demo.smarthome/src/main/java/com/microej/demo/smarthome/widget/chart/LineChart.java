@@ -18,8 +18,6 @@ import ej.style.util.StyleHelper;
 import ej.widget.navigation.TransitionListener;
 import ej.widget.navigation.TransitionManager;
 
-/** IPR start **/
-
 /**
  * Represents a line chart with several ordered points.
  */
@@ -214,5 +212,3 @@ public class LineChart extends BasicChart {
 		return isInTransition;
 	}
 }
-
-/** IPR end **/

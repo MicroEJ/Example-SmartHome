@@ -20,12 +20,12 @@ import ej.widget.container.List;
 import ej.widget.toggle.RadioModel;
 
 /**
- *
+ * A page providing an overview of the system.
  */
 public class InformationPage extends MenuPage {
 
 	/**
-	 *
+	 * Instantes an Information Page
 	 */
 	public InformationPage() {
 		final Grid grid = new Grid(false, 2);

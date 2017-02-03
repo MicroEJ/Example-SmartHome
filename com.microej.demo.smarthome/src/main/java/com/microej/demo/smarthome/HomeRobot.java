@@ -21,8 +21,8 @@ import com.microej.demo.smarthome.page.ThermostatPage;
 import com.microej.demo.smarthome.widget.ColorPicker;
 import com.microej.demo.smarthome.widget.Menu;
 import com.microej.demo.smarthome.widget.OverlapComposite;
-import com.microej.demo.smarthome.widget.PowerWidget;
 import com.microej.demo.smarthome.widget.chart.Chart;
+import com.microej.demo.smarthome.widget.chart.PowerWidget;
 import com.microej.demo.smarthome.widget.light.LightCircularProgress;
 import com.microej.demo.smarthome.widget.light.LightWidget;
 import com.microej.demo.smarthome.widget.thermostat.ThermostatCircularProgress;
@@ -44,10 +44,13 @@ import ej.widget.navigation.Navigator;
 import ej.widget.navigation.page.Page;
 
 /**
- *
+ * Robot that simulates user interaction.
  */
 public class HomeRobot implements Automaton {
 
+	/**
+	 * The period in between two actions.
+	 */
 	private static final int PERIOD = 2_500;
 	private static final int INITIAL_STATE = 0;
 	private static final Random rand = new Random();
@@ -57,7 +60,6 @@ public class HomeRobot implements Automaton {
 
 	@Override
 	public void onStart() {
-		System.out.println("HomeRobot.onStart()");
 		state = INITIAL_STATE;
 		dashBoardForward = true;
 	}
@@ -98,8 +100,12 @@ public class HomeRobot implements Automaton {
 	}
 
 	/**
+	 * Automate one action on a page.
+	 *
 	 * @param hierrary
+	 *            the hierrarchy of the page.
 	 * @param lastPage
+	 *            the page to automate.
 	 */
 	private void automate(final List<Composite> hierrary, final ColorPickerPage lastPage) {
 		final ColorPicker colorPicker = (ColorPicker) lastPage.getWidget(0);
@@ -112,8 +118,8 @@ public class HomeRobot implements Automaton {
 		final float distance = (rand.nextFloat()/2.0f + 0.5f) * r;
 		final int x = (int) (distance * Math.cos(angle)) + width/2;
 		final int y = (int) (distance * Math.sin(angle)) + height/2;
-		colorPicker.performClick(Pointer.PRESSED, x, y);
-		colorPicker.performClick(Pointer.RELEASED, x, y);
+		colorPicker.performTouch(Pointer.PRESSED, x, y);
+		colorPicker.performTouch(Pointer.RELEASED, x, y);
 		break;
 		case INITIAL_STATE + 3:
 			colorPicker.getCloseButton().performClick();
@@ -124,16 +130,24 @@ public class HomeRobot implements Automaton {
 	}
 
 	/**
+	 * Automate one action on a page.
+	 *
 	 * @param hierrary
+	 *            the hierrarchy of the page.
 	 * @param lastPage
+	 *            the page to automate.
 	 */
 	private void automate(final List<Composite> hierrary, final DoorPage lastPage) {
 		goToNext(lastPage.getMenu(), lastPage.getMenuButton());
 	}
 
 	/**
+	 * Automate one action on a page.
+	 *
 	 * @param hierrary
+	 *            the hierrarchy of the page.
 	 * @param lastPage
+	 *            the page to automate.
 	 */
 	private void automate(final List<Composite> hierrary, final LightPage lastPage) {
 		final Grid lights = (Grid) lastPage.getWidget(0);
@@ -192,8 +206,12 @@ public class HomeRobot implements Automaton {
 	}
 
 	/**
+	 * Automate one action on a page.
+	 *
 	 * @param hierrary
+	 *            the hierrarchy of the page.
 	 * @param lastPage
+	 *            the page to automate.
 	 */
 	private void automate(final List<Composite> hierrary, final ThermostatPage lastPage) {
 		final Grid thermostats = (Grid) lastPage.getWidget(0);
@@ -217,8 +235,12 @@ public class HomeRobot implements Automaton {
 	}
 
 	/**
+	 * Automate one action on a page.
+	 *
 	 * @param hierrary
+	 *            the hierrarchy of the page.
 	 * @param lastPage
+	 *            the page to automate.
 	 */
 	private void automate(final List<Composite> hierrary, final GraphPage lastPage) {
 		final PowerWidget powerWidget = (PowerWidget) lastPage.getWidget(0);
@@ -239,8 +261,12 @@ public class HomeRobot implements Automaton {
 	}
 
 	/**
+	 * Automate one action on a page.
+	 *
 	 * @param hierrary
+	 *            the hierrarchy of the page.
 	 * @param lastPage
+	 *            the page to automate.
 	 */
 	private void automate(final List<Composite> hierrary, final InformationPage lastPage) {
 		goToNextDashboard(hierrary, lastPage, true);

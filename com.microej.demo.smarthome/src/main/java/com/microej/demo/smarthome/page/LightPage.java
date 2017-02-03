@@ -13,11 +13,11 @@ import com.microej.demo.smarthome.data.light.LightProvider;
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Images;
 import com.microej.demo.smarthome.widget.ImageMenuButton;
+import com.microej.demo.smarthome.widget.ToggleBox;
 import com.microej.demo.smarthome.widget.light.LightWidget;
 
 import ej.components.dependencyinjection.ServiceLoaderFactory;
 import ej.mwt.Widget;
-import ej.widget.composed.ToggleBox;
 import ej.widget.composed.ToggleWrapper;
 import ej.widget.container.Grid;
 import ej.widget.navigation.TransitionListener;
@@ -25,7 +25,7 @@ import ej.widget.navigation.TransitionManager;
 import ej.widget.toggle.RadioModel;
 
 /**
- *
+ * A page displaying the lights devices.
  */
 public class LightPage extends DevicePage<Light> implements ProviderListener<Light> {
 
@@ -33,7 +33,7 @@ public class LightPage extends DevicePage<Light> implements ProviderListener<Lig
 	private Thread animationThread;
 
 	/**
-	 *
+	 * Instantiates a LightPage.
 	 */
 	public LightPage() {
 		final LightProvider provider = ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class);

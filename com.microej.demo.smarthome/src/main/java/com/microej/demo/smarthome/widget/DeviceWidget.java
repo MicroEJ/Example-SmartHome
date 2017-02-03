@@ -12,19 +12,23 @@ import ej.widget.basic.Label;
 import ej.widget.container.Dock;
 
 /**
- *
+ * An abstract device widget.
  */
-public class DeviceWidget<D extends Device<?>> extends Dock {
+public abstract class DeviceWidget<D extends Device<?>> extends Dock {
 
+	/**
+	 * The model.
+	 */
 	protected final D model;
 
 	/**
+	 * Instantiates a DeviceWidget.
+	 *
 	 * @param model
+	 *            the model of the widget.
 	 */
-	public DeviceWidget(D model) {
+	public DeviceWidget(final D model) {
 		this.model = model;
 		this.addTop(new Label(model.getName()));
 	}
-
-
 }

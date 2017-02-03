@@ -9,7 +9,7 @@ package com.microej.demo.smarthome.page;
 import com.microej.demo.smarthome.data.power.Power;
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Strings;
-import com.microej.demo.smarthome.widget.PowerWidget;
+import com.microej.demo.smarthome.widget.chart.PowerWidget;
 
 import ej.components.dependencyinjection.ServiceLoaderFactory;
 import ej.mwt.Widget;

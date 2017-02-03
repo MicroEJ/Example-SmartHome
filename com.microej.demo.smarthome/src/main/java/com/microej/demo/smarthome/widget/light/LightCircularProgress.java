@@ -16,15 +16,22 @@ import ej.style.Style;
 import ej.style.container.Rectangle;
 import ej.widget.model.BoundedRangeModel;
 
-
+/**
+ * A CircularProgressWidget using a light as a model.
+ */
 public class LightCircularProgress extends CircularProgressWidget implements LightEventListener {
-
-
 
 	private static final int ANIMATION_DURATION = 300;
 	private final Light light;
 
-
+	/**
+	 * Instantiates a LightCircularProgress.
+	 *
+	 * @param model
+	 *            the BoundedRangeModel.
+	 * @param light
+	 *            the light.
+	 */
 	public LightCircularProgress(final BoundedRangeModel model, final Light light) {
 		super(model, ANIMATION_DURATION);
 		this.light = light;
@@ -46,9 +53,9 @@ public class LightCircularProgress extends CircularProgressWidget implements Lig
 		// set style
 		if (isEnabled()) {
 			// fill circle
-			final int innerD = diameter / 2;
-			final int innerX = x + (diameter - innerD) / 2;
-			final int innerY = y + (diameter - innerD) / 2;
+			final int innerD = getDiameter() / 2;
+			final int innerX = getCircleX() + (getDiameter() - innerD) / 2;
+			final int innerY = getCircleY() + (getDiameter() - innerD) / 2;
 			g.setColor(light.getColor());
 			g.removeBackgroundColor();
 			g.fillCircle(innerX, innerY, innerD);
@@ -73,7 +80,6 @@ public class LightCircularProgress extends CircularProgressWidget implements Lig
 
 	@Override
 	public void onColorChange(final int color) {
-		System.out.println("LightCircularProgress.onColorChange() color=" + color);
 		// Do nothing.
 	}
 

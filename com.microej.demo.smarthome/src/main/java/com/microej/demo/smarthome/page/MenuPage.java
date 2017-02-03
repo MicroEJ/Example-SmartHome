@@ -14,13 +14,18 @@ import ej.widget.listener.OnStateChangeListener;
 import ej.widget.navigation.page.Page;
 
 /**
+ * An abstract page to be used in a MenuNavigatorPage.
  *
+ * @see MenuNavigatorPage
  */
 public abstract class MenuPage extends Page {
 
 	private final ToggleWrapper button;
 	private Menu menu;
 
+	/**
+	 * Instantiates the menu page.
+	 */
 	public MenuPage() {
 		super();
 
@@ -31,7 +36,7 @@ public abstract class MenuPage extends Page {
 
 				@Override
 				public void onStateChange(final boolean newState) {
-					if(newState){
+					if (newState) {
 						menu.show(MenuPage.this);
 					}
 				}
@@ -68,7 +73,9 @@ public abstract class MenuPage extends Page {
 	}
 
 	/**
-	 * @return
+	 * Creates the button that will be used in the menu.
+	 *
+	 * @return the button.
 	 */
 	protected abstract ToggleWrapper createMenuButton();
 }

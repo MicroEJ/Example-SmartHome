@@ -13,19 +13,19 @@ import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Images;
 import com.microej.demo.smarthome.widget.DoorWidget;
 import com.microej.demo.smarthome.widget.ImageMenuButton;
+import com.microej.demo.smarthome.widget.ToggleBox;
 
 import ej.components.dependencyinjection.ServiceLoaderFactory;
-import ej.widget.composed.ToggleBox;
 import ej.widget.composed.ToggleWrapper;
 import ej.widget.toggle.RadioModel;
 
 /**
- *
+ * A page displaying the door status.
  */
 public class DoorPage extends DevicePage<com.microej.demo.smarthome.data.door.Door> implements ProviderListener<Door> {
 
 	/**
-	 *
+	 * Instantiates a DoorPage.
 	 */
 	public DoorPage() {
 		final DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class);
@@ -42,20 +42,6 @@ public class DoorPage extends DevicePage<com.microej.demo.smarthome.data.door.Do
 		final ToggleBox toggleBox = new ToggleBox(new RadioModel(), imageMenuButton);
 		toggleBox.addClassSelector(ClassSelectors.FOOTER_MENU_BUTTON);
 		return toggleBox;
-	}
-
-	@Override
-	public void showNotify() {
-		super.showNotify();
-	}
-
-	@Override
-	public void hideNotify() {
-		super.hideNotify();
-		// DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class);
-		// removeAllDevices();
-		// provider.removeListener(this);
-
 	}
 
 	@Override

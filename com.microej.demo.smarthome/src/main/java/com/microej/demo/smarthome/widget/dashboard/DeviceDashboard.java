@@ -14,18 +14,21 @@ import ej.widget.basic.Image;
 import ej.widget.container.List;
 
 /**
- *
+ * A widget displaying a device state.
  */
-public class DeviceDashboard extends List {
+public abstract class DeviceDashboard extends List {
 
 	private boolean active = false;
 	private final Image image;
 	private final String name;
 
 	/**
+	 * Instantiates a DeviceDashboard.
 	 *
+	 * @param name
+	 *            the name of the device.
 	 */
-	public DeviceDashboard(String name) {
+	public DeviceDashboard(final String name) {
 		super();
 		this.name = name;
 		image = new Image(HomeImageLoader.loadDashBoard(name));
@@ -34,7 +37,7 @@ public class DeviceDashboard extends List {
 	}
 
 	@Override
-	public boolean isInState(State state) {
+	public boolean isInState(final State state) {
 		if (state == State.Active) {
 			return active;
 		}
@@ -42,12 +45,12 @@ public class DeviceDashboard extends List {
 	}
 
 	/**
-	 * Sets the active.
+	 * Sets the active state.
 	 *
 	 * @param active
-	 *            the active to set.
+	 *            the active state to set.
 	 */
-	public void setActive(boolean active) {
+	public void setActive(final boolean active) {
 		if (active != this.active) {
 			this.active = active;
 			image.setSource(HomeImageLoader.loadDashBoard(name, active));

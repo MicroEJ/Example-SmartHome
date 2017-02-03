@@ -22,7 +22,7 @@ import ej.style.util.StyleHelper;
 import ej.widget.StyledWidget;
 
 /**
- *
+ * A widget displaying the time.
  */
 public class TimeWidget extends StyledWidget {
 
@@ -37,7 +37,7 @@ public class TimeWidget extends StyledWidget {
 	private String end;
 
 	/**
-	 *
+	 * instantiates a TimeWidget.
 	 */
 	public TimeWidget() {
 		super();
@@ -45,9 +45,9 @@ public class TimeWidget extends StyledWidget {
 	}
 
 	@Override
-	public void renderContent(GraphicsContext g, Style style, Rectangle bounds) {
-		Font font = StyleHelper.getFont(style);
-		StringBuilder builder = new StringBuilder(start);
+	public void renderContent(final GraphicsContext g, final Style style, final Rectangle bounds) {
+		final Font font = StyleHelper.getFont(style);
+		final StringBuilder builder = new StringBuilder(start);
 		if ((refresh & 1) == 0) {
 			builder.append(Strings.HOUR_MIN_SEPARATOR);
 		} else {
@@ -59,23 +59,21 @@ public class TimeWidget extends StyledWidget {
 				style.getAlignment());
 	}
 
-	/**
-	 * @return
-	 */
+
 	private void update() {
 		if (isShown() && getPanel().isActive() || start == null) {
 
 			refresh++;
 			if (refresh > UPDATE_RATE) {
-				Calendar calendar = Calendar.getInstance();
-				boolean am = calendar.get(Calendar.AM_PM) == Calendar.AM;
+				final Calendar calendar = Calendar.getInstance();
+				final boolean am = calendar.get(Calendar.AM_PM) == Calendar.AM;
 				int hour = calendar.get(Calendar.HOUR);
 				if (hour == 0) {
 					hour = 12;
 				}
-				int min = calendar.get(Calendar.MINUTE);
+				final int min = calendar.get(Calendar.MINUTE);
 				start = Utils.formatDoubleDigits(hour);
-				StringBuilder builder = new StringBuilder(Utils.formatDoubleDigits(min));
+				final StringBuilder builder = new StringBuilder(Utils.formatDoubleDigits(min));
 				builder.append(Strings.TIME_SEPARATOR);
 				if (am) {
 					builder.append(Strings.AM);
@@ -90,15 +88,15 @@ public class TimeWidget extends StyledWidget {
 	}
 
 	@Override
-	public Rectangle validateContent(Style style, Rectangle bounds) {
-		Font font = StyleHelper.getFont(style);
+	public Rectangle validateContent(final Style style, final Rectangle bounds) {
+		final Font font = StyleHelper.getFont(style);
 		return style.getTextManager().computeContentSize(DATE, font, bounds);
 	}
 
 	@Override
 	public void showNotify() {
 		super.showNotify();
-		Timer timer = ServiceLoaderFactory.getServiceLoader().getService(Timer.class);
+		final Timer timer = ServiceLoaderFactory.getServiceLoader().getService(Timer.class);
 		synchronized (sync) {
 			if (update == null) {
 				update = new TimerTask() {

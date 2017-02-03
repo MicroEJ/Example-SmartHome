@@ -7,7 +7,7 @@
 package com.microej.demo.smarthome.util;
 
 /**
- *
+ * Name of the images.
  */
 public interface Images {
 	String AIRCONDITIONNER = "airconditioner";

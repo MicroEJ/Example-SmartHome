@@ -22,7 +22,7 @@ import ej.widget.listener.OnClickListener;
 import ej.widget.navigation.transition.PushScreenshotTransitionManager;
 
 /**
- *
+ * The main page.
  */
 public class SmartHomePage extends MenuNavigatorPage {
 
@@ -37,7 +37,7 @@ public class SmartHomePage extends MenuNavigatorPage {
 	private ButtonImage storeButton;
 
 	/**
-	 *
+	 * Instantiates a SmartHomePage
 	 */
 	public SmartHomePage() {
 		super(pagesURL);
@@ -52,24 +52,17 @@ public class SmartHomePage extends MenuNavigatorPage {
 		this.setWidget(mainDock);
 	}
 
-
-	/**
-	 * @return
-	 */
 	private Widget createMainContent() {
-		navigator.addClassSelector(ClassSelectors.BODY);
+		getNavigator().addClassSelector(ClassSelectors.BODY);
 		// create navigator
 		final PushScreenshotTransitionManager manager = new PushScreenshotTransitionManager(MWT.LEFT);
-		navigator.setTransitionManager(manager);
+		getNavigator().setTransitionManager(manager);
 
 		manager.setDuration(300);
 
-		return navigator;
+		return getNavigator();
 	}
 
-	/**
-	 * @return
-	 */
 	private Widget createHeader() {
 		final Dock dock = new Dock();
 		dock.setCenter(new Label(Strings.SMARTHOME_TITLE));
@@ -80,7 +73,12 @@ public class SmartHomePage extends MenuNavigatorPage {
 		return dock;
 	}
 
-
+	/**
+	 * Add a listener for the Store button.
+	 *
+	 * @param onClickListener
+	 *            the listener.
+	 */
 	public void addOnClickListener(final OnClickListener onClickListener) {
 		storeButton.addOnClickListener(onClickListener);
 	}

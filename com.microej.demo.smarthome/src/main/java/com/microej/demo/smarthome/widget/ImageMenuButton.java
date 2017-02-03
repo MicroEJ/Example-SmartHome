@@ -10,10 +10,19 @@ import com.microej.demo.smarthome.style.HomeImageLoader;
 
 import ej.widget.basic.image.ImageToggle;
 
+/**
+ * An Image menu button.
+ */
 public class ImageMenuButton extends ImageToggle {
 
 	private final String name;
 
+	/**
+	 * Instantiates an ImageMenuButton.
+	 * 
+	 * @param name
+	 *            the image name.
+	 */
 	public ImageMenuButton(final String name) {
 		super();
 		this.name = name;

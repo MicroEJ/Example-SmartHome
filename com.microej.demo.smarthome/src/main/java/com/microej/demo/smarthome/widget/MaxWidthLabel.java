@@ -13,30 +13,39 @@ import ej.style.util.StyleHelper;
 import ej.widget.basic.Label;
 
 /**
- *
+ * A label with a max width label.
  */
 public class MaxWidthLabel extends Label {
 
 	private String maxText;
+
 	/**
+	 * Instantiates a MaxWidthLabel.
 	 *
+	 * @param maxText
+	 *            A text with the max size.
 	 */
-	public MaxWidthLabel(String maxText) {
+	public MaxWidthLabel(final String maxText) {
 		super();
 		this.maxText = maxText;
 	}
 
 	/**
+	 * Instantiates a MaxWidthLabel.
+	 *
 	 * @param text
+	 *            the text to display.
+	 * @param maxText
+	 *            A text with the max size.
 	 */
-	public MaxWidthLabel(String text, String maxtText) {
+	public MaxWidthLabel(final String text, final String maxtText) {
 		super(text);
 		maxText = maxtText;
 	}
 
 	@Override
-	public Rectangle validateContent(Style style, Rectangle availableSize) {
-		Font font = StyleHelper.getFont(style);
+	public Rectangle validateContent(final Style style, final Rectangle availableSize) {
+		final Font font = StyleHelper.getFont(style);
 		return style.getTextManager().computeContentSize(maxText, font, availableSize);
 	}
 
@@ -55,8 +64,9 @@ public class MaxWidthLabel extends Label {
 	 * @param maxText
 	 *            the maxText to set.
 	 */
-	public void setMaxText(String maxText) {
+	public void setMaxText(final String maxText) {
 		this.maxText = maxText;
+		invalidate();
+		repaint();
 	}
-
 }

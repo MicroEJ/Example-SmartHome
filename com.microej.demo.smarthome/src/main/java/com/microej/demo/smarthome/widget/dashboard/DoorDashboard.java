@@ -17,7 +17,7 @@ import ej.components.dependencyinjection.ServiceLoaderFactory;
 import ej.widget.basic.Label;
 
 /**
- *
+ * A widget displaying the door states.
  */
 public class DoorDashboard extends DeviceDashboard {
 
@@ -26,7 +26,7 @@ public class DoorDashboard extends DeviceDashboard {
 	private int doorOpen = 0;
 
 	/**
-	 * @param name
+	 * Instantiate a DoorDashboard.
 	 */
 	public DoorDashboard() {
 		super(Images.SECURITY);
@@ -65,9 +65,6 @@ public class DoorDashboard extends DeviceDashboard {
 		updateDoors();
 	}
 
-	/**
-	 *
-	 */
 	private void updateDoors() {
 		if (doorOpen > 0) {
 			lockLabel.setText(Strings.LOCKS_ARE_CLOSED);

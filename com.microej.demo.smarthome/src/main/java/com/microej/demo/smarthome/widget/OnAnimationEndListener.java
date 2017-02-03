@@ -7,8 +7,11 @@
 package com.microej.demo.smarthome.widget;
 
 /**
- *
+ * Callback interface of an animation.
  */
 public interface OnAnimationEndListener {
+	/**
+	 * Function called at the end of an animation.
+	 */
 	void onAnimationEnd();
 }
