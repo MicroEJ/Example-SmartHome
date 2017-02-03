@@ -22,8 +22,7 @@ public class LimitedButtonWrapper extends ButtonWrapper {
 			final int x = this.getRelativeX(pointer.getAbsoluteX());
 			final int y = this.getRelativeY(pointer.getAbsoluteY());
 			if (isInBound(x, y)) {
-				super.handleEvent(event);
-				return true;
+				return super.handleEvent(event);
 			} else {
 				return false;
 			}
@@ -31,14 +30,7 @@ public class LimitedButtonWrapper extends ButtonWrapper {
 		return super.handleEvent(event);
 	}
 
-	/**
-	 * @param x
-	 * @param y
-	 * @return
-	 */
 	protected boolean isInBound(final int x, final int y) {
 		return getWidget(0).contains(x, y);
 	}
-
-
 }

@@ -10,23 +10,21 @@ import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Images;
 import com.microej.demo.smarthome.widget.ImageMenuButton;
 import com.microej.demo.smarthome.widget.Menu;
-import com.microej.demo.smarthome.widget.MenuButton;
 
 import ej.mwt.MWT;
+import ej.widget.composed.ToggleBox;
+import ej.widget.composed.ToggleWrapper;
 import ej.widget.container.Dock;
 import ej.widget.navigation.TransitionManager;
 import ej.widget.navigation.transition.OverlapScreenshotTransitionManager;
+import ej.widget.toggle.RadioModel;
 
-/**
- *
- */
+
 public class DashBoardPage extends MenuNavigatorPage {
 
 	private static final String[] pagesURL = { InformationPage.class.getName(), GraphPage.class.getName() };
 
-	/**
-	 *
-	 */
+
 	public DashBoardPage() {
 		super(pagesURL);
 
@@ -44,9 +42,10 @@ public class DashBoardPage extends MenuNavigatorPage {
 	}
 
 	@Override
-	protected MenuButton createMenuButton() {
+	protected ToggleWrapper createMenuButton() {
 		final ImageMenuButton imageMenuButton = new ImageMenuButton(Images.DASHBOARD);
-		imageMenuButton.addClassSelector(ClassSelectors.FOOTER_MENU_BUTTON);
-		return imageMenuButton;
+		final ToggleBox toggleBox = new ToggleBox(new RadioModel(), imageMenuButton);
+		toggleBox.addClassSelector(ClassSelectors.FOOTER_MENU_BUTTON);
+		return toggleBox;
 	}
 }

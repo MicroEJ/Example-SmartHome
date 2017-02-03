@@ -15,32 +15,26 @@ import ej.widget.StyledComposite;
 /**
  *
  */
-public class OverlapingComposite extends StyledComposite {
-
-	private static int EVENT_RATE = 30;
-
-	private long nextEvent;
+public class OverlapComposite extends StyledComposite {
 
 	@Override
 	public Rectangle validateContent(final Style style, final Rectangle bounds) {
-		final int widthHint = bounds.getWidth();
-		final int heightHint = bounds.getHeight();
-		int width = widthHint;
-		int height = heightHint;
+		int widthHint = bounds.getWidth();
+		int heightHint = bounds.getHeight();
 		final boolean maxWidth = (widthHint == MWT.NONE);
 		final boolean maxHeight = (heightHint == MWT.NONE);
 
 		for (final Widget w : getWidgets()) {
 			w.validate(widthHint, heightHint);
 			if (maxWidth) {
-				width = Math.max(width, w.getPreferredWidth());
+				widthHint = Math.max(widthHint, w.getPreferredWidth());
 			}
 			if (maxHeight) {
-				height = Math.max(height, w.getPreferredHeight());
+				heightHint = Math.max(heightHint, w.getPreferredHeight());
 			}
 		}
 
-		return new Rectangle(0, 0, width, height);
+		return new Rectangle(0, 0, widthHint, heightHint);
 	}
 
 	@Override
@@ -63,23 +57,5 @@ public class OverlapingComposite extends StyledComposite {
 	@Override
 	public void add(final Widget widget) throws NullPointerException, IllegalArgumentException {
 		super.add(widget);
-	}
-
-	@Override
-	public boolean handleEvent(final int event) {
-		// Avoid OutOfEvent exception.
-		final long currentTime = System.currentTimeMillis();
-		if (currentTime > nextEvent) {
-			nextEvent = currentTime + EVENT_RATE;
-			int i = getWidgetsCount();
-			while (i > 0) {
-				i--;
-				if (getWidget(i).handleEvent(event)) {
-					return true;
-				}
-			}
-			return false;
-		}
-		return true;
 	}
 }

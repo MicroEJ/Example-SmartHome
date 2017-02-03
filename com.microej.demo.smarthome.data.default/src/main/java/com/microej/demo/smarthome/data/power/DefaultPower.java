@@ -10,42 +10,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.microej.demo.smarthome.data.impl.Device;
-import com.microej.demo.smarthome.data.power.InstantPower;
-import com.microej.demo.smarthome.data.power.Power;
-import com.microej.demo.smarthome.data.power.PowerEventListener;
+import com.microej.demo.smarthome.data.impl.AbstractDevice;
 
 import ej.bon.Timer;
 import ej.bon.TimerTask;
 import ej.components.dependencyinjection.ServiceLoaderFactory;
 
-/**
- *
- */
-public class DefaultPower extends Device<PowerEventListener>
-implements Power {
+
+public class DefaultPower extends AbstractDevice<PowerEventListener> implements Power {
 
 	private static final long HOUR_IN_MS = 1000 * 60 * 60;
 
-	private long lastPowerTime;
-	private final Random rand = new Random();
-
-	/**
-	 * Values
-	 */
 	private static final int INITIAL_HOUR = 7;
 	private static final int MAX_POWER_AT_A_TIME = 24;
 	private static final int MAX_PC = 6000;
 
-	/**
-	 * Attributes
-	 */
+	private static final Random RAND = new Random();
+
 	private final List<InstantPower> powers;
+	private long lastPowerTime;
 
 
-	/**
-	 * Constructor
-	 */
 	public DefaultPower() {
 		super(DefaultPower.class.getSimpleName());
 		powers = new ArrayList<InstantPower>(MAX_POWER_AT_A_TIME);
@@ -65,13 +50,17 @@ implements Power {
 
 	@Override
 	public InstantPower getInstantPowerConsumption() {
-		return powers.get(powers.size()-1);
+		synchronized (powers) {
+			return powers.get(powers.size() - 1);
+		}
 	}
 
 	@Override
 	public InstantPower[] getPowerConsumptions() {
-		final InstantPower[] powersArray = new InstantPower[powers.size()];
-		return powers.toArray(powersArray);
+		synchronized (powers) {
+			final InstantPower[] powersArray = new InstantPower[powers.size()];
+			return powers.toArray(powersArray);
+		}
 	}
 
 	@Override
@@ -90,10 +79,12 @@ implements Power {
 	 * Adds an instant power
 	 */
 	public void addInstantPower(final InstantPower instantPower) {
-		if (powers.size() >= MAX_POWER_AT_A_TIME) {
-			powers.remove(0);
+		synchronized (powers) {
+			if (powers.size() >= MAX_POWER_AT_A_TIME) {
+				powers.remove(0);
+			}
+			powers.add(instantPower);
 		}
-		powers.add(instantPower);
 
 		for (final PowerEventListener powerEventListener : listeners) {
 			powerEventListener.onInstantPower(instantPower);
@@ -106,7 +97,7 @@ implements Power {
 	 */
 	private synchronized void addInstantPower() {
 		lastPowerTime += HOUR_IN_MS;
-		final int powerValue = rand.nextInt(getMaxPowerConsumption());
+		final int powerValue = RAND.nextInt(getMaxPowerConsumption());
 		final InstantPower instantPower = new DefaultInstantPower(lastPowerTime, powerValue);
 		addInstantPower(instantPower);
 	}

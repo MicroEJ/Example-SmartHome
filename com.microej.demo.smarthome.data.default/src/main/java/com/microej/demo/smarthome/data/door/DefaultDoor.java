@@ -6,22 +6,19 @@
  */
 package com.microej.demo.smarthome.data.door;
 
-import com.microej.demo.smarthome.data.door.Door;
-import com.microej.demo.smarthome.data.door.DoorEventListener;
-import com.microej.demo.smarthome.data.impl.Device;
+import com.microej.demo.smarthome.data.impl.AbstractDevice;
 
 /**
  *
  */
-public class DefaultDoor extends Device<DoorEventListener> implements Door {
+public class DefaultDoor extends AbstractDevice<DoorEventListener> implements Door {
 
-	private boolean open = false;
+	private boolean open;
 
-	/**
-	 * @param name
-	 */
+
 	public DefaultDoor(final String name) {
 		super(name);
+		open = false;
 	}
 
 

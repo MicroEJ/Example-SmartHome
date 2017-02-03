@@ -74,7 +74,7 @@ public class SmartHomePage extends MenuNavigatorPage {
 		final Dock dock = new Dock();
 		dock.setCenter(new Label(Strings.SMARTHOME_TITLE));
 		dock.addRight(new TimeWidget());
-		storeButton = new ButtonImage(HomeImageLoader.loadImageRoot(Images.STORE));
+		storeButton = new ButtonImage(HomeImageLoader.getAbsolutePath(Images.STORE));
 		dock.addLeft(storeButton);
 		dock.addClassSelector(ClassSelectors.HEADER);
 		return dock;

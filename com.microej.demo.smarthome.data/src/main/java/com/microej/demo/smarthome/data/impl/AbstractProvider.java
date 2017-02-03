@@ -9,45 +9,40 @@ package com.microej.demo.smarthome.data.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.microej.demo.smarthome.data.Device;
 import com.microej.demo.smarthome.data.ProviderListener;
 
-/**
- *
- */
-public class Provider<T extends com.microej.demo.smarthome.data.Device>
+public class AbstractProvider<T extends Device<?>>
 {
 	private final List<ProviderListener<T>> listeners;
 	protected final List<T> devices;
 
-	/**
-	 *
-	 */
-	public Provider() {
+	public AbstractProvider() {
 		super();
 		listeners = new ArrayList<>();
 		devices = new ArrayList<>();
 	}
 
-	public void addListener(ProviderListener<T> listener) {
+	public void addListener(final ProviderListener<T> listener) {
 		listeners.add(listener);
 
 	}
 
-	public void removeListener(ProviderListener<T> listener) {
+	public void removeListener(final ProviderListener<T> listener) {
 		listeners.remove(listener);
 
 	}
 
-	protected void add(T device) {
+	protected void add(final T device) {
 		devices.add(device);
-		for (ProviderListener<T> listener : listeners) {
+		for (final ProviderListener<T> listener : listeners) {
 			listener.newElement(device);
 		}
 	}
 
-	protected void remove(T device) {
+	protected void remove(final T device) {
 		devices.remove(device);
-		for (ProviderListener<T> listener : listeners) {
+		for (final ProviderListener<T> listener : listeners) {
 			listener.removeElement(device);
 		}
 	}

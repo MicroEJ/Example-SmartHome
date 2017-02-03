@@ -220,6 +220,7 @@ public class ColorPicker extends Dock {
 		final int d = (int) Math.sqrt(dX * dX + dY * dY);
 		final int r = getRadius();
 
+		// Use closest position within the circle.
 		if (d > r) {
 			pointerX = centerX + dX * r / d;
 			pointerY = centerY + dY * r / d;

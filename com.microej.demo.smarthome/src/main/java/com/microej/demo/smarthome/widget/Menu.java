@@ -10,73 +10,60 @@ import com.microej.demo.smarthome.navigator.DirectNavigator;
 import com.microej.demo.smarthome.page.MenuPage;
 
 import ej.mwt.Widget;
+import ej.widget.composed.ToggleWrapper;
 import ej.widget.container.Grid;
-import ej.widget.listener.OnClickListener;
+import ej.widget.toggle.ToggleGroup;
 
 /**
  *
  */
 public class Menu extends Grid {
 
-	private MenuButton active;
 	private final DirectNavigator navigator;
+	private final ToggleGroup group;
+	private ToggleWrapper currentButton;
 
 	/**
 	 * @param navigator
 	 */
-	public Menu(DirectNavigator navigator) {
+	public Menu(final DirectNavigator navigator) {
 		super(false, 1);
+		group = new ToggleGroup();
 		this.navigator = navigator;
 	}
 
 	@Override
-	public void add(Widget widget) throws NullPointerException, IllegalArgumentException {
+	public void add(final Widget widget) throws NullPointerException, IllegalArgumentException {
 		throw new IllegalArgumentException();
 	}
 
-	public void add(final MenuButton button) throws NullPointerException, IllegalArgumentException {
+	public void add(final ToggleWrapper button) {
+		if (getWidgetsCount() == 0) {
+			currentButton = button;
+			button.setChecked(true);
+		}
 		super.add(button);
-		button.addOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick() {
-				setActive(button);
-			}
-		});
-
-		if (active == null) {
-			setActive(button);
-		}
-	}
-
-	/**
-	 * @param widget
-	 */
-	private synchronized void setActive(MenuButton button) {
-		if (active != null) {
-			active.setFocus(false);
-		}
-		active = button;
-		active.setFocus(true);
+		group.addToggle(button.getToggle());
 	}
 
 	/**
 	 * @param menuPage
 	 */
-	public void show(MenuPage menuPage) {
-		MenuButton button = menuPage.getMenuButton();
+	public void show(final MenuPage menuPage) {
+		final ToggleWrapper button = menuPage.getMenuButton();
 		boolean forward = false;
 
-		for (Widget widget : getWidgets()) {
+		for (final Widget widget : getWidgets()) {
 			if (widget == button) {
 				forward = false;
 				break;
 			}
-			if (widget == active) {
+			if (widget == currentButton) {
 				forward = true;
 				break;
 			}
 		}
+		currentButton = button;
 		navigator.show(menuPage, forward);
 	}
 }

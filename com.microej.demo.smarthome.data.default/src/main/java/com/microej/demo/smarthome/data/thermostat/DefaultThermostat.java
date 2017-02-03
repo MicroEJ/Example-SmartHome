@@ -6,35 +6,27 @@
  */
 package com.microej.demo.smarthome.data.thermostat;
 
-import com.microej.demo.smarthome.data.impl.Device;
-import com.microej.demo.smarthome.data.thermostat.Thermostat;
-import com.microej.demo.smarthome.data.thermostat.ThermostatEventListener;
+import com.microej.demo.smarthome.data.impl.AbstractDevice;
 
 import ej.bon.Timer;
 import ej.bon.TimerTask;
 import ej.components.dependencyinjection.ServiceLoaderFactory;
 
-/**
- *
- */
-public class DefaultThermostat extends Device<ThermostatEventListener>
-		implements Thermostat {
+
+public class DefaultThermostat extends AbstractDevice<ThermostatEventListener> implements Thermostat {
 
 	private static final int MAX = 400;
 	private static final int MIN = 50;
-	private int temperature = 220;
-	private int target = 240;
+	private int temperature;
+	private int target;
 
-	/**
-	 *
-	 */
 	public DefaultThermostat() {
 		this("Thermostat");
+		temperature = 220;
+		target = 240;
 	}
 
-	/**
-	 * @param name
-	 */
+
 	public DefaultThermostat(final String name) {
 		super(name);
 
@@ -50,22 +42,6 @@ public class DefaultThermostat extends Device<ThermostatEventListener>
 				setTemperature(temperature);
 			}
 		}, 1_000, 10_000);
-
-		// ServiceLoaderFactory.getServiceLoader().getService(Timer.class).schedule(new TimerTask() {
-		// Random rand = new Random();
-		//
-		// @Override
-		// public void run() {
-		// // int target = thermostat.getTargetTemperature();
-		// // target--;
-		// // if (target < thermostat.getMinTemperature()) {
-		// // target = thermostat.getMaxTemperature();
-		// // }
-		// int dif = getMaxTemperature() - getMinTemperature();
-		// int target = rand.nextInt(dif);
-		// setTargetTemperature(target + getMinTemperature());
-		// }
-		// }, 1_500, 20_000);
 	}
 
 	@Override

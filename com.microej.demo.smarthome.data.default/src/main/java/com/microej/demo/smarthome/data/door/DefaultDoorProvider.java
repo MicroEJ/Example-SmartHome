@@ -6,9 +6,7 @@
  */
 package com.microej.demo.smarthome.data.door;
 
-import com.microej.demo.smarthome.data.door.Door;
-import com.microej.demo.smarthome.data.door.DoorProvider;
-import com.microej.demo.smarthome.data.impl.Provider;
+import com.microej.demo.smarthome.data.impl.AbstractProvider;
 
 import ej.bon.Timer;
 import ej.bon.TimerTask;
@@ -17,11 +15,8 @@ import ej.components.dependencyinjection.ServiceLoaderFactory;
 /**
  *
  */
-public class DefaultDoorProvider extends Provider<Door> implements DoorProvider {
+public class DefaultDoorProvider extends AbstractProvider<Door> implements DoorProvider {
 
-	/**
-	 *
-	 */
 	public DefaultDoorProvider() {
 		super();
 		final DefaultDoor door = new DefaultDoor("Entrance");

@@ -21,40 +21,56 @@ public class HomeImageLoader extends DefaultImageLoader {
 	private static final String MENU = "menu/";
 	private static final String DASHBOARD = "dashboard/";
 
-	public static Image loadDashBoard(String name) {
+	public static String getMenuPath(final String name) {
+		return getMenuPath(name, false);
+	}
+
+	public static String getMenuPath(String name, final boolean active) {
+		name = MENU + name;
+		return getImagePath(name, active);
+	}
+
+	public static String getDashBoardPath(final String name) {
+		return getDashBoardPath(name, false);
+	}
+
+	public static String getDashBoardPath(String name, final boolean active) {
+		name = DASHBOARD + name;
+		return getImagePath(name, active);
+	}
+
+	public static Image loadDashBoard(final String name) {
 		return loadDashBoard(name, false);
 	}
 
-	public static Image loadDashBoard(String name, boolean active) {
-		name = DASHBOARD + name;
-		return loadImage(name, active);
+	public static Image loadDashBoard(final String name, final boolean active) {
+		return loadImage(getDashBoardPath(name, active));
 	}
 
-	public static Image loadMenu(String name) {
-		return loadMenu(name, false);
+	public static Image loadMenu(final String name) {
+		return loadImage(getMenuPath(name));
 	}
 
-	public static Image loadMenu(String name, boolean active) {
-		name = MENU + name;
-		return loadImage(name, active);
+	public static Image loadMenu(final String name, final boolean active) {
+		return loadImage(getMenuPath(name, active));
 	}
 
-	public static Image loadImage(String name, boolean active) {
+	public static Image loadImage(final String name, final boolean active) {
+		return loadImage(getImagePath(name, active));
+	}
+
+	public static String getImagePath(String name, final boolean active) {
 		if (active) {
 			name += ACTIVE;
 		}
-		return loadImage(name);
+		return name;
 	}
 
-	public static String loadImageRoot(String name) {
+	public static String getAbsolutePath(final String name) {
 		return BASE + name + SUFFIX;
 	}
 
-	/**
-	 * @param name
-	 * @return
-	 */
-	public static Image loadImage(String name) {
-		return StyleHelper.getImage(loadImageRoot(name));
+	public static Image loadImage(final String name) {
+		return StyleHelper.getImage(getAbsolutePath(name));
 	}
 }

@@ -13,14 +13,16 @@ import com.microej.demo.smarthome.data.light.LightProvider;
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Images;
 import com.microej.demo.smarthome.widget.ImageMenuButton;
-import com.microej.demo.smarthome.widget.MenuButton;
 import com.microej.demo.smarthome.widget.light.LightWidget;
 
 import ej.components.dependencyinjection.ServiceLoaderFactory;
 import ej.mwt.Widget;
+import ej.widget.composed.ToggleBox;
+import ej.widget.composed.ToggleWrapper;
 import ej.widget.container.Grid;
 import ej.widget.navigation.TransitionListener;
 import ej.widget.navigation.TransitionManager;
+import ej.widget.toggle.RadioModel;
 
 /**
  *
@@ -69,10 +71,11 @@ public class LightPage extends DevicePage<Light> implements ProviderListener<Lig
 	}
 
 	@Override
-	protected MenuButton createMenuButton() {
+	protected ToggleWrapper createMenuButton() {
 		final ImageMenuButton imageMenuButton = new ImageMenuButton(Images.LIGHTS);
-		imageMenuButton.addClassSelector(ClassSelectors.FOOTER_MENU_BUTTON);
-		return imageMenuButton;
+		final ToggleBox toggleBox = new ToggleBox(new RadioModel(), imageMenuButton);
+		toggleBox.addClassSelector(ClassSelectors.FOOTER_MENU_BUTTON);
+		return toggleBox;
 	}
 
 	@Override

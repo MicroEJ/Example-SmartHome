@@ -8,19 +8,13 @@ package com.microej.demo.smarthome.data.light;
 
 import java.util.Random;
 
-import com.microej.demo.smarthome.data.impl.Provider;
-import com.microej.demo.smarthome.data.light.Light;
-import com.microej.demo.smarthome.data.light.LightProvider;
+import com.microej.demo.smarthome.data.impl.AbstractProvider;
 
-/**
- *
- */
-public class DefaultLightProvider extends Provider<Light> implements LightProvider {
+
+public class DefaultLightProvider extends AbstractProvider<Light> implements LightProvider {
 
 	private static Random rand = new Random();
-	/**
-	 *
-	 */
+
 	public DefaultLightProvider() {
 		super();
 		final DefaultLight light1 = newLight("Kitchen");
@@ -34,10 +28,6 @@ public class DefaultLightProvider extends Provider<Light> implements LightProvid
 		add(light3);
 	}
 
-	/**
-	 * @param name
-	 * @return
-	 */
 	private DefaultLight newLight(final String name) {
 		final DefaultLight light = new DefaultLight(name);
 		light.setBrightness(rand.nextFloat());

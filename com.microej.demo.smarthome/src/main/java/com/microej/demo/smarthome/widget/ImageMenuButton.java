@@ -8,34 +8,28 @@ package com.microej.demo.smarthome.widget;
 
 import com.microej.demo.smarthome.style.HomeImageLoader;
 
-import ej.widget.basic.Image;
+import ej.widget.basic.image.ImageToggle;
 
-/**
- *
- */
-public class ImageMenuButton extends MenuButton {
+public class ImageMenuButton extends ImageToggle {
 
-	private final Image image;
 	private final String name;
-	private boolean focus = false;
 
-	/**
-	 * @param source
-	 */
-	public ImageMenuButton(String name) {
+	public ImageMenuButton(final String name) {
 		super();
 		this.name = name;
-		image = new Image(HomeImageLoader.loadMenu(name));
-		setWidget(image);
 	}
 
 	@Override
-	public void setFocus(boolean focus) {
-		if (this.focus != focus) {
-			this.focus = focus;
-			image.setSource(HomeImageLoader.loadMenu(name, focus));
-			image.repaint();
-			super.setFocus(focus);
-		}
+	protected String getCheckedImagePath() {
+		final String absolutePath = HomeImageLoader.getAbsolutePath(HomeImageLoader.getMenuPath(name, true));
+		return absolutePath;
 	}
+
+	@Override
+	protected String getUncheckedImagePath() {
+		final String absolutePath = HomeImageLoader.getAbsolutePath(HomeImageLoader.getMenuPath(name, false));
+		return absolutePath;
+	}
+
+
 }

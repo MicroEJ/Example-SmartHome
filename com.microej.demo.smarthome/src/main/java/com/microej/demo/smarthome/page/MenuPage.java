@@ -8,9 +8,9 @@ package com.microej.demo.smarthome.page;
 
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.widget.Menu;
-import com.microej.demo.smarthome.widget.MenuButton;
 
-import ej.widget.listener.OnClickListener;
+import ej.widget.composed.ToggleWrapper;
+import ej.widget.listener.OnStateChangeListener;
 import ej.widget.navigation.page.Page;
 
 /**
@@ -18,7 +18,7 @@ import ej.widget.navigation.page.Page;
  */
 public abstract class MenuPage extends Page {
 
-	private final MenuButton button;
+	private final ToggleWrapper button;
 	private Menu menu;
 
 	public MenuPage() {
@@ -27,11 +27,13 @@ public abstract class MenuPage extends Page {
 		button = createMenuButton();
 		addClassSelector(ClassSelectors.BODY);
 		if (button != null) {
-			button.addOnClickListener(new OnClickListener() {
+			button.addOnStateChangeListener(new OnStateChangeListener() {
 
 				@Override
-				public void onClick() {
-					menu.show(MenuPage.this);
+				public void onStateChange(final boolean newState) {
+					if(newState){
+						menu.show(MenuPage.this);
+					}
 				}
 			});
 		}
@@ -42,7 +44,7 @@ public abstract class MenuPage extends Page {
 	 *
 	 * @return the button.
 	 */
-	public MenuButton getMenuButton() {
+	public ToggleWrapper getMenuButton() {
 		return button;
 	}
 
@@ -61,12 +63,12 @@ public abstract class MenuPage extends Page {
 	 * @param menu
 	 *            the menu to set.
 	 */
-	public void setMenu(Menu menu) {
+	public void setMenu(final Menu menu) {
 		this.menu = menu;
 	}
 
 	/**
 	 * @return
 	 */
-	protected abstract MenuButton createMenuButton();
+	protected abstract ToggleWrapper createMenuButton();
 }

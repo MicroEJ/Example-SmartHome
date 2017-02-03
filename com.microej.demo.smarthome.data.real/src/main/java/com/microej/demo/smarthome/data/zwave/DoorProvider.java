@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import com.microej.demo.smarthome.data.door.Door;
-import com.microej.demo.smarthome.data.impl.Provider;
+import com.microej.demo.smarthome.data.impl.AbstractProvider;
 
 import ej.basedriver.Controller;
 import ej.basedriver.ControllerListener;
@@ -25,7 +25,7 @@ import ej.ecom.RegistrationListener;
 /**
  *
  */
-public class DoorProvider extends Provider<com.microej.demo.smarthome.data.door.Door>
+public class DoorProvider extends AbstractProvider<Door>
 implements com.microej.demo.smarthome.data.door.DoorProvider {
 
 	private final RegistrationListener<DryContact> listener;

@@ -6,26 +6,20 @@
  */
 package com.microej.demo.smarthome.data.light;
 
-import com.microej.demo.smarthome.data.impl.Device;
+import com.microej.demo.smarthome.data.impl.AbstractDevice;
 
-/**
- *
- */
-public class DefaultLight extends Device<LightEventListener> implements Light {
+
+public class DefaultLight extends AbstractDevice<LightEventListener> implements Light {
 
 	private boolean on;
 	private int color;
 	private float brightness;
-	/**
-	 * @param name
-	 */
+
 	public DefaultLight(final String name) {
 		super(name);
 	}
 
-	/**
-	 * @param name
-	 */
+
 	public DefaultLight(final Light light) {
 		super(light.getName());
 		on = light.isOn();

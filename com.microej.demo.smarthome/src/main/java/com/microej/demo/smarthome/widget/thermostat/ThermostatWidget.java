@@ -11,7 +11,7 @@ import com.microej.demo.smarthome.model.ThermostatBoundedRangeModel;
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Strings;
 import com.microej.demo.smarthome.widget.LimitedButtonWrapper;
-import com.microej.demo.smarthome.widget.OverlapingComposite;
+import com.microej.demo.smarthome.widget.OverlapComposite;
 
 import ej.mwt.Widget;
 import ej.widget.basic.Label;
@@ -34,7 +34,7 @@ public class ThermostatWidget extends Grid {
 	private TemperatureLabel currentTemperature;
 	private String lastClassSelector = null;
 	private Label desiredLabel;
-	private final OverlapingComposite composite;
+	private final OverlapComposite composite;
 
 	/**
 	 * @param thermostat
@@ -44,7 +44,7 @@ public class ThermostatWidget extends Grid {
 		this.thermostat = thermostat;
 		model = new ThermostatBoundedRangeModel(thermostat);
 
-		composite = new OverlapingComposite();
+		composite = new OverlapComposite();
 
 		final ThermostatCircularProgress thermostatCircularProgress = new ThermostatCircularProgress(model);
 		thermostatCircularProgress.addClassSelector(ClassSelectors.THERMOSTAT);

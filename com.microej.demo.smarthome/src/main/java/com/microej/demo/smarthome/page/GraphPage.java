@@ -9,14 +9,15 @@ package com.microej.demo.smarthome.page;
 import com.microej.demo.smarthome.data.power.Power;
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Strings;
-import com.microej.demo.smarthome.widget.MenuButton;
 import com.microej.demo.smarthome.widget.PowerWidget;
 
 import ej.components.dependencyinjection.ServiceLoaderFactory;
 import ej.mwt.Widget;
 import ej.widget.basic.Label;
+import ej.widget.composed.ToggleWrapper;
 import ej.widget.navigation.TransitionListener;
 import ej.widget.navigation.TransitionManager;
+import ej.widget.toggle.RadioModel;
 
 /**
  * This class represents the page which shows the power chart
@@ -59,8 +60,10 @@ public class GraphPage extends MenuPage {
 	 * Creates the menu button
 	 */
 	@Override
-	protected MenuButton createMenuButton() {
-		final MenuButton menuButton = new MenuButton(new Label(Strings.MAXPOWERTODAY));
+	protected ToggleWrapper createMenuButton() {
+		final Label label = new Label(Strings.MAXPOWERTODAY);
+		final ToggleWrapper menuButton = new ToggleWrapper(new RadioModel());
+		menuButton.setWidget(label);
 		menuButton.addClassSelector(ClassSelectors.DASHBOARD_MENU_BUTTON);
 		return menuButton;
 	}

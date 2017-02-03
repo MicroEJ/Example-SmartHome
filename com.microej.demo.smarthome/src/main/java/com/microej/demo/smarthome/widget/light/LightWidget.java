@@ -14,7 +14,7 @@ import com.microej.demo.smarthome.widget.ColorPicker;
 import com.microej.demo.smarthome.widget.DeviceWidget;
 import com.microej.demo.smarthome.widget.LimitedButtonWrapper;
 import com.microej.demo.smarthome.widget.OnAnimationEndListener;
-import com.microej.demo.smarthome.widget.OverlapingComposite;
+import com.microej.demo.smarthome.widget.OverlapComposite;
 
 import ej.widget.basic.image.ImageSwitch;
 import ej.widget.composed.ButtonWrapper;
@@ -45,7 +45,7 @@ implements OnStateChangeListener, OnAnimationEndListener {
 		super(light);
 		addClassSelector(ClassSelectors.LIGHT_WIDGET);
 
-		final OverlapingComposite overlapingComposite = new OverlapingComposite();
+		final OverlapComposite overlapingComposite = new OverlapComposite();
 		// circular progress
 		final BoundedRangeModel boundedRange = new DefaultBoundedRangeModel(0, 1000, 0);
 		progress = new LightCircularProgress(boundedRange, light);

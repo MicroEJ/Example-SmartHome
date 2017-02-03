@@ -18,11 +18,9 @@ import com.microej.demo.smarthome.page.LightPage;
 import com.microej.demo.smarthome.page.MenuNavigatorPage;
 import com.microej.demo.smarthome.page.MenuPage;
 import com.microej.demo.smarthome.page.ThermostatPage;
-import com.microej.demo.smarthome.util.ExecutorUtils;
 import com.microej.demo.smarthome.widget.ColorPicker;
 import com.microej.demo.smarthome.widget.Menu;
-import com.microej.demo.smarthome.widget.MenuButton;
-import com.microej.demo.smarthome.widget.OverlapingComposite;
+import com.microej.demo.smarthome.widget.OverlapComposite;
 import com.microej.demo.smarthome.widget.PowerWidget;
 import com.microej.demo.smarthome.widget.chart.Chart;
 import com.microej.demo.smarthome.widget.light.LightCircularProgress;
@@ -53,7 +51,7 @@ import ej.widget.navigation.page.Page;
  */
 public class HomeRobot extends Robot {
 
-	private static final int DELAY = 4_000;
+	private static final int DELAY = 40_000;
 	private static final int PERIOD = 2_500;
 	private static final Timer timer = new Timer();
 	private static final int INITIAL_STATE = 0;
@@ -68,7 +66,6 @@ public class HomeRobot extends Robot {
 			@Override
 			public void run() {
 				Thread.currentThread().setName("Robot");
-				Thread.currentThread().setPriority(ExecutorUtils.VERY_LOW_PRIORITY);
 
 			}
 		}, 0);
@@ -169,7 +166,7 @@ public class HomeRobot extends Robot {
 		final Widget widget = lights.getWidget(nextInt);
 		if (widget instanceof LightWidget) {
 			light = (LightWidget) widget;
-			final OverlapingComposite composite = (OverlapingComposite) light.getWidget(1);
+			final OverlapComposite composite = (OverlapComposite) light.getWidget(1);
 			lightCircularProgress = (LightCircularProgress) composite.getWidget(0);
 			buttonWrapper = (ButtonWrapper) composite.getWidget(1);
 			final ToggleWrapper toggleWrapper = (ToggleWrapper) light.getWidget(2);
@@ -216,7 +213,7 @@ public class HomeRobot extends Robot {
 	private void automate(final List<Composite> hierrary, final ThermostatPage lastPage) {
 		final Grid thermostats = (Grid) lastPage.getWidget(0);
 		final ThermostatWidget thermostat = (ThermostatWidget) thermostats.getWidget(0);
-		final OverlapingComposite composite = (OverlapingComposite) thermostat.getWidget(1);
+		final OverlapComposite composite = (OverlapComposite) thermostat.getWidget(1);
 		final ThermostatCircularProgress progress = (ThermostatCircularProgress) composite.getWidget(0);
 		final ButtonWrapper validate = (ButtonWrapper) composite.getWidget(1);
 		switch (state) {
@@ -275,18 +272,18 @@ public class HomeRobot extends Robot {
 		}
 	}
 
-	private void goToNext(final Menu menu, final MenuButton current) {
+	private void goToNext(final Menu menu, final ToggleWrapper current) {
 		state = INITIAL_STATE - 1;
 		final Widget[] buttons = menu.getWidgets();
 		for (int i = 0; i < buttons.length; i++) {
-			MenuButton button = (MenuButton) buttons[i];
+			ToggleWrapper button = (ToggleWrapper) buttons[i];
 			if (button == current) {
 				if (i == buttons.length - 1) {
-					button = (MenuButton) buttons[0];
+					button = (ToggleWrapper) buttons[0];
 				} else {
-					button = (MenuButton) buttons[i + 1];
+					button = (ToggleWrapper) buttons[i + 1];
 				}
-				button.performClick();
+				button.getToggle().toggle();
 			}
 		}
 	}
