@@ -25,14 +25,19 @@ import ej.style.container.Rectangle;
 import ej.style.util.ElementAdapter;
 import ej.style.util.StyleHelper;
 
-/** IPR start **/
-
 /**
  * Represents a chart with basic functionality.
  */
 public abstract class BasicChart extends Chart implements Animation {
 
+	/**
+	 * The left padding of the chart.
+	 */
 	protected static final int LEFT_PADDING = 55;
+
+	/**
+	 * The distance in between points.
+	 */
 	protected static final int STEP_X = 40;
 
 	private static final int APPARITION_DURATION = 400;
@@ -59,7 +64,7 @@ public abstract class BasicChart extends Chart implements Animation {
 	private int bubbleAnimationStep;
 
 	/**
-	 * Constructor
+	 * Instantiates a BasicChart.
 	 */
 	public BasicChart() {
 		super();
@@ -72,9 +77,7 @@ public abstract class BasicChart extends Chart implements Animation {
 		motion = new NoMotion(0, 0);
 	}
 
-	/**
-	 * Animation
-	 */
+
 	@Override
 	public void showNotify() {
 		super.showNotify();
@@ -85,10 +88,16 @@ public abstract class BasicChart extends Chart implements Animation {
 		}
 	}
 
+	/**
+	 * Reset the animation.
+	 */
 	public void resetAnimation() {
 		this.currentApparitionStep = 0;
 	}
 
+	/**
+	 * Starts the animation.
+	 */
 	public void startAnimation() {
 		this.motion = new LinearMotion(0, APPARITION_STEPS, APPARITION_DURATION);
 		resetAnimation();
@@ -102,6 +111,9 @@ public abstract class BasicChart extends Chart implements Animation {
 		super.hideNotify();
 	}
 
+	/**
+	 * Stops the animation.
+	 */
 	public void stopAnimation() {
 		final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
 		animator.stopAnimation(this);
@@ -114,6 +126,11 @@ public abstract class BasicChart extends Chart implements Animation {
 		return !this.motion.isFinished();
 	}
 
+	/**
+	 * Get the animation ration.
+	 *
+	 * @return the animation ratio.
+	 */
 	protected float getAnimationRatio() {
 		final int threshold = APPARITION_STEPS / 3;
 		if (this.currentApparitionStep < threshold) {
@@ -123,9 +140,6 @@ public abstract class BasicChart extends Chart implements Animation {
 		}
 	}
 
-	/**
-	 * Handle pointer events
-	 */
 	@Override
 	public boolean handleEvent(final int event) {
 		if (Event.getType(event) == Event.POINTER) {
@@ -158,8 +172,6 @@ public abstract class BasicChart extends Chart implements Animation {
 		} else {
 			selectPoint(null);
 		}
-
-		//playBubbleAnimation(BasicChart.this.getSelectedPoint() != null);
 	}
 
 	@Override
@@ -197,7 +209,7 @@ public abstract class BasicChart extends Chart implements Animation {
 	}
 
 	/**
-	 * Render scale
+	 * Render the scale.
 	 */
 	protected void renderScale(final GraphicsContext g, final Style style, final Rectangle bounds, final float topValue) {
 		final Font font = StyleHelper.getFont(style);
@@ -398,9 +410,12 @@ public abstract class BasicChart extends Chart implements Animation {
 		return yBarBottom - apparitionLength;
 	}
 
+	/**
+	 * Gets whether the chart is animated.
+	 *
+	 * @return whether the chart is animated.
+	 */
 	protected boolean isAnimated() {
 		return false;
 	}
 }
-
-/** IPR end **/

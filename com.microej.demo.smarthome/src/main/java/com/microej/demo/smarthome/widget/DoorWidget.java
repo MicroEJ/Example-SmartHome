@@ -20,7 +20,7 @@ import ej.motion.linear.LinearMotion;
 import ej.widget.basic.Image;
 
 /**
- *
+ * A door widget.
  */
 public class DoorWidget extends DeviceWidget<Door> implements DoorEventListener, Animation {
 
@@ -38,9 +38,12 @@ public class DoorWidget extends DeviceWidget<Door> implements DoorEventListener,
 	private Motion motion;
 
 	/**
+	 * Instantiates a DoorWidget.
+	 *
 	 * @param model
+	 *            the model.
 	 */
-	public DoorWidget(Door model) {
+	public DoorWidget(final Door model) {
 		super(model);
 		addClassSelector(ClassSelectors.DOOR_WIDGET);
 
@@ -54,24 +57,24 @@ public class DoorWidget extends DeviceWidget<Door> implements DoorEventListener,
 	}
 
 	@Override
-	public void onStateChange(boolean open) {
+	public void onStateChange(final boolean open) {
 		setOpen(open);
 	}
 
-	private void setOpen(boolean open) {
+	private void setOpen(final boolean open) {
 		if (this.open != open) {
-			int animStep = (this.open ? 0 : ANIMATION_STEPS);
-			String image = getImage(animStep);
+			final int animStep = (this.open ? 0 : ANIMATION_STEPS);
+			final String image = getImage(animStep);
 
 			this.open = open;
 			this.motion = new LinearMotion(animStep, ANIMATION_STEPS-animStep, ANIMATION_DURATION);
-			this.door.setSource(HomeImageLoader.loadImageRoot(image));
-			Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
+			this.door.setSource(HomeImageLoader.getAbsolutePath(image));
+			final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
 			animator.startAnimation(this);
 		}
 	}
 
-	private String getImage(int animStep) {
+	private String getImage(final int animStep) {
 		switch (animStep) {
 		case 0:
 			return Images.DOOR_OPEN;
@@ -88,9 +91,9 @@ public class DoorWidget extends DeviceWidget<Door> implements DoorEventListener,
 	}
 
 	@Override
-	public boolean tick(long currentTimeMillis) {
-		String image = getImage(this.motion.getCurrentValue());
-		this.door.setSource(HomeImageLoader.loadImageRoot(image));
+	public boolean tick(final long currentTimeMillis) {
+		final String image = getImage(this.motion.getCurrentValue());
+		this.door.setSource(HomeImageLoader.getAbsolutePath(image));
 		return !this.motion.isFinished();
 	}
 
@@ -105,5 +108,4 @@ public class DoorWidget extends DeviceWidget<Door> implements DoorEventListener,
 	public void hideNotify() {
 		this.model.removeListener(this);
 	}
-
 }

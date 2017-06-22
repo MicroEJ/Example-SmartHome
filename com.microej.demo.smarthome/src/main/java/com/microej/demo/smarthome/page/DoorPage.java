@@ -13,56 +13,45 @@ import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Images;
 import com.microej.demo.smarthome.widget.DoorWidget;
 import com.microej.demo.smarthome.widget.ImageMenuButton;
-import com.microej.demo.smarthome.widget.MenuButton;
+import com.microej.demo.smarthome.widget.ToggleBox;
 
 import ej.components.dependencyinjection.ServiceLoaderFactory;
+import ej.widget.composed.ToggleWrapper;
+import ej.widget.toggle.RadioModel;
 
 /**
- *
+ * A page displaying the door status.
  */
 public class DoorPage extends DevicePage<com.microej.demo.smarthome.data.door.Door> implements ProviderListener<Door> {
 
 	/**
-	 *
+	 * Instantiates a DoorPage.
 	 */
 	public DoorPage() {
-		DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class);
-		Door[] list = provider.list();
-		for (Door door : list) {
+		final DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class);
+		final Door[] list = provider.list();
+		for (final Door door : list) {
 			newElement(door);
 		}
 		provider.addListener(this);
 	}
 
 	@Override
-	protected MenuButton createMenuButton() {
-		ImageMenuButton imageMenuButton = new ImageMenuButton(Images.SECURITY);
-		imageMenuButton.addClassSelector(ClassSelectors.FOOTER_MENU_BUTTON);
-		return imageMenuButton;
+	protected ToggleWrapper createMenuButton() {
+		final ImageMenuButton imageMenuButton = new ImageMenuButton(Images.SECURITY);
+		final ToggleBox toggleBox = new ToggleBox(new RadioModel(), imageMenuButton);
+		toggleBox.addClassSelector(ClassSelectors.FOOTER_MENU_BUTTON);
+		return toggleBox;
 	}
 
 	@Override
-	public void showNotify() {
-		super.showNotify();
-	}
-
-	@Override
-	public void hideNotify() {
-		super.hideNotify();
-		// DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class);
-		// removeAllDevices();
-		// provider.removeListener(this);
-
-	}
-
-	@Override
-	public void newElement(Door element) {
-		DoorWidget device = new DoorWidget(element);
+	public void newElement(final Door element) {
+		final DoorWidget device = new DoorWidget(element);
 		addDevice(element, device);
 	}
 
 	@Override
-	public void removeElement(Door element) {
+	public void removeElement(final Door element) {
 		removeDevice(element);
 	}
 }

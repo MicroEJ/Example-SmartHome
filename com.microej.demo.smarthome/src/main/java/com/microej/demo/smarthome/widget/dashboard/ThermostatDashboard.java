@@ -15,7 +15,7 @@ import com.microej.demo.smarthome.widget.thermostat.TemperatureLabel;
 import ej.components.dependencyinjection.ServiceLoaderFactory;
 
 /**
- *
+ * A dashboard tiles displaying the state of the thermostat.
  */
 public class ThermostatDashboard extends DeviceDashboard {
 
@@ -23,13 +23,13 @@ public class ThermostatDashboard extends DeviceDashboard {
 	private final ThermostatEventListener listener;
 
 	/**
-	 * @param name
+	 * Instantiates a ThermostatDashboard.
 	 */
 	public ThermostatDashboard() {
 		super(Images.AIRCONDITIONNER);
 		thermostat = ServiceLoaderFactory.getServiceLoader().getService(Thermostat.class);
 
-		TemperatureLabel thermostatLabel = new TemperatureLabel(thermostat.getTemperature(),
+		final TemperatureLabel thermostatLabel = new TemperatureLabel(thermostat.getTemperature(),
 				thermostat.getMaxTemperature());
 		add(thermostatLabel);
 		thermostatLabel.addClassSelector(ClassSelectors.DASHBOARD_ITEM_TEXT);
@@ -38,14 +38,14 @@ public class ThermostatDashboard extends DeviceDashboard {
 		listener = new ThermostatEventListener() {
 
 			@Override
-			public void onTemperatureChange(int temperature) {
+			public void onTemperatureChange(final int temperature) {
 				updateState();
 
 			}
 
 
 			@Override
-			public void onTargetTemperatureChange(int targetTemperature) {
+			public void onTargetTemperatureChange(final int targetTemperature) {
 				updateState();
 
 			}

@@ -1,3 +1,0 @@
-# Set priority to normal.
-ExecutorUtils.LOW_PRIORITY=5
-ExecutorUtils.VERY_LOW_PRIORITY=5

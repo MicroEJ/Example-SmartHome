@@ -8,53 +8,57 @@ package com.microej.demo.smarthome.widget.light;
 
 import com.microej.demo.smarthome.Main;
 import com.microej.demo.smarthome.data.light.Light;
-import com.microej.demo.smarthome.data.light.LightEventListener;
+import com.microej.demo.smarthome.page.ColorPickerPage;
 import com.microej.demo.smarthome.style.ClassSelectors;
-import com.microej.demo.smarthome.widget.CircleWidget;
 import com.microej.demo.smarthome.widget.ColorPicker;
 import com.microej.demo.smarthome.widget.DeviceWidget;
+import com.microej.demo.smarthome.widget.LimitedButtonWrapper;
 import com.microej.demo.smarthome.widget.OnAnimationEndListener;
-import com.microej.demo.smarthome.widget.OverlapingComposite;
+import com.microej.demo.smarthome.widget.OverlapComposite;
 
-import ej.mwt.Panel;
 import ej.widget.basic.image.ImageSwitch;
+import ej.widget.composed.ButtonWrapper;
+import ej.widget.composed.ToggleWrapper;
 import ej.widget.listener.OnClickListener;
 import ej.widget.listener.OnStateChangeListener;
 import ej.widget.listener.OnValueChangeListener;
 import ej.widget.model.BoundedRangeModel;
 import ej.widget.model.DefaultBoundedRangeModel;
+import ej.widget.toggle.ToggleModel;
 
 /**
- *
+ * A widget displaying the state of a light.
  */
 public class LightWidget extends DeviceWidget<Light>
-implements LightEventListener, OnStateChangeListener, OnAnimationEndListener {
+implements OnStateChangeListener, OnAnimationEndListener {
 
 	/**
 	 * Attributes
 	 */
-	private final LightCircularProgress circular;
+	private final LightCircularProgress progress;
 	private final ImageSwitch switchButton;
-	private final CircleWidget circularButton;
 
 	/**
-	 * Constructor
+	 * Instantiates a LightWidget.
+	 *
+	 * @param light
+	 *            the model.
 	 */
-	public LightWidget(final Light model) {
-		super(model);
-		model.addListener(this);
+	public LightWidget(final Light light) {
+		super(light);
 		addClassSelector(ClassSelectors.LIGHT_WIDGET);
 
-		final OverlapingComposite overlapingComposite = new OverlapingComposite();
+		final OverlapComposite overlapingComposite = new OverlapComposite();
 		// circular progress
 		final BoundedRangeModel boundedRange = new DefaultBoundedRangeModel(0, 1000, 0);
-		circular = new LightCircularProgress(boundedRange);
+		progress = new LightCircularProgress(boundedRange, light);
+		progress.resetAnimation();
 
-		circular.addOnValueChangeListener(new OnValueChangeListener() {
+		progress.addOnValueChangeListener(new OnValueChangeListener() {
 
 			@Override
 			public void onValueChange(final int newValue) {
-				model.setBrightness(circular.getPercentComplete());
+				light.setBrightness(progress.getPercentComplete());
 
 			}
 
@@ -66,146 +70,97 @@ implements LightEventListener, OnStateChangeListener, OnAnimationEndListener {
 			public void onMaximumValueChange(final int newMaximum) {
 			}
 		});
-		circular.addClassSelector(ClassSelectors.LIGHT_PROGRESS);
-		circular.setOnAnimationEndListener(this);
 
-		overlapingComposite.add(circular);
+		progress.addClassSelector(ClassSelectors.LIGHT_PROGRESS);
+		progress.setOnAnimationEndListener(this);
+
+		overlapingComposite.add(progress);
 
 
-		circularButton = new CircleWidget(new OnClickListener() {
+		final ButtonWrapper circularButton = new LimitedButtonWrapper();
+		final LightCircleWidget lightCircleWidget = new LightCircleWidget(light);
+		circularButton.setWidget(lightCircleWidget);
+		circularButton.addOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick() {
-				changeColor();
+				openColorPicker();
 			}
 		});
-		circularButton.addClassSelector(ClassSelectors.LIGHT_PROGRESS);
+
+		lightCircleWidget.addClassSelector(ClassSelectors.LIGHT_PROGRESS);
 		overlapingComposite.add(circularButton);
+		setCenter(overlapingComposite);
 
 		// toggle button
+		final ToggleModel toggle = new ToggleModel(light.isOn());
+		toggle.addOnStateChangeListener(this);
+		final ToggleWrapper wrapper = new ToggleWrapper(toggle);
 		switchButton = new ImageSwitch();
-		switchButton.setChecked(model.isOn());
-		switchButton.addOnStateChangeListener(this);
-		switchButton.addClassSelector(ClassSelectors.LIGHT_PROGRESS);
+		switchButton.setChecked(light.isOn());
+		wrapper.addClassSelector(ClassSelectors.LIGHT_PROGRESS);
+		wrapper.setWidget(switchButton);
 
 		// place widgets
-		setCenter(overlapingComposite);
-		addBottom(switchButton);
-
-
-		final float value = model.getBrightness();
-		onBrightnessChange(value);
-
-		// set initial state
-		onColorChange(model.getColor());
-		onStateChange(model.isOn());
-	}
-
-	/**
-	 * Handle color change event
-	 */
-	@Override
-	public void onColorChange(final int color) {
-		circular.setColor(color);
-		circularButton.setColor(color);
-	}
-
-	/**
-	 * Handle brightness change event
-	 */
-	@Override
-	public void onBrightnessChange(final float brightness) {
-		final int min = circular.getMinimum();
-		final int max = circular.getMaximum();
-		final float value = (max - min) * brightness + min;
-		circular.setValue((int) value);
+		addBottom(wrapper);
 	}
 
 	@Override
 	public boolean isEnabled() {
-		return circular.isEnabled();
+		return model.isOn();
 	}
+
 	/**
 	 * Handle state change event
 	 */
 	@Override
 	public void onStateChange(final boolean on) {
-		circular.setEnabled(on);
-		circularButton.setEnabled(on);
-		if (on) {
-			circular.initAnimation();
-			circular.startAnimation();
+		if (on != model.isOn()) {
+			if (on) {
+				progress.resetAnimation();
+				progress.startAnimation();
+			}
+			switchButton.setChecked(on);
+			model.switchOn(on);
 		}
-		switchButton.setChecked(on);
-		model.switchOn(on);
-	}
-
-	@Override
-	public void showNotify() {
-		super.showNotify();
-		onColorChange(model.getColor());
-		setEnabled(model.isOn());
 	}
 
 	/**
 	 * Changes light color
 	 */
-	private void changeColor() {
+	private void openColorPicker() {
 		// calculate animation source position
-		final int sourceX = circular.getAbsoluteX() + circular.getWidth() / 2;
-		final int sourceY = circular.getAbsoluteY() + circular.getHeight() / 2;
-
-		// create color change listener
-		final OnValueChangeListener listener = new OnValueChangeListener() {
-			@Override
-			public void onValueChange(final int newValue) {
-				model.setColor(newValue);
-				circularButton.setColor(newValue);
-			}
-
-			@Override
-			public void onMinimumValueChange(final int newMinimum) {
-			}
-
-			@Override
-			public void onMaximumValueChange(final int newMaximum) {
-			}
-		};
+		final int sourceX = progress.getAbsoluteX() + progress.getWidth() / 2;
+		final int sourceY = progress.getAbsoluteY() + progress.getHeight() / 2;
 
 		// create color picker
-		final ColorPicker picker = new ColorPicker(sourceX, sourceY, model.getColor(), getPanel());
-		picker.addOnValueChangeListener(listener);
+		Main.getTransitionManager().setTarget(sourceX, sourceY);
 
 		// create dialog
-		final Panel dialog = new Panel();
-		dialog.setWidget(picker);
-
-		// set close dialog listener
-		final OnClickListener closeButtonListener = new OnClickListener() {
-			@Override
-			public void onClick() {
-				getPanel().show(Main.getDesktop());
-				dialog.hide();
-			}
-		};
-		picker.setCloseButtonListener(closeButtonListener);
-
-		// show dialog
-		dialog.show(Main.getDesktop(), true);
-		getPanel().hide();
+		final ColorPickerPage page = new ColorPickerPage(model);
+		final ColorPicker colorPicker = page.getColorPicker();
+		// colorPicker.addOnValueChangeListener(listener);
+		Main.getNavigator().show(page, true);
 	}
-
-	public void startAnimation() {
-		circular.startAnimation();
-	}
-
 
 	/**
-	 *
+	 * Starts the animation.
+	 */
+	public void startAnimation() {
+		progress.startAnimation();
+	}
+
+	/**
+	 * Resets the animation.
+	 */
+	public void resetAnimation() {
+		progress.resetAnimation();
+	}
+
+	/**
+	 * Stops the animation.
 	 */
 	public void stopAnimation() {
-		circular.stopAnimation();
-		circular.initAnimation();
-
+		progress.stopAnimation();
 	}
 
 	@Override

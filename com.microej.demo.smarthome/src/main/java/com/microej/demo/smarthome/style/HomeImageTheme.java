@@ -27,12 +27,12 @@ public class HomeImageTheme implements ImageTheme {
 
 	@Override
 	public String getSwitchCheckedPath() {
-		return HomeImageLoader.loadImageRoot(Images.TOGGLE_ON);
+		return HomeImageLoader.getAbsolutePath(Images.TOGGLE_ON);
 	}
 
 	@Override
 	public String getSwitchUncheckedPath() {
-		return HomeImageLoader.loadImageRoot(Images.TOGGLE_OFF);
+		return HomeImageLoader.getAbsolutePath(Images.TOGGLE_OFF);
 	}
 
 	@Override
@@ -69,5 +69,4 @@ public class HomeImageTheme implements ImageTheme {
 	public String getProgressBarVerticalPath() {
 		throw new UnsupportedOperationException();
 	}
-
 }

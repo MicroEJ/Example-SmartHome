@@ -11,8 +11,6 @@ import java.util.List;
 
 import ej.widget.StyledComposite;
 
-/** IPR start **/
-
 /**
  * Represents a chart with several ordered points.
  */
@@ -41,7 +39,7 @@ public abstract class Chart extends StyledComposite {
 	private String unit;
 
 	/**
-	 * Constructor
+	 * Instantiates a Chart.
 	 */
 	public Chart() {
 		this.points = new ArrayList<>();
@@ -57,7 +55,7 @@ public abstract class Chart extends StyledComposite {
 	 * @param chartPoint
 	 *            the point to add
 	 */
-	public void addPoint(ChartPoint chartPoint) {
+	public void addPoint(final ChartPoint chartPoint) {
 		this.points.add(chartPoint);
 		chartPoint.setParentElement(this);
 	}
@@ -76,10 +74,10 @@ public abstract class Chart extends StyledComposite {
 	 * @param pointIndex
 	 *            the index of the point to select
 	 */
-	public void selectPoint(Integer pointIndex) {
+	public void selectPoint(final Integer pointIndex) {
 		// check the index
 		if (pointIndex != null) {
-			int pointIndexInt = pointIndex.intValue();
+			final int pointIndexInt = pointIndex.intValue();
 			if (pointIndexInt < 0 || pointIndexInt >= this.points.size()) {
 				throw new IndexOutOfBoundsException();
 			}
@@ -89,7 +87,7 @@ public abstract class Chart extends StyledComposite {
 			// select newly selected point
 			this.selectedPointIndex = pointIndex;
 			if (pointIndex != null) {
-				ChartPoint newPoint = this.points.get(pointIndex.intValue());
+				final ChartPoint newPoint = this.points.get(pointIndex.intValue());
 				if (newPoint.getValue() < 0.0f) {
 					this.selectedPointIndex = null;
 				}
@@ -126,7 +124,7 @@ public abstract class Chart extends StyledComposite {
 	 * @param maxScaleValue
 	 *            the maximum value of the scale
 	 */
-	public void setScale(int numScaleValues, float maxScaleValue) {
+	public void setScale(final int numScaleValues, final float maxScaleValue) {
 		this.numScaleValues = numScaleValues;
 		this.maxScaleValue = maxScaleValue;
 		repaint();
@@ -154,7 +152,7 @@ public abstract class Chart extends StyledComposite {
 	 * @param unit
 	 *            the unit string
 	 */
-	public void setUnit(String unit) {
+	public void setUnit(final String unit) {
 		this.unit = unit;
 		repaint();
 	}
@@ -168,5 +166,3 @@ public abstract class Chart extends StyledComposite {
 		return this.unit;
 	}
 }
-
-/** IPR end **/

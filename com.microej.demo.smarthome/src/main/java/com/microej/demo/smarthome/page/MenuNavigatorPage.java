@@ -6,69 +6,71 @@
  */
 package com.microej.demo.smarthome.page;
 
-import java.util.ArrayList;
-
-import com.microej.demo.smarthome.navigator.DirectNavigator;
 import com.microej.demo.smarthome.widget.Menu;
-import com.microej.demo.smarthome.widget.MenuButton;
 
-import ej.widget.navigation.Navigator;
+import ej.widget.composed.ToggleWrapper;
+import ej.widget.navigation.navigator.SimpleNavigator;
 import ej.widget.navigation.page.ClassNameURLResolver;
 
 /**
- *
+ * Abstract page providing a navigator and a menu.
  */
 public class MenuNavigatorPage extends MenuPage {
 
-	private java.util.List<MenuPage> pages;
-	protected final DirectNavigator navigator;
-	protected final Menu menu;
+	private MenuPage[] pages;
+	private final SimpleNavigator navigator;
+	private final Menu menu;
 
 	/**
+	 * Instantiates the page.
+	 *
 	 * @param pagesURL
+	 *            url of the pages to display.
 	 */
-	public MenuNavigatorPage(String[] pagesURL) {
+	public MenuNavigatorPage(final String[] pagesURL) {
 		super();
-		navigator = new DirectNavigator();
+		navigator = new SimpleNavigator();
 		menu = new Menu(navigator);
 		initPages(pagesURL);
 
-		navigator.show(pages.get(0), true);
+		getNavigator().show(pages[0], true);
 	}
 
-	/**
-	 * @param pagesURL
-	 *
-	 */
-	private void initPages(String[] pagesURL) {
-		pages = new ArrayList<>();
-		ClassNameURLResolver urlResolver = new ClassNameURLResolver();
-		for (String pageName : pagesURL) {
-			MenuPage p = (MenuPage) urlResolver.resolve(pageName);
+	private void initPages(final String[] pagesURL) {
+		pages = new MenuPage[pagesURL.length];
+		final ClassNameURLResolver urlResolver = new ClassNameURLResolver();
+		for (int i = 0; i < pagesURL.length; i++) {
+			final String pageName = pagesURL[i];
+			final MenuPage p = (MenuPage) urlResolver.resolve(pageName);
 			p.setMenu(menu);
-			pages.add(p);
+			pages[i] = p;
 		}
 	}
 
+
 	/**
-	 * @return
+	 * Initialize the menu.
+	 *
+	 * @return The menu.
 	 */
 	protected Menu initMenu() {
-		for (MenuPage page : pages) {
+		for (final MenuPage page : pages) {
 			menu.add(page.getMenuButton());
 		}
 		return menu;
 	}
 
 	@Override
-	protected MenuButton createMenuButton() {
+	protected ToggleWrapper createMenuButton() {
 		return null;
 	}
 
 	/**
-	 * @return
+	 * Gets the navigator of the page.
+	 * 
+	 * @return the navigator.
 	 */
-	public Navigator getNavigator() {
+	public SimpleNavigator getNavigator() {
 		return navigator;
 	}
 

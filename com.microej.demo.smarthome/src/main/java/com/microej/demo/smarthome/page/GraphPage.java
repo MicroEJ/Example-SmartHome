@@ -9,15 +9,15 @@ package com.microej.demo.smarthome.page;
 import com.microej.demo.smarthome.data.power.Power;
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Strings;
-import com.microej.demo.smarthome.widget.MenuButton;
-import com.microej.demo.smarthome.widget.PowerWidget;
+import com.microej.demo.smarthome.widget.chart.PowerWidget;
 
 import ej.components.dependencyinjection.ServiceLoaderFactory;
 import ej.mwt.Widget;
 import ej.widget.basic.Label;
+import ej.widget.composed.ToggleWrapper;
 import ej.widget.navigation.TransitionListener;
 import ej.widget.navigation.TransitionManager;
-import ej.widget.navigation.page.Page;
+import ej.widget.toggle.RadioModel;
 
 /**
  * This class represents the page which shows the power chart
@@ -38,24 +38,19 @@ public class GraphPage extends MenuPage {
 		listener = new TransitionListener() {
 
 			@Override
-			public void onTransitionStop() {
+			public void onTransitionStart(final TransitionManager transitionManager) {
+				if (isInHierarchy(GraphPage.this, transitionManager.getTo())) {
+					powerWidget.reload();
+				}
+
+			}
+
+			@Override
+			public void onTransitionStop(final TransitionManager manager) {
 				if (isShown()) {
 					powerWidget.startAnimation();
 				}
 
-			}
-
-			@Override
-			public void onTransitionStep(final int step) {
-
-			}
-
-
-			@Override
-			public void onTransitionStart(final int transitionsSteps, final int transitionsStop, final Page from, final Page to) {
-				if (isInHierarchy(GraphPage.this, to)) {
-					powerWidget.reload();
-				}
 			}
 
 		};
@@ -65,8 +60,10 @@ public class GraphPage extends MenuPage {
 	 * Creates the menu button
 	 */
 	@Override
-	protected MenuButton createMenuButton() {
-		final MenuButton menuButton = new MenuButton(new Label(Strings.MAXPOWERTODAY));
+	protected ToggleWrapper createMenuButton() {
+		final Label label = new Label(Strings.MAXPOWERTODAY);
+		final ToggleWrapper menuButton = new ToggleWrapper(new RadioModel());
+		menuButton.setWidget(label);
 		menuButton.addClassSelector(ClassSelectors.DASHBOARD_MENU_BUTTON);
 		return menuButton;
 	}
@@ -74,14 +71,14 @@ public class GraphPage extends MenuPage {
 
 	@Override
 	public void showNotify() {
-		TransitionManager.addGlobalTransitionListener(listener);
+		TransitionManager.addTransitionListener(listener);
 		super.showNotify();
 	}
 
 	@Override
 	public void hideNotify() {
 		super.hideNotify();
-		TransitionManager.removeGlobalTransitionListener(listener);
+		TransitionManager.removeTransitionListener(listener);
 	}
 
 	private boolean isInHierarchy(Widget widget, final Widget hierarchy) {

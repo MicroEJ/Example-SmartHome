@@ -12,7 +12,7 @@ import com.microej.demo.smarthome.widget.MaxWidthLabel;
 import ej.widget.composed.ButtonWrapper;
 
 /**
- *
+ * A label displaying the temperature.
  */
 public class TemperatureLabel extends ButtonWrapper {
 
@@ -22,7 +22,10 @@ public class TemperatureLabel extends ButtonWrapper {
 
 
 	/**
-	 * @param maxText
+	 * Instatiate a TemperatureLabel.
+	 *
+	 * @param maxTemperature
+	 *            the maximum temperature.
 	 */
 	public TemperatureLabel(final int maxTemperature) {
 		super();
@@ -32,8 +35,12 @@ public class TemperatureLabel extends ButtonWrapper {
 
 
 	/**
+	 * Instatiate a TemperatureLabel.
+	 *
 	 * @param value
-	 * @param maximum
+	 *            the current value.
+	 * @param maxTemperature
+	 *            the maximum temperature.
 	 */
 	public TemperatureLabel(final int value, final int maximum) {
 		this(maximum);
@@ -41,7 +48,10 @@ public class TemperatureLabel extends ButtonWrapper {
 	}
 
 	/**
+	 * Sets the temperature.
+	 *
 	 * @param temperature
+	 *            the temperature.
 	 */
 	public void setTemperature(final int temperature) {
 		this.temperature = temperature;
@@ -49,17 +59,18 @@ public class TemperatureLabel extends ButtonWrapper {
 
 	}
 
-	/**
-	 *
-	 */
 	private void updateText() {
 		final String temperatureString = toTemperatureString(convert(temperature, celsius));
 		label.setText(temperatureString);
 	}
 
-
 	/**
-	 * @param temperature2
+	 * Convert a celsius temperature to a format.
+	 *
+	 * @param temperature
+	 *            the temperature.
+	 * @param celsius
+	 *            true if the target temperature is in celsius, false if the target temperature is in F.
 	 * @return
 	 */
 	private int convert(final int temperature, final boolean celsius) {

@@ -17,7 +17,7 @@ import ej.components.dependencyinjection.ServiceLoaderFactory;
 import ej.widget.basic.Label;
 
 /**
- *
+ * A dashboard tile displaying the lights state.
  */
 public class LightsDashboard extends DeviceDashboard {
 
@@ -25,8 +25,9 @@ public class LightsDashboard extends DeviceDashboard {
 	private int countOn = 0;
 	private final LightEventListener listener;
 	private final Label lightLabel;
+
 	/**
-	 * @param name
+	 * Instantiates a LightsDashboard.
 	 */
 	public LightsDashboard() {
 		super(Images.LIGHTS);
@@ -42,7 +43,7 @@ public class LightsDashboard extends DeviceDashboard {
 		listener = new LightEventListener() {
 
 			@Override
-			public void onStateChange(boolean on) {
+			public void onStateChange(final boolean on) {
 				if (on) {
 					countOn++;
 				} else {
@@ -52,14 +53,14 @@ public class LightsDashboard extends DeviceDashboard {
 			}
 
 			@Override
-			public void onColorChange(int color) {
-				// TODO Auto-generated method stub
+			public void onColorChange(final int color) {
+				// Not used.
 
 			}
 
 			@Override
-			public void onBrightnessChange(float brightness) {
-				// TODO Auto-generated method stub
+			public void onBrightnessChange(final float brightness) {
+				// Not used.
 
 			}
 		};
@@ -69,10 +70,10 @@ public class LightsDashboard extends DeviceDashboard {
 	public void showNotify() {
 		super.showNotify();
 
-		LightProvider provider = ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class);
-		Light[] list = provider.list();
+		final LightProvider provider = ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class);
+		final Light[] list = provider.list();
 		countOn = 0;
-		for (Light light : list) {
+		for (final Light light : list) {
 			if(light.isOn()){
 				countOn++;
 			}
@@ -98,7 +99,7 @@ public class LightsDashboard extends DeviceDashboard {
 	}
 
 	@Override
-	public void setActive(boolean active) {
+	public void setActive(final boolean active) {
 		super.setActive(active);
 		number.setEnabled(active);
 	}
@@ -106,9 +107,9 @@ public class LightsDashboard extends DeviceDashboard {
 	@Override
 	public void hideNotify() {
 		super.hideNotify();
-		LightProvider provider = ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class);
-		Light[] list = provider.list();
-		for (Light light : list) {
+		final LightProvider provider = ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class);
+		final Light[] list = provider.list();
+		for (final Light light : list) {
 			light.removeListener(listener);
 		}
 	}

@@ -13,16 +13,16 @@ import com.microej.demo.smarthome.util.Strings;
 import com.microej.demo.smarthome.widget.Menu;
 import com.microej.demo.smarthome.widget.TimeWidget;
 
+import ej.mwt.MWT;
 import ej.mwt.Widget;
 import ej.widget.basic.Label;
 import ej.widget.composed.ButtonImage;
 import ej.widget.container.Dock;
 import ej.widget.listener.OnClickListener;
-import ej.widget.navigation.page.Page;
-import ej.widget.navigation.transition.HorizontalScreenshotTransitionManager;
+import ej.widget.navigation.transition.PushScreenshotTransitionManager;
 
 /**
- *
+ * The main page.
  */
 public class SmartHomePage extends MenuNavigatorPage {
 
@@ -37,7 +37,7 @@ public class SmartHomePage extends MenuNavigatorPage {
 	private ButtonImage storeButton;
 
 	/**
-	 *
+	 * Instantiates a SmartHomePage
 	 */
 	public SmartHomePage() {
 		super(pagesURL);
@@ -52,38 +52,33 @@ public class SmartHomePage extends MenuNavigatorPage {
 		this.setWidget(mainDock);
 	}
 
-
-	/**
-	 * @return
-	 */
 	private Widget createMainContent() {
-		navigator.addClassSelector(ClassSelectors.BODY);
+		getNavigator().addClassSelector(ClassSelectors.BODY);
 		// create navigator
-		// navigator.setTransitionManager(new HorizontalTransitionManager() {
-		navigator.setTransitionManager(new HorizontalScreenshotTransitionManager() {
-			@Override
-			protected void setCurrentPage(final Page newPage) {
-				super.setCurrentPage(newPage);
-			}
-		});
+		final PushScreenshotTransitionManager manager = new PushScreenshotTransitionManager(MWT.LEFT);
+		getNavigator().setTransitionManager(manager);
 
-		return navigator;
+		manager.setDuration(300);
+
+		return getNavigator();
 	}
 
-	/**
-	 * @return
-	 */
 	private Widget createHeader() {
 		final Dock dock = new Dock();
 		dock.setCenter(new Label(Strings.SMARTHOME_TITLE));
 		dock.addRight(new TimeWidget());
-		storeButton = new ButtonImage(HomeImageLoader.loadImageRoot(Images.STORE));
+		storeButton = new ButtonImage(HomeImageLoader.getAbsolutePath(Images.STORE));
 		dock.addLeft(storeButton);
 		dock.addClassSelector(ClassSelectors.HEADER);
 		return dock;
 	}
 
-
+	/**
+	 * Add a listener for the Store button.
+	 *
+	 * @param onClickListener
+	 *            the listener.
+	 */
 	public void addOnClickListener(final OnClickListener onClickListener) {
 		storeButton.addOnClickListener(onClickListener);
 	}

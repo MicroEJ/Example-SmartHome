@@ -11,34 +11,22 @@ import ej.microui.event.generator.Pointer;
 import ej.widget.composed.ButtonWrapper;
 
 /**
- *
+ * A button that is pressed when its only child is pressed.
  */
 public class LimitedButtonWrapper extends ButtonWrapper {
 
 	@Override
-	public boolean handleEvent(int event) {
+	public boolean handleEvent(final int event) {
 		if (Event.getType(event) == Event.POINTER) {
-			Pointer pointer = (Pointer) Event.getGenerator(event);
-			int x = this.getRelativeX(pointer.getAbsoluteX());
-			int y = this.getRelativeY(pointer.getAbsoluteY());
-			if (isInBound(x, y)) {
-				super.handleEvent(event);
-				return true;
+			final Pointer pointer = (Pointer) Event.getGenerator(event);
+			final int x = this.getRelativeX(pointer.getAbsoluteX());
+			final int y = this.getRelativeY(pointer.getAbsoluteY());
+			if (getWidget(0).contains(x, y)) {
+				return super.handleEvent(event);
 			} else {
 				return false;
 			}
 		}
 		return super.handleEvent(event);
 	}
-
-	/**
-	 * @param x
-	 * @param y
-	 * @return
-	 */
-	protected boolean isInBound(int x, int y) {
-		return getWidget(0).contains(x, y);
-	}
-
-
 }

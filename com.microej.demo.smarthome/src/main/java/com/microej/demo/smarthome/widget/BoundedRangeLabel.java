@@ -19,7 +19,7 @@ import ej.widget.listener.OnValueChangeListener;
 import ej.widget.model.BoundedRangeModel;
 
 /**
- *
+ * A label displaying a bounded range model value.
  */
 public class BoundedRangeLabel extends StyledComposite {
 
@@ -29,9 +29,12 @@ public class BoundedRangeLabel extends StyledComposite {
 	private final OnValueChangeListener onValueChangeListener;
 
 	/**
+	 * Instantiates a BoundedRangeLabel
+	 * 
 	 * @param boundedRange
+	 *            the model.
 	 */
-	public BoundedRangeLabel(BoundedRangeModel boundedRange) {
+	public BoundedRangeLabel(final BoundedRangeModel boundedRange) {
 		this.model = boundedRange;
 		value = new MaxWidthLabel(computeText(getValue(boundedRange.getValue())),
 				String.valueOf(getValue(boundedRange.getMaximum())));
@@ -42,34 +45,30 @@ public class BoundedRangeLabel extends StyledComposite {
 		onValueChangeListener = new OnValueChangeListener() {
 
 			@Override
-			public void onValueChange(int newValue) {
+			public void onValueChange(final int newValue) {
 				value.setText(computeText(newValue));
 
 			}
 
 			@Override
-			public void onMinimumValueChange(int newMinimum) {
+			public void onMinimumValueChange(final int newMinimum) {
 				// Not used
 
 			}
 
 			@Override
-			public void onMaximumValueChange(int newMaximum) {
+			public void onMaximumValueChange(final int newMaximum) {
 				// Not used
 
 			}
 		};
 	}
 
-	/**
-	 * @param value2
-	 * @return
-	 */
-	private int getValue(int value) {
+	private int getValue(final int value) {
 		return value / 10;
 	}
 
-	private String computeText(int newValue) {
+	private String computeText(final int newValue) {
 		if (!isEnabled()) {
 			return "";
 		}
@@ -90,45 +89,44 @@ public class BoundedRangeLabel extends StyledComposite {
 	}
 
 	@Override
-	public Rectangle validateContent(Style style, Rectangle bounds) {
+	public Rectangle validateContent(final Style style, final Rectangle bounds) {
 		value.validate(MWT.NONE, MWT.NONE);
 		type.validate(MWT.NONE, MWT.NONE);
-		int widthHint = value.getPreferredWidth() + type.getPreferredWidth();
-		int heightHint = Math.max(value.getPreferredHeight(), value.getPreferredHeight());
+		final int widthHint = value.getPreferredWidth() + type.getPreferredWidth();
+		final int heightHint = Math.max(value.getPreferredHeight(), value.getPreferredHeight());
 
 		return new Rectangle(0, 0, widthHint, heightHint);
 	}
 
 	@Override
-	protected void setBoundsContent(Rectangle bounds) {
-		int boundsX = bounds.getX();
-		int boundsY = bounds.getY();
-		int boundsWidth = bounds.getWidth();
-		int boundsHeight = bounds.getHeight();
+	protected void setBoundsContent(final Rectangle bounds) {
+		final int boundsX = bounds.getX();
+		final int boundsY = bounds.getY();
+		final int boundsWidth = bounds.getWidth();
+		final int boundsHeight = bounds.getHeight();
 
-		int valueWidth = value.getPreferredWidth();
-		int typeWidth = type.getPreferredWidth();
-		int height = Math.max(value.getPreferredHeight(), value.getPreferredHeight());
+		final int valueWidth = value.getPreferredWidth();
+		final int typeWidth = type.getPreferredWidth();
+		final int height = Math.max(value.getPreferredHeight(), value.getPreferredHeight());
 
-		int alignment = getStyle().getAlignment();
-		int x = AlignmentHelper.computeXLeftCorner(valueWidth + typeWidth, boundsX, boundsWidth, alignment);
-		int y = AlignmentHelper.computeYTopCorner(height, boundsY, boundsHeight, alignment);
+		final int alignment = getStyle().getAlignment();
+		final int x = AlignmentHelper.computeXLeftCorner(valueWidth + typeWidth, boundsX, boundsWidth, alignment);
+		final int y = AlignmentHelper.computeYTopCorner(height, boundsY, boundsHeight, alignment);
 		value.setBounds(x, y, valueWidth, height);
 		type.setBounds(x + valueWidth, y, typeWidth, height);
 	}
 
 	@Override
-	public void addClassSelector(String classSelector) {
+	public void addClassSelector(final String classSelector) {
 		super.addClassSelector(classSelector);
 		value.addClassSelector(classSelector);
 		type.addClassSelector(classSelector);
 	}
 
 	@Override
-	public void removeClassSelector(String classSelector) {
+	public void removeClassSelector(final String classSelector) {
 		super.removeClassSelector(classSelector);
 		value.removeClassSelector(classSelector);
 		type.removeClassSelector(classSelector);
 	}
-
 }

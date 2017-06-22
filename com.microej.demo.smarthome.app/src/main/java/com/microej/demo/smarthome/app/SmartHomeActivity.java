@@ -6,10 +6,7 @@
  */
 package com.microej.demo.smarthome.app;
 
-import ej.components.dependencyinjection.ServiceLoaderFactory;
-import ej.exit.ExitHandler;
 import ej.wadapps.app.Activity;
-import ej.widget.listener.OnClickListener;
 
 /**
  *
@@ -24,14 +21,14 @@ public class SmartHomeActivity implements Activity {
 
 	@Override
 	public void onCreate() {
-		com.microej.demo.smarthome.Main.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick() {
-				ServiceLoaderFactory.getServiceLoader().getService(ExitHandler.class).exit();
-
-			}
-		});
+		// com.microej.demo.smarthome.Main.setOnClickListener(new OnClickListener() {
+		//
+		// @Override
+		// public void onClick() {
+		// ServiceLoaderFactory.getServiceLoader().getService(ExitHandler.class).exit();
+		//
+		// }
+		// });
 
 	}
 

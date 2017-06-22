@@ -6,77 +6,78 @@
  */
 package com.microej.demo.smarthome.widget;
 
-import com.microej.demo.smarthome.navigator.DirectNavigator;
 import com.microej.demo.smarthome.page.MenuPage;
 
 import ej.mwt.Widget;
+import ej.widget.composed.ToggleWrapper;
 import ej.widget.container.Grid;
-import ej.widget.listener.OnClickListener;
+import ej.widget.navigation.navigator.SimpleNavigator;
+import ej.widget.toggle.ToggleGroup;
 
 /**
- *
+ * A menu between pages.
  */
 public class Menu extends Grid {
 
-	private MenuButton active;
-	private final DirectNavigator navigator;
+	private final SimpleNavigator navigator;
+	private final ToggleGroup group;
+	private ToggleWrapper currentButton;
 
 	/**
+	 * Instantiates a Menu.
+	 *
 	 * @param navigator
+	 *            the navigator.
 	 */
-	public Menu(DirectNavigator navigator) {
+	public Menu(final SimpleNavigator navigator) {
 		super(false, 1);
+		group = new ToggleGroup();
 		this.navigator = navigator;
 	}
 
 	@Override
-	public void add(Widget widget) throws NullPointerException, IllegalArgumentException {
+	public void add(final Widget widget) throws NullPointerException, IllegalArgumentException {
 		throw new IllegalArgumentException();
 	}
 
-	public void add(final MenuButton button) throws NullPointerException, IllegalArgumentException {
+	/**
+	 * Adds a button.
+	 *
+	 * @param button
+	 *            the button to add.
+	 */
+	public void add(final ToggleWrapper button) {
+		if (getWidgetsCount() == 0) {
+			currentButton = button;
+			button.setChecked(true);
+		}
 		super.add(button);
-		button.addOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick() {
-				setActive(button);
-			}
-		});
-
-		if (active == null) {
-			setActive(button);
-		}
+		group.addToggle(button.getToggle());
 	}
 
 	/**
-	 * @param widget
+	 * Shows a page.
+	 *
+	 * @param page
+	 *            the page to show.
 	 */
-	private synchronized void setActive(MenuButton button) {
-		if (active != null) {
-			active.setFocus(false);
-		}
-		active = button;
-		active.setFocus(true);
-	}
-
-	/**
-	 * @param menuPage
-	 */
-	public void show(MenuPage menuPage) {
-		MenuButton button = menuPage.getMenuButton();
+	public void show(final MenuPage page) {
+		final ToggleWrapper button = page.getMenuButton();
 		boolean forward = false;
 
-		for (Widget widget : getWidgets()) {
-			if (widget == button) {
-				forward = false;
-				break;
+		if (button != currentButton) {
+			for (final Widget widget : getWidgets()) {
+				if (widget == button) {
+					forward = false;
+					break;
+				}
+				if (widget == currentButton) {
+					forward = true;
+					break;
+				}
 			}
-			if (widget == active) {
-				forward = true;
-				break;
-			}
+			currentButton = button;
+			navigator.show(page, forward);
 		}
-		navigator.show(menuPage, forward);
 	}
 }

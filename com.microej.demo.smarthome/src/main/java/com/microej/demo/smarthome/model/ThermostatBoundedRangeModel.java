@@ -16,7 +16,7 @@ import ej.widget.listener.OnValueChangeListener;
 import ej.widget.model.DefaultBoundedRangeModel;
 
 /**
- *
+ * A model for a thermostat.
  */
 public class ThermostatBoundedRangeModel extends DefaultBoundedRangeModel implements ThermostatEventListener {
 
@@ -24,30 +24,37 @@ public class ThermostatBoundedRangeModel extends DefaultBoundedRangeModel implem
 	private final List<OnValueChangeListener> listeners;
 
 	/**
+	 * Instantiates a ThermostatBoundedRangeModel.
+	 *
 	 * @param minimum
+	 *            the minimum temperature.
 	 * @param maximum
+	 *            the maximum temperature.
 	 * @param initialValue
+	 *            the initial temperature.
 	 */
-	public ThermostatBoundedRangeModel(Thermostat thermostat) {
+	public ThermostatBoundedRangeModel(final Thermostat thermostat) {
 		super(thermostat.getMinTemperature(), thermostat.getMaxTemperature(), thermostat.getTemperature());
 		this.thermostat = thermostat;
 		listeners = new ArrayList<>();
 	}
 
 	@Override
-	public void onTemperatureChange(int temperature) {
+	public void onTemperatureChange(final int temperature) {
 		setValue(temperature);
 
 	}
 
 	@Override
-	public void onTargetTemperatureChange(int targetTemperature) {
-		for (OnValueChangeListener onValueChangeListener : listeners) {
+	public void onTargetTemperatureChange(final int targetTemperature) {
+		for (final OnValueChangeListener onValueChangeListener : listeners) {
 			onValueChangeListener.onValueChange(targetTemperature);
 		}
 	}
 
 	/**
+	 * Set the target temperature.
+	 *
 	 * @param targetTemperature
 	 */
 	public void setTargetValue(int target) {
@@ -55,39 +62,56 @@ public class ThermostatBoundedRangeModel extends DefaultBoundedRangeModel implem
 			target = Math.max(getMinimum(), target);
 			target = Math.min(getMaximum(), target);
 			thermostat.setTargetTemperature(target);
-			for (OnValueChangeListener onValueChangeListener : listeners) {
+			for (final OnValueChangeListener onValueChangeListener : listeners) {
 				onValueChangeListener.onValueChange(target);
 			}
 		}
 	}
 
+	/**
+	 * Gets the target temperature.
+	 *
+	 * @return the target temperature.
+	 */
 	public int getTargetValue() {
 		return thermostat.getTargetTemperature();
 	}
+
 	/**
-	 * @param e
+	 * Adds a listener to be notified on target temperature changes.
+	 *
+	 * @param listener
+	 *            the listener.
 	 * @return
 	 * @see java.util.List#add(java.lang.Object)
 	 */
-	public boolean addOnTargetValueChangeListener(OnValueChangeListener e) {
-		return listeners.add(e);
+	public boolean addOnTargetValueChangeListener(final OnValueChangeListener listener) {
+		return listeners.add(listener);
 	}
 
 	/**
-	 * @param o
+	 * Removes a listener.
+	 *
+	 * @param listener
+	 *            the listener.
 	 * @return
 	 * @see java.util.List#remove(java.lang.Object)
 	 */
-	public boolean removeOnTargetValueChangeListener(OnValueChangeListener o) {
-		return listeners.remove(o);
+	public boolean removeOnTargetValueChangeListener(final OnValueChangeListener listener) {
+		return listeners.remove(listener);
 	}
 
+	/**
+	 * Registers the model as a listener of the thermostat.
+	 */
 	public void register() {
 		thermostat.addListener(this);
 	}
 
+	/**
+	 * Unregisters the model as a listener of the thermostat.
+	 */
 	public void unregister() {
 		thermostat.removeListener(this);
 	}
-
 }

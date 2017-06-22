@@ -20,14 +20,11 @@ import ej.style.util.StyleHelper;
 import ej.widget.basic.BoundedRange;
 import ej.widget.listener.OnValueChangeListener;
 import ej.widget.model.BoundedRangeModel;
-import ej.widget.model.DefaultBoundedRangeModel;
 
 /**
- *
+ * A progress bar showing its value in an arc.
  */
 public class CircularProgressWidget extends BoundedRange implements Animation {
-
-	private static final int ANIMATION_STEPS = 8;
 
 	private static final int EVENT_RATE = 50;
 
@@ -37,45 +34,50 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 	private static final int DEFAULT_THICKNESS_FULL = 1;
 	private static final int DEFAULT_FADE = 2;
 	private static final int DEFAULT_THICKNESS = 3;
-	protected int startAngle = DEFAULT_START_ANGLE;
+
 	private int arcAngle = DEFAULT_ARC_ANGLE;
 	private int fadeFull = DEFAULT_FADE_FULL;
 	private int thicknessFull = DEFAULT_THICKNESS_FULL;
 	private final OnValueChangeListener listener;
 	private OnAnimationEndListener onAnimationEndListener;
-	protected int fade = DEFAULT_FADE;
-	protected int thickness = DEFAULT_THICKNESS;
-	protected int animationProgress = 1;
+	private int fade = DEFAULT_FADE;
+	private int thickness = DEFAULT_THICKNESS;
+	private int startAngle = DEFAULT_START_ANGLE;
 
 	// used to compute relative position.
-	protected int x;
-	protected int y;
-	protected int diameter;
-	protected int offset;
-	protected int currentArcAngle;
-	protected Integer customColor;
-	protected final ValueAnimation valueAnimation;
+	private int circleX;
+	private int circleY;
+	private int diameter;
+	private int offset;
+	private int currentArcAngle;
+	private final ValueAnimation valueAnimation;
 
 	private long nextEvent;
-
-	// private final TransitionListener transitionListener;
 
 	private boolean animated;
 
 
 	/**
+	 * Instantiates a CircularProgressWidget
+	 *
 	 * @param model
+	 *            the model.
 	 */
 	public CircularProgressWidget(final BoundedRangeModel model) {
 		this(model, ValueAnimation.DEFAULT_DURATION);
 	}
 
 	/**
+	 *
+	 * Instantiates a CircularProgressWidget
+	 *
 	 * @param model
+	 *            the model.
+	 * @param duration
+	 *            the duration of the animation.
 	 */
 	public CircularProgressWidget(final BoundedRangeModel model, final int duration) {
 		super(model);
-		animationProgress = model.getMaximum() / ANIMATION_STEPS;
 		currentArcAngle = computeAngle(getMinimum());
 		listener = new OnValueChangeListener() {
 			@Override
@@ -100,41 +102,36 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 		valueAnimation = new ValueAnimation(model.getMinimum(), model.getValue(), model.getValue(), model.getMaximum());
 	}
 
-	/**
-	 * @param min
-	 * @param max
-	 * @param initialValue
-	 */
-	public CircularProgressWidget(final int min, final int max, final int initialValue) {
-		this(new DefaultBoundedRangeModel(min, max, initialValue));
-	}
-
 	@Override
 	public void renderContent(final GraphicsContext g, final Style style, final Rectangle bounds) {
-		x = AlignmentHelper.computeXLeftCorner(diameter, 0, bounds.getWidth(),
-				style.getAlignment());
-		y = AlignmentHelper.computeYTopCorner(diameter, 0, bounds.getHeight(),
-				style.getAlignment());
+		circleX = AlignmentHelper.computeXLeftCorner(getDiameter(), 0, bounds.getWidth(), style.getAlignment());
+		circleY = AlignmentHelper.computeYTopCorner(getDiameter(), 0, bounds.getHeight(), style.getAlignment());
 		final AntiAliasedShapes shapes = AntiAliasedShapes.Singleton;
 		g.setColor(style.getBackgroundColor());
 		shapes.setFade(fadeFull);
 		shapes.setThickness(thicknessFull);
-		shapes.drawCircleArc(g, x, y, diameter, startAngle, arcAngle);
+		shapes.drawCircleArc(g, getCircleX(), getCircleY(), getDiameter(), startAngle, arcAngle);
 
-		if (isEnabled() && currentArcAngle != 0) {
-			if (customColor != null) {
-				g.setColor(customColor);
-			} else {
-				g.setColor(style.getForegroundColor());
-			}
+		if (isEnabled() && getCurrentArcAngle() != 0) {
+			g.setColor(getColor(style));
 
 			shapes.setFade(fade);
 			shapes.setThickness(thickness);
-			shapes.drawCircleArc(g, offset + x, offset + y, (diameter - (offset << 1)), startAngle,
-					currentArcAngle);
+			shapes.drawCircleArc(g, getCircleOffset() + getCircleX(), getCircleOffset() + getCircleY(), (getDiameter() - (getCircleOffset() << 1)), startAngle,
+					getCurrentArcAngle());
 		}
 	}
 
+	/**
+	 * Gets the color of the foreground.
+	 *
+	 * @param style
+	 *            the style of the widget.
+	 * @return the color.
+	 */
+	protected int getColor(final Style style) {
+		return style.getForegroundColor();
+	}
 
 	@Override
 	public void setBounds(final int x, final int y, final int width, final int height) {
@@ -142,11 +139,14 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 		final Rectangle bounds = getContentBounds();
 
 		final int diameterAvailable = Math.min(bounds.getWidth() - bounds.getX() * 2, bounds.getHeight() - bounds.getY() * 2);
-		offset = (thicknessFull + fadeFull) >> 1;
-			diameter = diameterAvailable - offset;
+		offset = ((thicknessFull + fadeFull) >> 1);
+		diameter = diameterAvailable - getCircleOffset();
 	}
+
 	/**
-	 * @return
+	 * Computes the angle for a value within the BoundedRangeModel.
+	 *
+	 * @return the angle.
 	 */
 	protected int computeAngle(final int value) {
 		final float min =getMinimum();
@@ -158,6 +158,220 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 	public Rectangle validateContent(final Style style, final Rectangle bounds) {
 		final int size = StyleHelper.getFont(style).getHeight() << 1;
 		return new Rectangle(0, 0, size, size);
+	}
+
+	@Override
+	public boolean handleEvent(final int event) {
+		if (isEnabled()) {
+			final long currentTime = System.currentTimeMillis();
+			if (currentTime > nextEvent) {
+				nextEvent = currentTime + EVENT_RATE;
+				if(Event.getType(event)==Event.POINTER){
+					final Pointer pointer = (Pointer) Event.getGenerator(event);
+					final int action = Pointer.getAction(event);
+					switch (action) {
+					case Pointer.DRAGGED:
+					case Pointer.PRESSED:
+					case Pointer.RELEASED:
+						final Rectangle rect = new Rectangle();
+						getStyle().getMargin().wrap(rect);
+						final int pointerX = pointer.getX() + rect.getX();
+						final int pointerY = pointer.getY() + rect.getY();
+						final int computeValue = computeValue(this.getRelativeX(pointerX), this.getRelativeY(pointerY));
+						performValueChange(computeValue);
+						return true;
+					}
+				}
+			}
+		}
+		return super.handleEvent(event);
+	}
+
+	@Override
+	public void setValue(final int value) {
+		synchronized (this) {
+			if (value != getValue()) {
+				super.setValue(value);
+				getValueAnimation().setTargetValue(value);
+				startAnimation();
+			}
+		}
+	}
+
+	/**
+	 * Sets the new value.
+	 *
+	 * @param value
+	 *            the new value.
+	 */
+	protected void performValueChange(final int value) {
+		setValue(value);
+	}
+
+
+	private int computeValue(final int pointerX, final int pointerY) {
+		final int dx = pointerX - (getCircleX() + (getDiameter() >> 1));
+		final int dy = pointerY - (getCircleY() + (getDiameter() >> 1));
+
+		double atan2 = Math.toDegrees(Math.atan2(dy, dx));
+
+		if (atan2 < 0) {
+			atan2 += 360;
+		}
+		atan2 += startAngle;
+		if (atan2 < 0) {
+			atan2 = 360 + atan2;
+		}
+
+		final int absArc = Math.abs(arcAngle);
+		if (atan2 > absArc) {
+			if (dx < 0) {
+				return getMinimum();
+			} else {
+				return getMaximum();
+			}
+		}
+		if (atan2 == 0) {
+			return getMinimum();
+		}
+
+		final double percent = atan2 / absArc;
+		return (int) ((getMaximum() - getMinimum()) * percent + getMinimum());
+	}
+
+	@Override
+	public void showNotify() {
+		addOnValueChangeListener(listener);
+		super.showNotify();
+	}
+
+	@Override
+	public void hideNotify() {
+		super.hideNotify();
+		removeOnValueChangeListener(listener);
+	}
+
+	/**
+	 * Resets the animation.
+	 */
+	public void resetAnimation() {
+		stopAnimation();
+		getValueAnimation().reset();
+		currentArcAngle = computeAngle(getValueAnimation().getCurrentValue());
+	}
+
+	/**
+	 * Starts the animation.
+	 */
+	public void startAnimation() {
+		if (!animated) {
+			animated = true;
+			getValueAnimation().start();
+			final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
+			animator.startAnimation(this);
+		}
+	}
+
+	/**
+	 * Stops the animation.
+	 */
+	public void stopAnimation() {
+		getValueAnimation().stop();
+		animationEnd();
+		final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
+		animator.stopAnimation(this);
+	}
+
+	@Override
+	public boolean tick(final long currentTimeMillis) {
+		if (!doTick(currentTimeMillis)) {
+			animationEnd();
+			return false;
+		}
+		return true;
+	}
+
+	private void animationEnd() {
+		animated = false;
+		if (onAnimationEndListener != null) {
+			onAnimationEndListener.onAnimationEnd();
+		}
+	}
+
+	/**
+	 * Sets the onAnimationEndListener.
+	 *
+	 * @param onAnimationEndListener
+	 *            the onAnimationEndListener to set.
+	 */
+	public void setOnAnimationEndListener(final OnAnimationEndListener onAnimationEndListener) {
+		this.onAnimationEndListener = onAnimationEndListener;
+	}
+
+	/**
+	 *
+	 * Tick function called during the animation.
+	 *
+	 * @param currentTimeMillis
+	 *            the currentTime.
+	 * @return false if the animation is finished.
+	 */
+	protected boolean doTick(final long currentTimeMillis) {
+		if (getValueAnimation().isFinished()) {
+			return false;
+		}
+		getValueAnimation().tick(currentTimeMillis);
+		currentArcAngle = computeAngle(getValueAnimation().getCurrentValue());
+		repaint();
+		return true;
+	}
+
+	/**
+	 * Gets the diameter.
+	 * @return the diameter.
+	 */
+	public int getDiameter() {
+		return diameter;
+	}
+
+	/**
+	 * Gets the x.
+	 * @return the x.
+	 */
+	public int getCircleX() {
+		return circleX;
+	}
+
+	/**
+	 * Gets the y.
+	 * @return the y.
+	 */
+	public int getCircleY() {
+		return circleY;
+	}
+
+	/**
+	 * Gets the valueAnimation.
+	 * @return the valueAnimation.
+	 */
+	public ValueAnimation getValueAnimation() {
+		return valueAnimation;
+	}
+
+	/**
+	 * Gets the offset.
+	 * @return the offset.
+	 */
+	public int getCircleOffset() {
+		return offset;
+	}
+
+	/**
+	 * Gets the currentArcAngle.
+	 * @return the currentArcAngle.
+	 */
+	public int getCurrentArcAngle() {
+		return currentArcAngle;
 	}
 
 	/**
@@ -240,6 +454,7 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 
 	/**
 	 * Gets the fade.
+	 *
 	 * @return the fade.
 	 */
 	public int getFade() {
@@ -273,161 +488,5 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 	 */
 	public void setThickness(final int thickness) {
 		this.thickness = thickness;
-	}
-
-	@Override
-	public boolean handleEvent(final int event) {
-		if (isEnabled()) {
-			final long currentTime = System.currentTimeMillis();
-			if (currentTime > nextEvent) {
-				nextEvent = currentTime + EVENT_RATE;
-				if(Event.getType(event)==Event.POINTER){
-					final Pointer pointer = (Pointer) Event.getGenerator(event);
-					final int action = Pointer.getAction(event);
-					switch (action) {
-					case Pointer.DRAGGED:
-					case Pointer.PRESSED:
-					case Pointer.RELEASED:
-						final Rectangle rect = new Rectangle();
-						getStyle().getMargin().wrap(rect);
-						final int pointerX = pointer.getX() + rect.getX();
-						final int pointerY = pointer.getY() + rect.getY();
-						final int computeValue = computeValue(this.getRelativeX(pointerX), this.getRelativeY(pointerY));
-						performValueChange(computeValue);
-						return true;
-					}
-				}
-			}
-		}
-		return super.handleEvent(event);
-	}
-
-	@Override
-	public void setValue(final int value) {
-		synchronized (this) {
-			if (value != getValue()) {
-				super.setValue(value);
-				valueAnimation.setTargetValue(value);
-				startAnimation();
-			}
-		}
-	}
-
-	protected void performValueChange(final int value) {
-		setValue(value);
-	}
-
-	/**
-	 * @param pointerX
-	 * @param pointerY
-	 */
-	private int computeValue(final int pointerX, final int pointerY) {
-		final int dx = pointerX - (x + (diameter >> 1));
-		final int dy = pointerY - (y + (diameter >> 1));
-
-		double atan2 = Math.toDegrees(Math.atan2(dy, dx));
-
-		if (atan2 < 0) {
-			atan2 += 360;
-		}
-		atan2 += startAngle;
-		if (atan2 < 0) {
-			atan2 = 360 + atan2;
-		}
-
-		final int absArc = Math.abs(arcAngle);
-		if (atan2 > absArc) {
-			if (dx < 0) {
-				return getMinimum();
-			} else {
-				return getMaximum();
-			}
-		}
-		if (atan2 == 0) {
-			return getMinimum();
-		}
-
-		final double percent = atan2 / absArc;
-		return (int) ((getMaximum() - getMinimum()) * percent + getMinimum());
-	}
-
-	@Override
-	public void showNotify() {
-		// transitionListener.onTransitionStart(0, 0, null, null);
-		addOnValueChangeListener(listener);
-		// TransitionManager.addGlobalTransitionListener(transitionListener);
-		super.showNotify();
-	}
-
-	@Override
-	public void hideNotify() {
-		// transitionListener.onTransitionStart(0, 0, null, null);
-		super.hideNotify();
-		removeOnValueChangeListener(listener);
-		// TransitionManager.removeGlobalTransitionListener(transitionListener);
-	}
-
-	public void initAnimation() {
-		valueAnimation.reset();
-		currentArcAngle = computeAngle(valueAnimation.getCurrentValue());
-	}
-
-	public void startAnimation() {
-		if (!animated) {
-			animated = true;
-			// if (isShown()) {
-			valueAnimation.start();
-			final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
-			animator.startAnimation(this);
-			// } else {
-			// currentArcAngle = computeAngle(valueAnimation.getCurrentValue());
-			// }
-		}
-	}
-
-	public void stopAnimation() {
-		valueAnimation.stop();
-		animationEnd();
-		final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
-		animator.stopAnimation(this);
-	}
-
-	@Override
-	public boolean tick(final long currentTimeMillis) {
-		if (!doTick(currentTimeMillis)) {
-			animationEnd();
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 *
-	 */
-	private void animationEnd() {
-		animated = false;
-		if (onAnimationEndListener != null) {
-			onAnimationEndListener.onAnimationEnd();
-		}
-	}
-
-	/**
-	 * Sets the onAnimationEndListener.
-	 *
-	 * @param onAnimationEndListener
-	 *            the onAnimationEndListener to set.
-	 */
-	public void setOnAnimationEndListener(final OnAnimationEndListener onAnimationEndListener) {
-		this.onAnimationEndListener = onAnimationEndListener;
-	}
-
-	public boolean doTick(final long currentTimeMillis) {
-		if (valueAnimation.isFinished()) {
-			return false;
-		}
-		valueAnimation.tick(currentTimeMillis);
-		currentArcAngle = computeAngle(valueAnimation.getCurrentValue());
-		repaint();
-		return true;
 	}
 }

@@ -9,7 +9,7 @@ package com.microej.demo.smarthome.data;
 /**
  *
  */
-public interface ProviderListener<T extends Device> {
+public interface ProviderListener<T extends Device<?>> {
 	void newElement(T element);
 
 	void removeElement(T element);

@@ -7,11 +7,12 @@
 package com.microej.demo.smarthome.data.philipshue;
 
 import java.util.Random;
+import java.util.concurrent.Executor;
 
-import com.microej.demo.smarthome.data.impl.Device;
+import com.microej.demo.smarthome.data.impl.AbstractDevice;
 import com.microej.demo.smarthome.data.light.LightEventListener;
-import com.microej.demo.smarthome.util.ExecutorUtils;
 
+import ej.util.concurrent.SingleThreadExecutor;
 import sew.light.Light;
 import sew.light.LightListener;
 import sew.light.util.Color;
@@ -20,10 +21,11 @@ import sew.light.util.HSVColor;
 /**
  *
  */
-public class HueLightSensor extends Device<LightEventListener>
+public class HueLightSensor extends AbstractDevice<LightEventListener>
 implements com.microej.demo.smarthome.data.light.Light, LightListener {
 
 	private static final double MIN_DIFF = 0.95f;
+	public static final Executor EXECUTOR = new SingleThreadExecutor();
 	private final Light light;
 	private final Color color;
 	private int rgbColor;
@@ -40,7 +42,7 @@ implements com.microej.demo.smarthome.data.light.Light, LightListener {
 		final Random rand = new Random(System.nanoTime());
 		color = new HSVColor(rand.nextDouble() * 360, 0.8f, 1f);
 		isOn = true;
-		ExecutorUtils.getExecutor(ExecutorUtils.LOW_PRIORITY).execute(new Runnable() {
+		EXECUTOR.execute(new Runnable() {
 
 			@Override
 			public void run() {
@@ -95,7 +97,7 @@ implements com.microej.demo.smarthome.data.light.Light, LightListener {
 	public void switchOn(final boolean on) {
 		if (isOn != on) {
 			isOn = on;
-			ExecutorUtils.getExecutor(ExecutorUtils.LOW_PRIORITY).execute(new Runnable() {
+			EXECUTOR.execute(new Runnable() {
 
 				@Override
 				public void run() {
@@ -130,7 +132,7 @@ implements com.microej.demo.smarthome.data.light.Light, LightListener {
 	}
 
 	private void updateHueColor() {
-		ExecutorUtils.getExecutor(ExecutorUtils.LOW_PRIORITY).execute(new Runnable() {
+		EXECUTOR.execute(new Runnable() {
 
 			@Override
 			public void run() {

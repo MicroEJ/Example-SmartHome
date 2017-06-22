@@ -5,7 +5,7 @@
 <stringAttribute key="com.is2t.microej.workbench.stdMicroEJLaunchConfigurationConfigurationScriptBoard" value="Local Deployment"/>
 <stringAttribute key="com.is2t.microej.workbench.stdMicroEJLaunchConfigurationExecutionKind" value="board"/>
 <listAttribute key="com.is2t.microej.workbench.stdMicroEJLaunchConfigurationImmutables"/>
-<stringAttribute key="com.is2t.microej.workbench.stdMicroEJLaunchConfigurationJPFConfigurationTabCSTART_com.is2t.microej.workbench.std.launch.ext.TextFieldOption_CENDboard.server.host" value="192.168.6.80"/>
+<stringAttribute key="com.is2t.microej.workbench.stdMicroEJLaunchConfigurationJPFConfigurationTabCSTART_com.is2t.microej.workbench.std.launch.ext.TextFieldOption_CENDboard.server.host" value="192.168.6.81"/>
 <stringAttribute key="com.is2t.microej.workbench.stdMicroEJLaunchConfigurationJPFConfigurationTabCSTART_com.is2t.microej.workbench.std.launch.ext.TextFieldOption_CENDboard.server.port" value="4000"/>
 <stringAttribute key="com.is2t.microej.workbench.stdMicroEJLaunchConfigurationJPFConfigurationTabCSTART_com.is2t.microej.workbench.std.launch.ext.TextFieldOption_CENDboard.timeout" value="60000"/>
 <stringAttribute key="com.is2t.microej.workbench.stdMicroEJLaunchConfigurationMainClass" value="__SmartHome__.generated.SmartHomeEntryPoint"/>

@@ -7,11 +7,10 @@
 package com.microej.demo.smarthome.style;
 
 import com.microej.demo.smarthome.util.Colors;
-import com.microej.demo.smarthome.util.Constants;
 import com.microej.demo.smarthome.widget.CircularPlainBackground;
 import com.microej.demo.smarthome.widget.TimeWidget;
 
-import ej.bon.Util;
+import ej.microui.display.Font;
 import ej.microui.display.GraphicsContext;
 import ej.style.State;
 import ej.style.Stylesheet;
@@ -33,42 +32,30 @@ import ej.style.util.EditableStyle;
 import ej.style.util.StyleHelper;
 
 /**
- *
+ * The populator of the stylesheet.
  */
 public class StylePopulator {
 
 	private static final int SIMPLE_OUTLINE = 8;
-	private static final int HALF_OUTLINE = SIMPLE_OUTLINE >> 1;
-	private static final int DOUBLE_OUTLINE = SIMPLE_OUTLINE << 1;
+	private static final int HALF_OUTLINE = SIMPLE_OUTLINE / 2;
+	private static final int DOUBLE_OUTLINE = SIMPLE_OUTLINE * 2;
 
+
+	/**
+	 * Initialize the stylesheet.
+	 */
 	public static void initializeStylesheet() {
 
-		Util.setCurrentTimeMillis(Constants.START_TIME);
 		final Stylesheet stylesheet = StyleHelper.getStylesheet();
 
-		final FontProfile fpXSmall = new FontProfile();
-		fpXSmall.setFamily(FontFamilies.SOURCE_SANS_PRO);
-		fpXSmall.setSize(FontSize.X_SMALL);
-
-		final FontProfile fpSmall = new FontProfile();
-		fpSmall.setFamily(FontFamilies.SOURCE_SANS_PRO);
-		fpSmall.setSize(FontSize.SMALL);
-
-		final FontProfile fpMedium = new FontProfile();
-		fpMedium.setFamily(FontFamilies.SOURCE_SANS_PRO);
-		fpMedium.setSize(FontSize.MEDIUM);
-
-		final FontProfile fpLarge = new FontProfile();
-		fpLarge.setFamily(FontFamilies.SOURCE_SANS_PRO);
-		fpLarge.setSize(FontSize.LARGE);
-
-		final FontProfile fpXLarge = new FontProfile();
-		fpXLarge.setFamily(FontFamilies.SOURCE_SANS_PRO_LIGHT);
-		fpXLarge.setSize(FontSize.X_LARGE);
-
-		final FontProfile fpXXLarge = new FontProfile();
-		fpXXLarge.setFamily(FontFamilies.SOURCE_SANS_PRO_LIGHT);
-		fpXXLarge.setSize(FontSize.XX_LARGE);
+		final FontProfile fpXSmall = new FontProfile(FontFamilies.SOURCE_SANS_PRO, FontSize.X_SMALL, Font.STYLE_PLAIN);
+		final FontProfile fpSmall = new FontProfile(FontFamilies.SOURCE_SANS_PRO, FontSize.SMALL, Font.STYLE_PLAIN);
+		final FontProfile fpMedium = new FontProfile(FontFamilies.SOURCE_SANS_PRO, FontSize.MEDIUM, Font.STYLE_PLAIN);
+		// final FontProfile fpLarge = new FontProfile(FontFamilies.SOURCE_SANS_PRO, FontSize.LARGE, Font.STYLE_PLAIN);
+		final FontProfile fpXLarge = new FontProfile(FontFamilies.SOURCE_SANS_PRO_LIGHT, FontSize.X_LARGE,
+				Font.STYLE_PLAIN);
+		// final FontProfile fpXXLarge = new FontProfile(FontFamilies.SOURCE_SANS_PRO_LIGHT, FontSize.XX_LARGE,
+		// Font.STYLE_PLAIN);
 
 		final Outline defaultOutline = new SimpleOutline(SIMPLE_OUTLINE);
 		final Outline doubleOutline = new SimpleOutline(DOUBLE_OUTLINE);
@@ -116,7 +103,7 @@ public class StylePopulator {
 			activeFooterStyle.setForegroundColor(Colors.CORAL);
 			stylesheet.addRule(
 					new AndCombinator(new ClassSelector(ClassSelectors.FOOTER_MENU_BUTTON),
-							new StateSelector(State.Focus)),
+							new StateSelector(State.Checked)),
 					activeFooterStyle);
 		}
 
@@ -280,7 +267,6 @@ public class StylePopulator {
 				dashBoardMenuStyle.setPadding(defaultOutline);
 				dashBoardMenuStyle.setBackground(plainBackground);
 				dashBoardMenuStyle.setBackgroundColor(Colors.CORAL);
-				// dashBoardMenuStyle.setForegroundColor(Colors.LIGHT_CORAL);
 				dashBoardMenuStyle.setForegroundColor(Colors.WHITE);
 				dashBoardMenuStyle.setFontProfile(fpXSmall);
 				stylesheet.addRule(dashBoardMenuSelector, dashBoardMenuStyle);
@@ -302,7 +288,7 @@ public class StylePopulator {
 				dashBoardActiveMenuStyle.setBackgroundColor(Colors.WHITE);
 				dashBoardActiveMenuStyle.setForegroundColor(Colors.CORAL);
 				stylesheet.addRule(new AndCombinator(menuButtonSelector,
-						new StateSelector(State.Focus)),
+						new StateSelector(State.Checked)),
 						dashBoardActiveMenuStyle);
 			}
 
@@ -396,14 +382,5 @@ public class StylePopulator {
 			}
 
 		}
-
-		{
-			final EditableStyle testStyle = new EditableStyle();
-			testStyle.setForegroundColor(0xFF0000);
-			testStyle.setBackgroundColor(0x00FF00);
-			testStyle.setBackground(plainBackground);
-			stylesheet.addRule(new ClassSelector(ClassSelectors.TEST), testStyle);
-		}
 	}
-
 }

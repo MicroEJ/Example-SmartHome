@@ -6,6 +6,8 @@
  */
 package com.microej.demo.smarthome.widget.light;
 
+import com.microej.demo.smarthome.data.light.Light;
+import com.microej.demo.smarthome.data.light.LightEventListener;
 import com.microej.demo.smarthome.widget.CircularProgressWidget;
 
 import ej.microui.display.GraphicsContext;
@@ -15,19 +17,29 @@ import ej.style.container.Rectangle;
 import ej.widget.model.BoundedRangeModel;
 
 /**
- *
+ * A CircularProgressWidget using a light as a model.
  */
-public class LightCircularProgress extends CircularProgressWidget {
-
-
+public class LightCircularProgress extends CircularProgressWidget implements LightEventListener {
 
 	private static final int ANIMATION_DURATION = 300;
+	private final Light light;
 
 	/**
-	 * Constructor
+	 * Instantiates a LightCircularProgress.
+	 *
+	 * @param model
+	 *            the BoundedRangeModel.
+	 * @param light
+	 *            the light.
 	 */
-	public LightCircularProgress(final BoundedRangeModel model) {
+	public LightCircularProgress(final BoundedRangeModel model, final Light light) {
 		super(model, ANIMATION_DURATION);
+		this.light = light;
+
+
+		onBrightnessChange(light.getBrightness());
+		onStateChange(light.isOn());
+		resetAnimation();
 	}
 
 	/**
@@ -39,12 +51,12 @@ public class LightCircularProgress extends CircularProgressWidget {
 		super.renderContent(g, style, bounds);
 
 		// set style
-		if (isEnabled() && customColor != null) {
+		if (isEnabled()) {
 			// fill circle
-			final int innerD = diameter / 2;
-			final int innerX = x + (diameter - innerD) / 2;
-			final int innerY = y + (diameter - innerD) / 2;
-			g.setColor(customColor);
+			final int innerD = getDiameter() / 2;
+			final int innerX = getCircleX() + (getDiameter() - innerD) / 2;
+			final int innerY = getCircleY() + (getDiameter() - innerD) / 2;
+			g.setColor(light.getColor());
 			g.removeBackgroundColor();
 			g.fillCircle(innerX, innerY, innerD);
 
@@ -61,11 +73,41 @@ public class LightCircularProgress extends CircularProgressWidget {
 		}
 	}
 
-	/**
-	 *
-	 */
-	public void setColor(final int color) {
-		customColor = color;
-		repaint();
+	@Override
+	protected int getColor(final Style style) {
+		return light.getColor();
+	}
+
+	@Override
+	public void onColorChange(final int color) {
+		// Do nothing.
+	}
+
+	@Override
+	public void onBrightnessChange(final float brightness) {
+		final int min = getMinimum();
+		final int max = getMaximum();
+		final float value = (max - min) * brightness + min;
+		setValue((int) value);
+	}
+
+	@Override
+	public void onStateChange(final boolean on) {
+		setEnabled(on);
+	}
+
+	@Override
+	public void showNotify() {
+		super.showNotify();
+
+		light.addListener(this);
+		onBrightnessChange(light.getBrightness());
+		onStateChange(light.isOn());
+	}
+
+	@Override
+	public void hideNotify() {
+		super.hideNotify();
+		light.removeListener(this);
 	}
 }

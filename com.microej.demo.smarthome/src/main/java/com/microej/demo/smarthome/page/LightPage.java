@@ -6,24 +6,26 @@
  */
 package com.microej.demo.smarthome.page;
 
+import com.microej.demo.smarthome.Main;
 import com.microej.demo.smarthome.data.ProviderListener;
 import com.microej.demo.smarthome.data.light.Light;
 import com.microej.demo.smarthome.data.light.LightProvider;
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Images;
 import com.microej.demo.smarthome.widget.ImageMenuButton;
-import com.microej.demo.smarthome.widget.MenuButton;
+import com.microej.demo.smarthome.widget.ToggleBox;
 import com.microej.demo.smarthome.widget.light.LightWidget;
 
 import ej.components.dependencyinjection.ServiceLoaderFactory;
 import ej.mwt.Widget;
+import ej.widget.composed.ToggleWrapper;
 import ej.widget.container.Grid;
 import ej.widget.navigation.TransitionListener;
 import ej.widget.navigation.TransitionManager;
-import ej.widget.navigation.page.Page;
+import ej.widget.toggle.RadioModel;
 
 /**
- *
+ * A page displaying the lights devices.
  */
 public class LightPage extends DevicePage<Light> implements ProviderListener<Light> {
 
@@ -31,7 +33,7 @@ public class LightPage extends DevicePage<Light> implements ProviderListener<Lig
 	private Thread animationThread;
 
 	/**
-	 *
+	 * Instantiates a LightPage.
 	 */
 	public LightPage() {
 		final LightProvider provider = ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class);
@@ -44,33 +46,36 @@ public class LightPage extends DevicePage<Light> implements ProviderListener<Lig
 		transitionListener = new TransitionListener() {
 
 			@Override
-			public void onTransitionStop() {
-				if (isShown() && devicesMap.size() > 0) {
-					startAnimation();
-				}
-			}
-
-			@Override
-			public void onTransitionStep(final int step) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void onTransitionStart(final int transitionsSteps, final int transitionsStop, final Page from,
-					final Page to) {
+			public void onTransitionStart(final TransitionManager transitionManager) {
 				if (devicesMap.size() > 0) {
 					stopAnimation();
 				}
+				// Doesn't reset the animation when the color picker opens.
+				if (transitionManager.getNavigator() != Main.getNavigator()) {
+					for (final Widget widget : devicesMap.values()) {
+						final LightWidget lightWidget = (LightWidget) widget;
+						lightWidget.resetAnimation();
+					}
+				}
+
+			}
+
+			@Override
+			public void onTransitionStop(final TransitionManager manager) {
+				if (isShown() && devicesMap.size() > 0) {
+					startAnimation();
+				}
+
 			}
 		};
 	}
 
 	@Override
-	protected MenuButton createMenuButton() {
+	protected ToggleWrapper createMenuButton() {
 		final ImageMenuButton imageMenuButton = new ImageMenuButton(Images.LIGHTS);
-		imageMenuButton.addClassSelector(ClassSelectors.FOOTER_MENU_BUTTON);
-		return imageMenuButton;
+		final ToggleBox toggleBox = new ToggleBox(new RadioModel(), imageMenuButton);
+		toggleBox.addClassSelector(ClassSelectors.FOOTER_MENU_BUTTON);
+		return toggleBox;
 	}
 
 	@Override
@@ -90,16 +95,14 @@ public class LightPage extends DevicePage<Light> implements ProviderListener<Lig
 
 	@Override
 	public void showNotify() {
-		transitionListener.onTransitionStart(0, 0, null, null);
-		TransitionManager.addGlobalTransitionListener(transitionListener);
+		TransitionManager.addTransitionListener(transitionListener);
 		super.showNotify();
 	}
 
 	@Override
 	public void hideNotify() {
 		super.hideNotify();
-		transitionListener.onTransitionStart(0, 0, null, null);
-		TransitionManager.removeGlobalTransitionListener(transitionListener);
+		TransitionManager.removeTransitionListener(transitionListener);
 	}
 
 	private synchronized void startAnimation() {
@@ -110,15 +113,9 @@ public class LightPage extends DevicePage<Light> implements ProviderListener<Lig
 			animationThread = new Thread(animation);
 			animationThread.start();
 		}
-
-
 	}
 
 	private synchronized void stopAnimation() {
-		for (final Widget widget : devicesMap.values()) {
-			final LightWidget lightWidget = (LightWidget) widget;
-			lightWidget.stopAnimation();
-		}
 		if (animationThread != null) {
 			animationThread.interrupt();
 			animationThread = null;

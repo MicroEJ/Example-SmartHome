@@ -7,30 +7,29 @@
 package com.microej.demo.smarthome.util;
 
 /**
- *
+ * The colors.
  */
 public interface Colors {
 
-	public static final int BLACK_50 = 0x4B5357;
+	int BLACK_50 = 0x4B5357;
 
-	public static final int WHITE = 0xFFFFFF;
+	int WHITE = 0xFFFFFF;
 
-	public static final int CONCRETE_25 = 0xB1BDC3;
+	int CONCRETE_25 = 0xB1BDC3;
 
-	public static final int CONCRETE_50 = 0xCBD3D7;
+	int CONCRETE_50 = 0xCBD3D7;
 
-	public static final int CONCRETE_75 = 0xE5E9EB;
+	int CONCRETE_75 = 0xE5E9EB;
 
-	public static final int CONCRETE_90 = 0xF2F4F5;
+	int CONCRETE_90 = 0xF2F4F5;
 
-	public static final int LIGHT_CORAL = 0xF7A897;
+	int LIGHT_CORAL = 0xF7A897;
 
-	public static final int CORAL = 0xEE502E;
+	int CORAL = 0xEE502E;
 
-	public static final int DARK_CORAL = 0xCF4520;
+	int DARK_CORAL = 0xCF4520;
 
-	public static final int LIGHT_BLUE = 0x0DADC9;
+	int LIGHT_BLUE = 0x0DADC9;
 
-	public static final int VERY_LIGHT_BLUE = 0x83E9E3;
-
+	int VERY_LIGHT_BLUE = 0x83E9E3;
 }

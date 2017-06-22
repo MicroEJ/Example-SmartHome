@@ -8,7 +8,7 @@ package com.microej.demo.smarthome.data.zwave;
 
 import com.microej.demo.smarthome.data.door.Door;
 import com.microej.demo.smarthome.data.door.DoorEventListener;
-import com.microej.demo.smarthome.data.impl.Device;
+import com.microej.demo.smarthome.data.impl.AbstractDevice;
 
 import ej.basedriver.BinaryState;
 import ej.basedriver.DryContact;
@@ -19,7 +19,7 @@ import ej.basedriver.event.EventHandler;
 /**
  *
  */
-public class ZwaveDoorSensor extends Device<DoorEventListener>
+public class ZwaveDoorSensor extends AbstractDevice<DoorEventListener>
 implements EventHandler<DryContact, DryContactEvent>, Door {
 
 	private final DryContact dryContact;

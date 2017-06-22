@@ -22,10 +22,9 @@ import ej.style.util.ElementAdapter;
 import ej.widget.listener.OnValueChangeListener;
 import ej.widget.navigation.TransitionListener;
 import ej.widget.navigation.TransitionManager;
-import ej.widget.navigation.page.Page;
 
 /**
- *
+ * A circulat progress for a thermostat.
  */
 public class ThermostatCircularProgress extends CircularProgressWidget {
 
@@ -41,7 +40,10 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	private final TransitionListener transitionListener;
 
 	/**
+	 * Instantiates a ThermostatCircularProgress.
+	 *
 	 * @param model
+	 *            the model.
 	 */
 	public ThermostatCircularProgress(final ThermostatBoundedRangeModel model) {
 		super(model);
@@ -82,25 +84,18 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 		transitionListener = new TransitionListener() {
 
 			@Override
-			public void onTransitionStop() {
+			public void onTransitionStart(final TransitionManager transitionManager) {
+				stopAnimation();
+				resetAnimation();
+
+			}
+
+			@Override
+			public void onTransitionStop(final TransitionManager manager) {
 				if (isShown()) {
-					initAnimation();
+					resetAnimation();
 					startAnimation();
 				}
-
-			}
-
-			@Override
-			public void onTransitionStep(final int step) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void onTransitionStart(final int transitionsSteps, final int transitionsStop, final Page from,
-					final Page to) {
-				stopAnimation();
-				initAnimation();
 
 			}
 		};
@@ -109,15 +104,15 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	@Override
 	public void renderContent(final GraphicsContext g, final Style style, final Rectangle bounds) {
 		super.renderContent(g, style, bounds);
-		if (targetAngle != 0 && valueAnimation.isFinished()) {
+		if (targetAngle != 0 && getValueAnimation().isFinished()) {
 			final AntiAliasedShapes shapes = AntiAliasedShapes.Singleton;
 			if (targetAngle > 0) {
 				g.setColor(colors.getStyle().getForegroundColor());
 			} else {
 				g.setColor(colors.getStyle().getBackgroundColor());
 			}
-			shapes.drawCircleArc(g, offset + x, offset + y, (diameter - (offset << 1)),
-					startAngle + currentArcAngle,
+			shapes.drawCircleArc(g, getCircleOffset() + getCircleX(), getCircleOffset() + getCircleY(), (getDiameter() - (getCircleOffset() << 1)),
+					getStartAngle() + getCurrentArcAngle(),
 					targetAngle);
 		}
 	}
@@ -128,20 +123,25 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 		super.setValue(value);
 	}
 
+	/**
+	 * Gets the target temperature.
+	 *
+	 * @return the target temperature.
+	 */
 	public int getTargetValue() {
 		return target.getTargetValue();
 	}
 
+	/**
+	 * Saves the target temperature into the model.
+	 */
 	public void validateTagetValue() {
 		model.setTargetValue(target.getTargetValue());
 	}
 
-	/**
-	 *
-	 */
 	private void updateAngle() {
 		final int computeAngle = computeAngle(
-				target.getCurrentValue() - valueAnimation.getCurrentValue() + model.getMinimum());
+				target.getCurrentValue() - getValueAnimation().getCurrentValue() + model.getMinimum());
 		if (computeAngle != targetAngle) {
 			targetAngle = computeAngle;
 			repaint();
@@ -153,6 +153,12 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 		setLocalTarget(value);
 	}
 
+	/**
+	 * Sets the current target temperature.
+	 *
+	 * @param value
+	 *            the temperature.
+	 */
 	public void setLocalTarget(final int value) {
 		target.setTargetValue(value);
 		target.start();
@@ -162,8 +168,8 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 
 	@Override
 	public void showNotify() {
-		transitionListener.onTransitionStart(0, 0, null, null);
-		TransitionManager.addGlobalTransitionListener(transitionListener);
+		transitionListener.onTransitionStart(null);
+		TransitionManager.addTransitionListener(transitionListener);
 		setLocalTarget(model.getTargetValue());
 		model.addOnTargetValueChangeListener(listener);
 		model.register();
@@ -173,16 +179,28 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	@Override
 	public void hideNotify() {
 		super.hideNotify();
-		transitionListener.onTransitionStart(0, 0, null, null);
-		TransitionManager.removeGlobalTransitionListener(transitionListener);
+		transitionListener.onTransitionStart(null);
+		TransitionManager.addTransitionListener(transitionListener);
 		model.removeOnTargetValueChangeListener(listener);
 		model.unregister();
 	}
 
+	/**
+	 * Adds a listener.
+	 *
+	 * @param listener
+	 *            the listener.
+	 */
 	public void addOnTargetValueChangeListener(final OnValueChangeListener listener) {
 		listeners.add(listener);
 	}
 
+	/**
+	 * Removes a listener.
+	 *
+	 * @param listener
+	 *            the listener.
+	 */
 	public void removeOnTargetValueChangeListener(final OnValueChangeListener listener) {
 		listeners.remove(listener);
 	}
@@ -194,8 +212,8 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	}
 
 	@Override
-	public void initAnimation() {
-		super.initAnimation();
+	public void resetAnimation() {
+		super.resetAnimation();
 		target.reset();
 		targetAngle = 0;
 	}
@@ -211,7 +229,6 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 			updateAngle();
 		} else {
 			// So the animation starts at the end of the first one.
-			// TODO call it only once.
 			target.start(currentTimeMillis);
 		}
 		return true;

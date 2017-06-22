@@ -17,7 +17,7 @@ import ej.components.dependencyinjection.ServiceLoaderFactory;
 import ej.widget.basic.Label;
 
 /**
- *
+ * A widget displaying the door states.
  */
 public class DoorDashboard extends DeviceDashboard {
 
@@ -26,7 +26,7 @@ public class DoorDashboard extends DeviceDashboard {
 	private int doorOpen = 0;
 
 	/**
-	 * @param name
+	 * Instantiate a DoorDashboard.
 	 */
 	public DoorDashboard() {
 		super(Images.SECURITY);
@@ -38,7 +38,7 @@ public class DoorDashboard extends DeviceDashboard {
 		listener = new DoorEventListener() {
 
 			@Override
-			public void onStateChange(boolean open) {
+			public void onStateChange(final boolean open) {
 				if (open) {
 					doorOpen++;
 				} else {
@@ -53,10 +53,10 @@ public class DoorDashboard extends DeviceDashboard {
 	@Override
 	public void showNotify() {
 		super.showNotify();
-		DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class);
-		Door[] list = provider.list();
+		final DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class);
+		final Door[] list = provider.list();
 		doorOpen = 0;
-		for (Door door : list) {
+		for (final Door door : list) {
 			if (door.isOpen()) {
 				doorOpen++;
 			}
@@ -65,15 +65,12 @@ public class DoorDashboard extends DeviceDashboard {
 		updateDoors();
 	}
 
-	/**
-	 *
-	 */
 	private void updateDoors() {
 		if (doorOpen > 0) {
-			lockLabel.setText(Strings.LOCKS_ARE_OPENED);
+			lockLabel.setText(Strings.LOCKS_ARE_CLOSED);
 			setActive(false);
 		} else {
-			lockLabel.setText(Strings.LOCKS_ARE_CLOSED);
+			lockLabel.setText(Strings.LOCKS_ARE_OPENED);
 			setActive(true);
 		}
 		repaint();
@@ -82,9 +79,9 @@ public class DoorDashboard extends DeviceDashboard {
 	@Override
 	public void hideNotify() {
 		super.hideNotify();
-		DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class);
-		Door[] list = provider.list();
-		for (Door door : list) {
+		final DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class);
+		final Door[] list = provider.list();
+		for (final Door door : list) {
 			door.removeListener(listener);
 		}
 	}

@@ -7,7 +7,7 @@
 package com.microej.demo.smarthome.util;
 
 /**
- *
+ * The strings used in the demo.
  */
 public interface Strings {
 
@@ -47,9 +47,6 @@ public interface Strings {
 
 	String WATT = "W";
 
-	/**
-	 * Values
-	 */
 	String COLOR_PICKER_TITLE = "Pick a color";
 
 	String HOUR_END = ":00 ";

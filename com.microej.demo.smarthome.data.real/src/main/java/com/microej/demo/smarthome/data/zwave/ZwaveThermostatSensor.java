@@ -9,10 +9,9 @@ package com.microej.demo.smarthome.data.zwave;
 import java.io.IOException;
 import java.util.Iterator;
 
-import com.microej.demo.smarthome.data.impl.Device;
+import com.microej.demo.smarthome.data.impl.AbstractDevice;
 import com.microej.demo.smarthome.data.thermostat.Thermostat;
 import com.microej.demo.smarthome.data.thermostat.ThermostatEventListener;
-import com.microej.demo.smarthome.util.ExecutorUtils;
 
 import ej.basedriver.EventControllerListener;
 import ej.basedriver.MultilevelSensor;
@@ -24,11 +23,12 @@ import ej.basedriver.event.ThermostatEvent;
 import ej.ecom.DeviceManager;
 import ej.ecom.RegistrationEvent;
 import ej.ecom.RegistrationListener;
+import ej.util.concurrent.SingleThreadExecutor;
 
 /**
  *
  */
-public class ZwaveThermostatSensor extends Device<ThermostatEventListener> implements Thermostat {
+public class ZwaveThermostatSensor extends AbstractDevice<ThermostatEventListener> implements Thermostat {
 
 
 	private static final int MIN_TEMPERATURE = 50;
@@ -43,6 +43,7 @@ public class ZwaveThermostatSensor extends Device<ThermostatEventListener> imple
 	private EventHandler<ej.basedriver.Thermostat, ThermostatEvent> thermostatEventHandler;
 	private RegistrationListener<MultilevelSensor> sensorRegistrationListener;
 	private RegistrationListener<ej.basedriver.Thermostat> thermostatRegistrationListener;
+	private SingleThreadExecutor singleThreadExecutor;
 
 
 	/**
@@ -50,6 +51,8 @@ public class ZwaveThermostatSensor extends Device<ThermostatEventListener> imple
 	 */
 	public ZwaveThermostatSensor() {
 		super("Temperature");
+
+		singleThreadExecutor = new SingleThreadExecutor();
 		sensorEventHandler = new EventHandler<MultilevelSensor, MultilevelSensorEvent>() {
 
 			@Override
@@ -68,7 +71,7 @@ public class ZwaveThermostatSensor extends Device<ThermostatEventListener> imple
 
 			@Override
 			public void handleEvent(final ThermostatEvent event) {
-				ThermostatMode mode = event.getMode();
+				final ThermostatMode mode = event.getMode();
 				if (mode == null) {
 					return;
 				}
@@ -92,7 +95,7 @@ public class ZwaveThermostatSensor extends Device<ThermostatEventListener> imple
 		if (sensor == null) {
 			return current;
 		}
-		double lastKnownValue = sensor.getLastKnownValue();
+		final double lastKnownValue = sensor.getLastKnownValue();
 		if (lastKnownValue == MultilevelValue.UNKNOWN) {
 			return current;
 		}
@@ -121,11 +124,11 @@ public class ZwaveThermostatSensor extends Device<ThermostatEventListener> imple
 		if (thermostat == null) {
 			return target;
 		}
-		ThermostatMode mode = thermostat.getLastknownMode();
+		final ThermostatMode mode = thermostat.getLastknownMode();
 		if (mode == null) {
 			return target;
 		}
-		double lastKnownValue = mode.getLastKnownValue();
+		final double lastKnownValue = mode.getLastKnownValue();
 		if (lastKnownValue == MultilevelValue.UNKNOWN) {
 			return target;
 		}
@@ -146,28 +149,28 @@ public class ZwaveThermostatSensor extends Device<ThermostatEventListener> imple
 			if (thermostat != null) {
 				final ThermostatMode mode = thermostat.getLastknownMode();
 				if (mode != null) {
-					ExecutorUtils.getExecutor(ExecutorUtils.LOW_PRIORITY).execute(new Runnable() {
+					singleThreadExecutor.execute(new Runnable() {
 
 						@Override
 						public void run() {
 							try {
 								mode.setValue(toThermostat(temperature));
-							} catch (IOException e) {
+							} catch (final IOException e) {
 							}
 						}
 					});
 				}
 			}
-			for (ThermostatEventListener thermostatEventListener : listeners) {
+			for (final ThermostatEventListener thermostatEventListener : listeners) {
 				thermostatEventListener.onTargetTemperatureChange(getTarget());
 			}
 		}
 	}
 
-	private void setCurrentTemperature(int value) {
+	private void setCurrentTemperature(final int value) {
 		if (value != current) {
 			this.current = value;
-			for (ThermostatEventListener thermostatEventListener : listeners) {
+			for (final ThermostatEventListener thermostatEventListener : listeners) {
 				thermostatEventListener.onTemperatureChange(getCurrent());
 			}
 		}
@@ -181,14 +184,14 @@ public class ZwaveThermostatSensor extends Device<ThermostatEventListener> imple
 		sensorRegistrationListener = new RegistrationListener<MultilevelSensor>() {
 
 			@Override
-			public void deviceRegistered(RegistrationEvent<MultilevelSensor> event) {
+			public void deviceRegistered(final RegistrationEvent<MultilevelSensor> event) {
 				if (sensor == null) {
 					sensor = event.getDevice();
 				}
 			}
 
 			@Override
-			public void deviceUnregistered(RegistrationEvent<MultilevelSensor> event) {
+			public void deviceUnregistered(final RegistrationEvent<MultilevelSensor> event) {
 				if (sensor == event.getDevice()) {
 					sensor = null;
 				}
@@ -199,7 +202,7 @@ public class ZwaveThermostatSensor extends Device<ThermostatEventListener> imple
 	}
 
 	private void loadSensor() {
-		Iterator<MultilevelSensor> sensors = DeviceManager.list(MultilevelSensor.class);
+		final Iterator<MultilevelSensor> sensors = DeviceManager.list(MultilevelSensor.class);
 		if (sensors.hasNext()) {
 			sensor = sensors.next();
 		}
@@ -210,7 +213,7 @@ public class ZwaveThermostatSensor extends Device<ThermostatEventListener> imple
 		thermostatRegistrationListener = new RegistrationListener<ej.basedriver.Thermostat>() {
 
 			@Override
-			public void deviceRegistered(RegistrationEvent<ej.basedriver.Thermostat> event) {
+			public void deviceRegistered(final RegistrationEvent<ej.basedriver.Thermostat> event) {
 				if (thermostat == null) {
 					thermostat = event.getDevice();
 				}
@@ -218,7 +221,7 @@ public class ZwaveThermostatSensor extends Device<ThermostatEventListener> imple
 			}
 
 			@Override
-			public void deviceUnregistered(RegistrationEvent<ej.basedriver.Thermostat> event) {
+			public void deviceUnregistered(final RegistrationEvent<ej.basedriver.Thermostat> event) {
 				if (thermostat == event.getDevice()) {
 					thermostat = null;
 				}
@@ -229,13 +232,13 @@ public class ZwaveThermostatSensor extends Device<ThermostatEventListener> imple
 	}
 
 	private void loadThermostat() {
-		Iterator<ej.basedriver.Thermostat> thermostats = DeviceManager.list(ej.basedriver.Thermostat.class);
+		final Iterator<ej.basedriver.Thermostat> thermostats = DeviceManager.list(ej.basedriver.Thermostat.class);
 		if (thermostats.hasNext()) {
 			thermostat = thermostats.next();
 		}
 	}
 
-	public void addController(EventControllerListener controller) {
+	public void addController(final EventControllerListener controller) {
 		controller.addEventHandler(MultilevelSensor.class.getName(), sensorEventHandler);
 		controller.addEventHandler(ej.basedriver.Thermostat.class.getName(), thermostatEventHandler);
 	}
@@ -243,16 +246,16 @@ public class ZwaveThermostatSensor extends Device<ThermostatEventListener> imple
 	/**
 	 * @param device
 	 */
-	public void removeController(EventControllerListener controller) {
+	public void removeController(final EventControllerListener controller) {
 		controller.removeEventHandler(sensorEventHandler);
 		controller.removeEventHandler(thermostatEventHandler);
 	}
 
-	private int fromThermostat(double value) {
+	private int fromThermostat(final double value) {
 		return (int) (value * 10);
 	}
 
-	private double toThermostat(int value) {
+	private double toThermostat(final int value) {
 		return value / 10d;
 	}
 
