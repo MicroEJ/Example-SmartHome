@@ -4,9 +4,12 @@
  * Copyright 2016 IS2T. All rights reserved.
  * IS2T PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
-package com.microej.demo.smarthome.app;
+package com.microej.demo.smarthome.app.fake;
 
+import ej.components.dependencyinjection.ServiceLoaderFactory;
+import ej.exit.ExitHandler;
 import ej.wadapps.app.Activity;
+import ej.widget.listener.OnClickListener;
 
 /**
  *
@@ -21,14 +24,14 @@ public class SmartHomeActivity implements Activity {
 
 	@Override
 	public void onCreate() {
-		// com.microej.demo.smarthome.Main.setOnClickListener(new OnClickListener() {
-		//
-		// @Override
-		// public void onClick() {
-		// ServiceLoaderFactory.getServiceLoader().getService(ExitHandler.class).exit();
-		//
-		// }
-		// });
+		com.microej.demo.smarthome.Main.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick() {
+				ServiceLoaderFactory.getServiceLoader().getService(ExitHandler.class).exit();
+
+			}
+		});
 
 	}
 

@@ -4,7 +4,9 @@
 	All rights reserved. 
 	Use is subject to license terms. 
 -->
-<project xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ea="antlib:org.apache.easyant" name="license.specific">
+<project name="smarthome" xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ea="antlib:org.apache.easyant">
+	
+	<dirname file="${ant.file.smarthome}" property="project.dir"/>
 	
     <target name="add-license" extensionOf="augment-authorized-license-path" >
 		<!-- Add the license -->
@@ -12,5 +14,13 @@
 			<path location="${project.ivy.file}/../LICENSE.txt"/>
 		</ea:path>
     </target>
+	
+	<target name="smarthome:add-widget-to-classpath" extensionOf="abstract-compile:compile-ready">
+		<augment id="compile.main.classpath">
+			<path>
+				<fileset dir="${project.dir}/lib" includes="*.jar" excludes="*-sources*" />
+			</path>
+		</augment>
+	</target>
 
 </project>
