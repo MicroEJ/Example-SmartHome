@@ -39,7 +39,7 @@ public class TemperatureLabel extends ButtonWrapper {
 	 *
 	 * @param value
 	 *            the current value.
-	 * @param maxTemperature
+	 * @param maximum
 	 *            the maximum temperature.
 	 */
 	public TemperatureLabel(final int value, final int maximum) {

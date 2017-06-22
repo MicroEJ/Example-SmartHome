@@ -38,9 +38,9 @@ public class MaxWidthLabel extends Label {
 	 * @param maxText
 	 *            A text with the max size.
 	 */
-	public MaxWidthLabel(final String text, final String maxtText) {
+	public MaxWidthLabel(final String text, final String maxText) {
 		super(text);
-		maxText = maxtText;
+		this.maxText = maxText;
 	}
 
 	@Override

@@ -26,12 +26,8 @@ public class ThermostatBoundedRangeModel extends DefaultBoundedRangeModel implem
 	/**
 	 * Instantiates a ThermostatBoundedRangeModel.
 	 *
-	 * @param minimum
-	 *            the minimum temperature.
-	 * @param maximum
-	 *            the maximum temperature.
-	 * @param initialValue
-	 *            the initial temperature.
+	 * @param thermostat
+	 *            the thermostat.
 	 */
 	public ThermostatBoundedRangeModel(final Thermostat thermostat) {
 		super(thermostat.getMinTemperature(), thermostat.getMaxTemperature(), thermostat.getTemperature());
@@ -55,7 +51,8 @@ public class ThermostatBoundedRangeModel extends DefaultBoundedRangeModel implem
 	/**
 	 * Set the target temperature.
 	 *
-	 * @param targetTemperature
+	 * @param target
+	 *            target temperature.
 	 */
 	public void setTargetValue(int target) {
 		if (thermostat.getTargetTemperature() != target) {
