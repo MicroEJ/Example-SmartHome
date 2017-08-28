@@ -1,0 +1,11 @@
+com.microej.demo.smarthome.style.HomeFontLoader
+com.microej.demo.smarthome.style.HomeImageLoader
+com.microej.demo.smarthome.style.HomeImageTheme
+
+com.microej.demo.smarthome.page.SmartHomePage
+com.microej.demo.smarthome.page.DoorPage
+com.microej.demo.smarthome.page.LightPage
+com.microej.demo.smarthome.page.DashBoardPage
+com.microej.demo.smarthome.page.ThermostatPage
+com.microej.demo.smarthome.page.InformationPage
+com.microej.demo.smarthome.page.GraphPage
