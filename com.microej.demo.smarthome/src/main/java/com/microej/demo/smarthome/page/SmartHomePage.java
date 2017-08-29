@@ -15,34 +15,29 @@ import com.microej.demo.smarthome.widget.TimeWidget;
 
 import ej.mwt.MWT;
 import ej.mwt.Widget;
+import ej.widget.basic.ButtonImage;
 import ej.widget.basic.Label;
-import ej.widget.composed.ButtonImage;
 import ej.widget.container.Dock;
+import ej.widget.container.transition.SlideScreenshotTransitionContainer;
+import ej.widget.container.transition.TransitionContainer;
 import ej.widget.listener.OnClickListener;
-import ej.widget.navigation.transition.PushScreenshotTransitionManager;
 
 /**
  * The main page.
  */
 public class SmartHomePage extends MenuNavigatorPage {
 
-	private final static String[] pagesURL = {
-			DashBoardPage.class.getName(),
-			ThermostatPage.class.getName(),
-			LightPage.class.getName(),
-			DoorPage.class.getName() };
-
-	private final Dock mainDock;
+	private static final String[] PAGE_URL = { DashBoardPage.class.getName(), ThermostatPage.class.getName(),
+			LightPage.class.getName(), DoorPage.class.getName() };
 
 	private ButtonImage storeButton;
 
 	/**
-	 * Instantiates a SmartHomePage
+	 * Instantiates a SmartHomePage.
 	 */
 	public SmartHomePage() {
-		super(pagesURL);
-
-		mainDock = new Dock();
+		super(PAGE_URL);
+		Dock mainDock = new Dock();
 		mainDock.addTop(createHeader());
 		final Menu menu = initMenu();
 		menu.addClassSelector(ClassSelectors.FOOTER);
@@ -53,22 +48,16 @@ public class SmartHomePage extends MenuNavigatorPage {
 	}
 
 	private Widget createMainContent() {
-		getNavigator().addClassSelector(ClassSelectors.BODY);
-		// create navigator
-		final PushScreenshotTransitionManager manager = new PushScreenshotTransitionManager(MWT.LEFT);
-		getNavigator().setTransitionManager(manager);
-
-		manager.setDuration(300);
-
-		return getNavigator();
+		getTransitionContainer().addClassSelector(ClassSelectors.BODY);
+		return getTransitionContainer();
 	}
 
 	private Widget createHeader() {
 		final Dock dock = new Dock();
 		dock.setCenter(new Label(Strings.SMARTHOME_TITLE));
 		dock.addRight(new TimeWidget());
-		storeButton = new ButtonImage(HomeImageLoader.getAbsolutePath(Images.STORE));
-		dock.addLeft(storeButton);
+		this.storeButton = new ButtonImage(HomeImageLoader.getAbsolutePath(Images.STORE));
+		dock.addLeft(this.storeButton);
 		dock.addClassSelector(ClassSelectors.HEADER);
 		return dock;
 	}
@@ -80,6 +69,11 @@ public class SmartHomePage extends MenuNavigatorPage {
 	 *            the listener.
 	 */
 	public void addOnClickListener(final OnClickListener onClickListener) {
-		storeButton.addOnClickListener(onClickListener);
+		this.storeButton.addOnClickListener(onClickListener);
+	}
+
+	@Override
+	protected TransitionContainer createTransitionContainer() {
+		return new SlideScreenshotTransitionContainer(MWT.LEFT, false, false);
 	}
 }

@@ -10,13 +10,13 @@ import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Images;
 import com.microej.demo.smarthome.widget.ImageMenuButton;
 import com.microej.demo.smarthome.widget.Menu;
-import com.microej.demo.smarthome.widget.ToggleBox;
 
 import ej.mwt.MWT;
+import ej.widget.composed.ToggleBox;
 import ej.widget.composed.ToggleWrapper;
 import ej.widget.container.Dock;
-import ej.widget.navigation.TransitionManager;
-import ej.widget.navigation.transition.OverlapScreenshotTransitionManager;
+import ej.widget.container.transition.SlideScreenshotTransitionContainer;
+import ej.widget.container.transition.TransitionContainer;
 import ej.widget.toggle.RadioModel;
 
 /**
@@ -24,18 +24,16 @@ import ej.widget.toggle.RadioModel;
  */
 public class DashBoardPage extends MenuNavigatorPage {
 
-	private static final String[] pagesURL = { InformationPage.class.getName(), GraphPage.class.getName() };
+	private static final String[] PAGES_URL = { InformationPage.class.getName(), GraphPage.class.getName() };
 
-
+	/**
+	 * Instantiates a dashboard page.
+	 */
 	public DashBoardPage() {
-		super(pagesURL);
+		super(PAGES_URL);
 
 		final Dock mainDock = new Dock();
-		final TransitionManager manager = new OverlapScreenshotTransitionManager(MWT.BOTTOM);
-		manager.setDuration(300);
-		getNavigator().setTransitionManager(manager);
-
-		mainDock.setCenter(getNavigator());
+		mainDock.setCenter(getTransitionContainer());
 		final Menu menu = initMenu();
 		menu.addClassSelector(ClassSelectors.DASHBOARD_MENU);
 		mainDock.addTop(menu);
@@ -49,5 +47,12 @@ public class DashBoardPage extends MenuNavigatorPage {
 		final ToggleBox toggleBox = new ToggleBox(new RadioModel(), imageMenuButton);
 		toggleBox.addClassSelector(ClassSelectors.FOOTER_MENU_BUTTON);
 		return toggleBox;
+	}
+
+	@Override
+	protected TransitionContainer createTransitionContainer() {
+		SlideScreenshotTransitionContainer slideTransitionContainer = new SlideScreenshotTransitionContainer(MWT.BOTTOM,
+				true, false);
+		return slideTransitionContainer;
 	}
 }

@@ -9,8 +9,8 @@ package com.microej.demo.smarthome.widget.chart;
 import java.util.List;
 
 import com.microej.demo.smarthome.data.power.InstantPower;
-import com.microej.demo.smarthome.data.power.Power;
 import com.microej.demo.smarthome.data.power.PowerEventListener;
+import com.microej.demo.smarthome.data.power.PowerMeter;
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Strings;
 
@@ -22,10 +22,12 @@ import ej.widget.container.Scroll;
  */
 public class PowerWidget extends Wrapper implements PowerEventListener {
 
+	private static final int HOUR_IN_DAY = 24;
+
 	private static final int NUM_SCALE_VALUES = 3;
 
 	private final BasicChart chart;
-	private final Power model;
+	private final PowerMeter model;
 
 	/**
 	 * Instantiates a PowerWidget.
@@ -33,7 +35,7 @@ public class PowerWidget extends Wrapper implements PowerEventListener {
 	 * @param model
 	 *            the model.
 	 */
-	public PowerWidget(final Power model) {
+	public PowerWidget(final PowerMeter model) {
 		super();
 
 		this.model = model;
@@ -43,19 +45,24 @@ public class PowerWidget extends Wrapper implements PowerEventListener {
 		this.chart.addClassSelector(ClassSelectors.CHART);
 
 		// add chart points
-		for (int h = 0; h < 24; h++) {
-			int hour = h % 13;
-			if (h > 12) {
-				hour++;
-			}
+		for (int h = 0; h < HOUR_IN_DAY; h++) {
+			// Uncomment to use 12 hours.
+			//			int halfADay = HOUR_IN_DAY >> 1;
+			//			int hour = h % (halfADay+1);
+			//			if (h > halfADay) {
+			//				hour++;
+			//			}
 			final String name = Integer.toString(h);
-			String fullName = Integer.toString(hour) + Strings.HOUR_END;
-			if (h > 12) {
-				fullName += Strings.PM;
-			} else {
-				fullName += Strings.AM;
-			}
-			final ChartPoint point = new ChartPoint(name, fullName, -1.0f);
+			StringBuffer fullName = new StringBuffer();
+			fullName.append(Integer.toString(h)).append(Strings.HOUR_END);
+			// Uncomment to use 12 hours.
+			//			fullName.append(Integer.toString(hour)).append(Strings.HOUR_END);
+			//			if (h > halfADay) {
+			//				fullName.append(Strings.PM);
+			//			} else {
+			//				fullName.append(Strings.AM);
+			//			}
+			final ChartPoint point = new ChartPoint(name, fullName.toString(), -1.0f);
 			point.addClassSelector(ClassSelectors.CHART_POINT);
 			this.chart.addPoint(point);
 		}
@@ -78,7 +85,7 @@ public class PowerWidget extends Wrapper implements PowerEventListener {
 	}
 
 	/**
-	 * On new power data
+	 * On new power data.
 	 */
 	@Override
 	public void onInstantPower(final InstantPower instantPower) {
@@ -88,7 +95,7 @@ public class PowerWidget extends Wrapper implements PowerEventListener {
 			final Integer selectedPoint = this.chart.getSelectedPoint();
 			if (selectedPoint != null) {
 				if (selectedPoint.intValue() > 0) {
-					this.chart.selectPoint(selectedPoint.intValue() - 1);
+					this.chart.selectPoint(Integer.valueOf(selectedPoint.intValue() - 1));
 				} else {
 					this.chart.selectPoint(null);
 				}
@@ -99,12 +106,12 @@ public class PowerWidget extends Wrapper implements PowerEventListener {
 	}
 
 	/**
-	 * Reload chart points
+	 * Reload chart points.
 	 */
 	public void reload() {
 		final List<ChartPoint> points = this.chart.getPoints();
 		int index = 0;
-		for (final InstantPower instantPower : model.getPowerConsumptions()) {
+		for (final InstantPower instantPower : this.model.getPowerConsumptions()) {
 			final float value = instantPower.getPower();
 			points.get(index).setValue(value);
 			index++;
@@ -119,7 +126,7 @@ public class PowerWidget extends Wrapper implements PowerEventListener {
 	 * @see com.microej.demo.smarthome.widget.chart.BasicChart#startAnimation()
 	 */
 	public void startAnimation() {
-		chart.startAnimation();
+		this.chart.startAnimation();
 	}
 
 	/**
@@ -128,7 +135,15 @@ public class PowerWidget extends Wrapper implements PowerEventListener {
 	 * @see com.microej.demo.smarthome.widget.chart.BasicChart#stopAnimation()
 	 */
 	public void stopAnimation() {
-		chart.stopAnimation();
+		this.chart.stopAnimation();
 	}
 
+	/**
+	 * Select a point in the chart.
+	 * Used by the robot.
+	 * @param id the id of the point, null for none.
+	 */
+	public void selectPoint(Integer id) {
+		this.chart.selectPoint(id);
+	}
 }

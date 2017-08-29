@@ -26,13 +26,11 @@ public class CircleWidget extends StyledWidget {
 	@Override
 	public void renderContent(final GraphicsContext g, final Style style, final Rectangle bounds) {
 		if (isEnabled()) {
-			x = AlignmentHelper.computeXLeftCorner(diameter, 0, bounds.getWidth(),
-					style.getAlignment());
-			y = AlignmentHelper.computeYTopCorner(diameter, 0, bounds.getHeight(),
-					style.getAlignment());
-			final int innerD = diameter / 2;
-			final int innerX = x + (diameter - innerD) / 2;
-			final int innerY = y + (diameter - innerD) / 2;
+			this.x = AlignmentHelper.computeXLeftCorner(this.diameter, 0, bounds.getWidth(), style.getAlignment());
+			this.y = AlignmentHelper.computeYTopCorner(this.diameter, 0, bounds.getHeight(), style.getAlignment());
+			final int innerD = this.diameter / 2;
+			final int innerX = this.x + (this.diameter - innerD) / 2;
+			final int innerY = this.y + (this.diameter - innerD) / 2;
 			g.removeBackgroundColor();
 			g.setColor(getColor(style));
 			g.fillCircle(innerX, innerY, innerD);
@@ -49,17 +47,6 @@ public class CircleWidget extends StyledWidget {
 		}
 	}
 
-	/**
-	 * Gets the foreground color.
-	 *
-	 * @param style
-	 *            the style of the widget.
-	 * @return the foreground color to use.
-	 */
-	protected int getColor(final Style style) {
-		return style.getForegroundColor();
-	}
-
 	@Override
 	public Rectangle validateContent(final Style style, final Rectangle bounds) {
 		return new Rectangle(0, 0, getPreferredWidth(), getPreferredHeight());
@@ -67,7 +54,7 @@ public class CircleWidget extends StyledWidget {
 
 	@Override
 	public boolean contains(final int x, final int y) {
-		final int radius = diameter / 2;
+		final int radius = this.diameter / 2;
 		final int dX = x - (this.x + radius);
 		final int dY = y - (this.y + radius);
 		final int d2 = dX * dX + dY * dY;
@@ -78,6 +65,17 @@ public class CircleWidget extends StyledWidget {
 	@Override
 	public void setBounds(final int x, final int y, final int width, final int height) {
 		super.setBounds(x, y, width, height);
-		diameter = Math.min(width, height);
+		this.diameter = Math.min(width, height);
+	}
+	
+	/**
+	 * Gets the foreground color.
+	 *
+	 * @param style
+	 *            the style of the widget.
+	 * @return the foreground color to use.
+	 */
+	protected int getColor(final Style style) {
+		return style.getForegroundColor();
 	}
 }

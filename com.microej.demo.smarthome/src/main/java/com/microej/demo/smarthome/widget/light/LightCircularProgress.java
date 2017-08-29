@@ -21,7 +21,6 @@ import ej.widget.model.BoundedRangeModel;
  */
 public class LightCircularProgress extends CircularProgressWidget implements LightEventListener {
 
-	private static final int ANIMATION_DURATION = 300;
 	private final Light light;
 
 	/**
@@ -33,18 +32,14 @@ public class LightCircularProgress extends CircularProgressWidget implements Lig
 	 *            the light.
 	 */
 	public LightCircularProgress(final BoundedRangeModel model, final Light light) {
-		super(model, ANIMATION_DURATION);
+		super(model);
 		this.light = light;
-
 
 		onBrightnessChange(light.getBrightness());
 		onStateChange(light.isOn());
 		resetAnimation();
 	}
 
-	/**
-	 * Renders the widget
-	 */
 	@Override
 	public void renderContent(final GraphicsContext g, final Style style, final Rectangle bounds) {
 		// render parent
@@ -56,7 +51,7 @@ public class LightCircularProgress extends CircularProgressWidget implements Lig
 			final int innerD = getDiameter() / 2;
 			final int innerX = getCircleX() + (getDiameter() - innerD) / 2;
 			final int innerY = getCircleY() + (getDiameter() - innerD) / 2;
-			g.setColor(light.getColor());
+			g.setColor(this.light.getColor());
 			g.removeBackgroundColor();
 			g.fillCircle(innerX, innerY, innerD);
 
@@ -69,13 +64,13 @@ public class LightCircularProgress extends CircularProgressWidget implements Lig
 			// draw border
 			g.setColor(style.getBackgroundColor());
 			antiAliasedShapes.setThickness(1);
-			antiAliasedShapes.drawCircle(g, innerX-1, innerY-1, innerD+2);
+			antiAliasedShapes.drawCircle(g, innerX - 1, innerY - 1, innerD + 2);
 		}
 	}
 
 	@Override
 	protected int getColor(final Style style) {
-		return light.getColor();
+		return this.light.getColor();
 	}
 
 	@Override
@@ -100,14 +95,7 @@ public class LightCircularProgress extends CircularProgressWidget implements Lig
 	public void showNotify() {
 		super.showNotify();
 
-		light.addListener(this);
-		onBrightnessChange(light.getBrightness());
-		onStateChange(light.isOn());
-	}
-
-	@Override
-	public void hideNotify() {
-		super.hideNotify();
-		light.removeListener(this);
+		onBrightnessChange(this.light.getBrightness());
+		onStateChange(this.light.isOn());
 	}
 }

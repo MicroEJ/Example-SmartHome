@@ -13,9 +13,9 @@ import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Images;
 import com.microej.demo.smarthome.widget.DoorWidget;
 import com.microej.demo.smarthome.widget.ImageMenuButton;
-import com.microej.demo.smarthome.widget.ToggleBox;
 
 import ej.components.dependencyinjection.ServiceLoaderFactory;
+import ej.widget.composed.ToggleBox;
 import ej.widget.composed.ToggleWrapper;
 import ej.widget.toggle.RadioModel;
 

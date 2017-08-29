@@ -6,18 +6,25 @@
  */
 package com.microej.demo.smarthome.data.light;
 
-import com.microej.demo.smarthome.data.ElementListener;
-
 /**
- *
+ * A listener for the lights events.
  */
-public interface LightEventListener extends ElementListener {
+public interface LightEventListener  {
+	/**
+	 * Call back function when the color changes.
+	 * @param color the new color.
+	 */
 	void onColorChange(int color);
 
+	/**
+	 * Call back function when the brightness changes.
+	 * @param brightness the new brightness.
+	 */
 	void onBrightnessChange(float brightness);
 
 	/**
-	 * @param on
+	 * Call back function when the light state changes.
+	 * @param on the new state.
 	 */
 	void onStateChange(boolean on);
 }

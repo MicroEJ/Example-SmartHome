@@ -16,25 +16,25 @@ import ej.widget.StyledComposite;
  */
 public abstract class Chart extends StyledComposite {
 
-	/**
+	/**.
 	 * Values
 	 */
 	private static final int DEFAULT_NUM_SCALE_VALUES = 1;
 	private static final float DEFAULT_MAX_SCALE_VALUE = 100.0f;
 	/**
-	 * Points
+	 * Points.
 	 */
 	private final List<ChartPoint> points;
 	private Integer selectedPointIndex;
 
 	/**
-	 * Scale
+	 * Scale.
 	 */
 	private int numScaleValues;
 	private float maxScaleValue;
 
 	/**
-	 * Unit
+	 * Unit.
 	 */
 	private String unit;
 
@@ -50,7 +50,7 @@ public abstract class Chart extends StyledComposite {
 	}
 
 	/**
-	 * Adds a point
+	 * Adds a point.
 	 *
 	 * @param chartPoint
 	 *            the point to add
@@ -61,7 +61,7 @@ public abstract class Chart extends StyledComposite {
 	}
 
 	/**
-	 * Removes all points
+	 * Removes all points.
 	 */
 	public void removeAllPoints() {
 		this.points.clear();
@@ -69,7 +69,7 @@ public abstract class Chart extends StyledComposite {
 	}
 
 	/**
-	 * Selects one of the points
+	 * Selects one of the points.
 	 *
 	 * @param pointIndex
 	 *            the index of the point to select
@@ -99,7 +99,7 @@ public abstract class Chart extends StyledComposite {
 	}
 
 	/**
-	 * Gets the list of points
+	 * Gets the list of points.
 	 *
 	 * @return the list of points
 	 */
@@ -108,7 +108,7 @@ public abstract class Chart extends StyledComposite {
 	}
 
 	/**
-	 * Gets the selected point
+	 * Gets the selected point.
 	 *
 	 * @return the index of the currently selected point
 	 */
@@ -117,7 +117,7 @@ public abstract class Chart extends StyledComposite {
 	}
 
 	/**
-	 * Sets the scale
+	 * Sets the scale.
 	 *
 	 * @param numScaleValues
 	 *            the number of values to show on the scale
@@ -131,7 +131,8 @@ public abstract class Chart extends StyledComposite {
 	}
 
 	/**
-	 * Gets the number of scale values
+	 * Gets the number of scale values.
+	 * 
 	 * @return the number of values to show on the scale
 	 */
 	public int getNumScaleValues() {
@@ -139,7 +140,8 @@ public abstract class Chart extends StyledComposite {
 	}
 
 	/**
-	 * Gets the maximum value of the scale
+	 * Gets the maximum value of the scale.
+	 * 
 	 * @return the maximum value of the scale
 	 */
 	public float getMaxScaleValue() {
@@ -147,7 +149,7 @@ public abstract class Chart extends StyledComposite {
 	}
 
 	/**
-	 * Sets the unit
+	 * Sets the unit.
 	 *
 	 * @param unit
 	 *            the unit string
@@ -158,7 +160,7 @@ public abstract class Chart extends StyledComposite {
 	}
 
 	/**
-	 * Gets the unit
+	 * Gets the unit.
 	 *
 	 * @return the unit string
 	 */

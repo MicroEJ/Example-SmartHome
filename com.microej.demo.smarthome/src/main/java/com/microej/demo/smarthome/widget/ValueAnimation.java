@@ -24,8 +24,6 @@ public class ValueAnimation implements Motion, Animation {
 	private final float valueProgress;
 	private long lastTick;
 
-
-
 	/**
 	 * Instantiates a ValueAnimation.
 	 *
@@ -81,26 +79,26 @@ public class ValueAnimation implements Motion, Animation {
 
 	@Override
 	public boolean tick(final long currentTimeMillis) {
-		if (targetValue == currentValue) {
+		if (this.targetValue == this.currentValue) {
 			return false;
 		}
-		if (targetValue > currentValue) {
-			currentValue = Math.min(targetValue, currentValue + getValueProgress(currentTimeMillis));
+		if (this.targetValue > this.currentValue) {
+			this.currentValue = Math.min(this.targetValue, this.currentValue + getValueProgress(currentTimeMillis));
 		} else /* if (targetValue < currentValue) */ {
-			currentValue = Math.max(targetValue, currentValue - getValueProgress(currentTimeMillis));
+			this.currentValue = Math.max(this.targetValue, this.currentValue - getValueProgress(currentTimeMillis));
 		}
 		return true;
 	}
 
 	private int getValueProgress(final long currentTimeMillis) {
-		final long elapsed = currentTimeMillis - lastTick;
-		lastTick = currentTimeMillis;
-		return (int) (elapsed * valueProgress);
+		final long elapsed = currentTimeMillis - this.lastTick;
+		this.lastTick = currentTimeMillis;
+		return (int) (elapsed * this.valueProgress);
 	}
 
 	@Override
 	public boolean isFinished() {
-		return currentValue==targetValue;
+		return this.currentValue == this.targetValue;
 	}
 
 	/**
@@ -109,7 +107,7 @@ public class ValueAnimation implements Motion, Animation {
 	 * @return the targetValue.
 	 */
 	public int getTargetValue() {
-		return targetValue;
+		return this.targetValue;
 	}
 
 	/**
@@ -124,7 +122,7 @@ public class ValueAnimation implements Motion, Animation {
 
 	@Override
 	public int getCurrentValue() {
-		return currentValue;
+		return this.currentValue;
 	}
 
 	@Override
@@ -145,7 +143,7 @@ public class ValueAnimation implements Motion, Animation {
 	 *            the currentTime.
 	 */
 	public void start(final long currentTimeMillis) {
-		lastTick = currentTimeMillis;
+		this.lastTick = currentTimeMillis;
 
 	}
 
@@ -153,18 +151,18 @@ public class ValueAnimation implements Motion, Animation {
 	 * Reset the animation.
 	 */
 	public void reset() {
-		currentValue = start;
+		this.currentValue = this.start;
 
 	}
 
 	@Override
 	public int getStartValue() {
-		return start;
+		return this.start;
 	}
 
 	@Override
 	public int getStopValue() {
-		return targetValue;
+		return this.targetValue;
 	}
 
 	@Override
@@ -176,7 +174,7 @@ public class ValueAnimation implements Motion, Animation {
 	 * Stops the animation.
 	 */
 	public void stop() {
-		currentValue = targetValue;
+		this.currentValue = this.targetValue;
 
 	}
 
@@ -187,7 +185,7 @@ public class ValueAnimation implements Motion, Animation {
 	 *            the start value to set.
 	 */
 	public void setStart(final int value) {
-		start = value;
+		this.start = value;
 	}
 
 }

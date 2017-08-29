@@ -32,7 +32,7 @@ public class ThermostatBoundedRangeModel extends DefaultBoundedRangeModel implem
 	public ThermostatBoundedRangeModel(final Thermostat thermostat) {
 		super(thermostat.getMinTemperature(), thermostat.getMaxTemperature(), thermostat.getTemperature());
 		this.thermostat = thermostat;
-		listeners = new ArrayList<>();
+		this.listeners = new ArrayList<>();
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class ThermostatBoundedRangeModel extends DefaultBoundedRangeModel implem
 
 	@Override
 	public void onTargetTemperatureChange(final int targetTemperature) {
-		for (final OnValueChangeListener onValueChangeListener : listeners) {
+		for (final OnValueChangeListener onValueChangeListener : this.listeners) {
 			onValueChangeListener.onValueChange(targetTemperature);
 		}
 	}
@@ -55,11 +55,11 @@ public class ThermostatBoundedRangeModel extends DefaultBoundedRangeModel implem
 	 *            target temperature.
 	 */
 	public void setTargetValue(int target) {
-		if (thermostat.getTargetTemperature() != target) {
+		if (this.thermostat.getTargetTemperature() != target) {
 			target = Math.max(getMinimum(), target);
 			target = Math.min(getMaximum(), target);
-			thermostat.setTargetTemperature(target);
-			for (final OnValueChangeListener onValueChangeListener : listeners) {
+			this.thermostat.setTargetTemperature(target);
+			for (final OnValueChangeListener onValueChangeListener : this.listeners) {
 				onValueChangeListener.onValueChange(target);
 			}
 		}
@@ -71,7 +71,7 @@ public class ThermostatBoundedRangeModel extends DefaultBoundedRangeModel implem
 	 * @return the target temperature.
 	 */
 	public int getTargetValue() {
-		return thermostat.getTargetTemperature();
+		return this.thermostat.getTargetTemperature();
 	}
 
 	/**
@@ -79,11 +79,11 @@ public class ThermostatBoundedRangeModel extends DefaultBoundedRangeModel implem
 	 *
 	 * @param listener
 	 *            the listener.
-	 * @return
+	 * @return true (as specified by {@link List#add(Object)})
 	 * @see java.util.List#add(java.lang.Object)
 	 */
 	public boolean addOnTargetValueChangeListener(final OnValueChangeListener listener) {
-		return listeners.add(listener);
+		return this.listeners.add(listener);
 	}
 
 	/**
@@ -91,24 +91,24 @@ public class ThermostatBoundedRangeModel extends DefaultBoundedRangeModel implem
 	 *
 	 * @param listener
 	 *            the listener.
-	 * @return
+	 * @return true (as specified by {@link List#remove(Object)})
 	 * @see java.util.List#remove(java.lang.Object)
 	 */
 	public boolean removeOnTargetValueChangeListener(final OnValueChangeListener listener) {
-		return listeners.remove(listener);
+		return this.listeners.remove(listener);
 	}
 
 	/**
 	 * Registers the model as a listener of the thermostat.
 	 */
 	public void register() {
-		thermostat.addListener(this);
+		this.thermostat.addListener(this);
 	}
 
 	/**
 	 * Unregisters the model as a listener of the thermostat.
 	 */
 	public void unregister() {
-		thermostat.removeListener(this);
+		this.thermostat.removeListener(this);
 	}
 }

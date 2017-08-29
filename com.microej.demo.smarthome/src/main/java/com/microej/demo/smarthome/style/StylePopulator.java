@@ -40,7 +40,11 @@ public class StylePopulator {
 	private static final int HALF_OUTLINE = SIMPLE_OUTLINE / 2;
 	private static final int DOUBLE_OUTLINE = SIMPLE_OUTLINE * 2;
 
-
+	
+	private StylePopulator(){
+		// Forbid instantiation.
+	}
+	
 	/**
 	 * Initialize the stylesheet.
 	 */
@@ -71,7 +75,6 @@ public class StylePopulator {
 			stylesheet.setDefaultStyle(defaultStyle);
 		}
 
-
 		{ // Header
 			final EditableStyle headerStyle = new EditableStyle();
 			headerStyle.setForegroundColor(Colors.WHITE);
@@ -91,8 +94,7 @@ public class StylePopulator {
 
 			final EditableStyle footerStyle = new EditableStyle();
 			footerStyle.setBackground(plainBackground);
-			footerStyle.setPadding(
-					new ComplexOutline(SIMPLE_OUTLINE, SIMPLE_OUTLINE, SIMPLE_OUTLINE, DOUBLE_OUTLINE));
+			footerStyle.setPadding(new ComplexOutline(SIMPLE_OUTLINE, SIMPLE_OUTLINE, SIMPLE_OUTLINE, DOUBLE_OUTLINE));
 			footerStyle.setForegroundColor(Colors.CONCRETE_25);
 			footerStyle.setBackgroundColor(Colors.WHITE);
 			stylesheet.addRule(footerClassSelector, footerStyle);
@@ -101,10 +103,8 @@ public class StylePopulator {
 		{ // Active footer button
 			final EditableStyle activeFooterStyle = new EditableStyle();
 			activeFooterStyle.setForegroundColor(Colors.CORAL);
-			stylesheet.addRule(
-					new AndCombinator(new ClassSelector(ClassSelectors.FOOTER_MENU_BUTTON),
-							new StateSelector(State.Checked)),
-					activeFooterStyle);
+			stylesheet.addRule(new AndCombinator(new ClassSelector(ClassSelectors.FOOTER_MENU_BUTTON),
+					new StateSelector(State.Checked)), activeFooterStyle);
 		}
 
 		{ // Body
@@ -153,7 +153,7 @@ public class StylePopulator {
 				pickerTitleStyle.setForegroundColor(Colors.CONCRETE_25);
 				pickerTitleStyle.setAlignment(GraphicsContext.LEFT | GraphicsContext.VCENTER);
 				pickerTitleStyle
-				.setPadding(new ComplexOutline(SIMPLE_OUTLINE, DOUBLE_OUTLINE, SIMPLE_OUTLINE, DOUBLE_OUTLINE));
+						.setPadding(new ComplexOutline(SIMPLE_OUTLINE, DOUBLE_OUTLINE, SIMPLE_OUTLINE, DOUBLE_OUTLINE));
 				stylesheet.addRule(new ClassSelector(ClassSelectors.PICKER_TITLE_LABEL), pickerTitleStyle);
 			}
 
@@ -162,7 +162,7 @@ public class StylePopulator {
 				pickerCloseStyle.setForegroundColor(Colors.CORAL);
 				pickerCloseStyle.setAlignment(GraphicsContext.RIGHT | GraphicsContext.VCENTER);
 				pickerCloseStyle
-				.setPadding(new ComplexOutline(SIMPLE_OUTLINE, DOUBLE_OUTLINE, SIMPLE_OUTLINE, DOUBLE_OUTLINE));
+						.setPadding(new ComplexOutline(SIMPLE_OUTLINE, DOUBLE_OUTLINE, SIMPLE_OUTLINE, DOUBLE_OUTLINE));
 				stylesheet.addRule(new ClassSelector(ClassSelectors.PICKER_CLOSE_BUTTON), pickerCloseStyle);
 			}
 
@@ -220,14 +220,12 @@ public class StylePopulator {
 				{ // Color fo Desired
 					final EditableStyle coralLabel = new EditableStyle();
 					coralLabel.setForegroundColor(Colors.CORAL);
-					stylesheet.addRule(new ClassSelector(ClassSelectors.COLOR_CORAL),
-							coralLabel);
+					stylesheet.addRule(new ClassSelector(ClassSelectors.COLOR_CORAL), coralLabel);
 					stylesheet.addRule(new AndCombinator(new ClassSelector(ClassSelectors.DASHBOARD_LIGHT_COUNT),
-							new StateSelector(State.Enabled)),
-							coralLabel);
+							new StateSelector(State.Enabled)), coralLabel);
 				}
 
-				{ // Color fo blue
+				{ // Color for blue
 					final EditableStyle coralLabel = new EditableStyle();
 					coralLabel.setForegroundColor(Colors.LIGHT_BLUE);
 					stylesheet.addRule(new ClassSelector(ClassSelectors.THERMOSTAT_DESIRED_COLD), coralLabel);
@@ -244,8 +242,7 @@ public class StylePopulator {
 				{ // Diff Value
 					final EditableStyle thermostatDiffValue = new EditableStyle();
 					thermostatDiffValue.setAlignment(GraphicsContext.RIGHT | GraphicsContext.TOP);
-					stylesheet.addRule(new ClassSelector(ClassSelectors.THERMOSTAT_DIFF_VALUE),
-							thermostatDiffValue);
+					stylesheet.addRule(new ClassSelector(ClassSelectors.THERMOSTAT_DIFF_VALUE), thermostatDiffValue);
 				}
 
 				{ // Diff Value degree
@@ -278,8 +275,7 @@ public class StylePopulator {
 				dashBoardActiveMenuStyle.setMargin(new ComplexOutline(0, DOUBLE_OUTLINE, 0, DOUBLE_OUTLINE));
 				dashBoardActiveMenuStyle.setBorder(new SimpleRoundedBorder(12, 1));
 				dashBoardActiveMenuStyle.setBorderColor(Colors.WHITE);
-				stylesheet.addRule(menuButtonSelector,
-						dashBoardActiveMenuStyle);
+				stylesheet.addRule(menuButtonSelector, dashBoardActiveMenuStyle);
 			}
 
 			{ // menu
@@ -287,8 +283,7 @@ public class StylePopulator {
 				dashBoardActiveMenuStyle.setBackground(new SimpleRoundedPlainBackground(14));
 				dashBoardActiveMenuStyle.setBackgroundColor(Colors.WHITE);
 				dashBoardActiveMenuStyle.setForegroundColor(Colors.CORAL);
-				stylesheet.addRule(new AndCombinator(menuButtonSelector,
-						new StateSelector(State.Checked)),
+				stylesheet.addRule(new AndCombinator(menuButtonSelector, new StateSelector(State.Checked)),
 						dashBoardActiveMenuStyle);
 			}
 
@@ -317,7 +312,8 @@ public class StylePopulator {
 				powerConsumptionStyle.setFontProfile(fpXLarge);
 				powerConsumptionStyle.setAlignment(GraphicsContext.RIGHT | GraphicsContext.VCENTER);
 				powerConsumptionStyle.setForegroundColor(Colors.CORAL);
-				stylesheet.addRule(new ClassSelector(ClassSelectors.DASHBOARD_POWER_CONSUMPTION), powerConsumptionStyle);
+				stylesheet.addRule(new ClassSelector(ClassSelectors.DASHBOARD_POWER_CONSUMPTION),
+						powerConsumptionStyle);
 			}
 
 			{ // Instant Power Bar

@@ -6,22 +6,24 @@
  */
 package com.microej.demo.smarthome.page;
 
-import com.microej.demo.smarthome.Main;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.microej.demo.smarthome.data.ProviderListener;
 import com.microej.demo.smarthome.data.light.Light;
 import com.microej.demo.smarthome.data.light.LightProvider;
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Images;
 import com.microej.demo.smarthome.widget.ImageMenuButton;
-import com.microej.demo.smarthome.widget.ToggleBox;
 import com.microej.demo.smarthome.widget.light.LightWidget;
 
 import ej.components.dependencyinjection.ServiceLoaderFactory;
 import ej.mwt.Widget;
+import ej.widget.animation.AnimationListener;
+import ej.widget.animation.AnimationListenerRegistry;
+import ej.widget.composed.ToggleBox;
 import ej.widget.composed.ToggleWrapper;
 import ej.widget.container.Grid;
-import ej.widget.navigation.TransitionListener;
-import ej.widget.navigation.TransitionManager;
 import ej.widget.toggle.RadioModel;
 
 /**
@@ -29,45 +31,21 @@ import ej.widget.toggle.RadioModel;
  */
 public class LightPage extends DevicePage<Light> implements ProviderListener<Light> {
 
-	private final TransitionListener transitionListener;
 	private Thread animationThread;
+	private List<Light> lights;
 
 	/**
 	 * Instantiates a LightPage.
 	 */
 	public LightPage() {
+		this.lights = new ArrayList<>();
 		final LightProvider provider = ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class);
 		provider.addListener(this);
 		final Light[] list = provider.list();
 		for (final Light light : list) {
 			newElement(light);
 		}
-
-		transitionListener = new TransitionListener() {
-
-			@Override
-			public void onTransitionStart(final TransitionManager transitionManager) {
-				if (devicesMap.size() > 0) {
-					stopAnimation();
-				}
-				// Doesn't reset the animation when the color picker opens.
-				if (transitionManager.getNavigator() != Main.getNavigator()) {
-					for (final Widget widget : devicesMap.values()) {
-						final LightWidget lightWidget = (LightWidget) widget;
-						lightWidget.resetAnimation();
-					}
-				}
-
-			}
-
-			@Override
-			public void onTransitionStop(final TransitionManager manager) {
-				if (isShown() && devicesMap.size() > 0) {
-					startAnimation();
-				}
-
-			}
-		};
+		
 	}
 
 	@Override
@@ -80,6 +58,7 @@ public class LightPage extends DevicePage<Light> implements ProviderListener<Lig
 
 	@Override
 	public void newElement(final Light element) {
+		this.lights.add(element);
 		final LightWidget device = new LightWidget(element);
 		addDevice(element, device);
 		if (isShown()) {
@@ -90,35 +69,36 @@ public class LightPage extends DevicePage<Light> implements ProviderListener<Lig
 
 	@Override
 	public void removeElement(final Light element) {
+		this.lights.remove(element);
 		removeDevice(element);
 	}
 
 	@Override
 	public void showNotify() {
-		TransitionManager.addTransitionListener(transitionListener);
+		startAnimation();
 		super.showNotify();
 	}
 
 	@Override
 	public void hideNotify() {
+		stopAnimation();
 		super.hideNotify();
-		TransitionManager.removeTransitionListener(transitionListener);
 	}
 
 	private synchronized void startAnimation() {
-		if (animationThread == null) {
+		if (this.animationThread == null) {
 			stopAnimation();
 			final Widget[] widgets = ((Grid) getWidget(0)).getWidgets();
 			final SequentialAnimation animation = new SequentialAnimation(widgets);
-			animationThread = new Thread(animation);
-			animationThread.start();
+			this.animationThread = new Thread(animation);
+			this.animationThread.start();
 		}
 	}
 
 	private synchronized void stopAnimation() {
-		if (animationThread != null) {
-			animationThread.interrupt();
-			animationThread = null;
+		if (this.animationThread != null) {
+			this.animationThread.interrupt();
+			this.animationThread = null;
 		}
 	}
 
@@ -127,28 +107,82 @@ public class LightPage extends DevicePage<Light> implements ProviderListener<Lig
 		private final Widget[] widgets;
 
 		/**
-		 * @param widgets
+		 * Instantiates a SequentialAnimation.
+		 * @param widgets the widgets.
 		 */
-		public SequentialAnimation(final Widget[] widgets) {
-			this.widgets = widgets;
+		SequentialAnimation(final Widget[] widgets) {
+			this.widgets = widgets.clone();
 		}
 
 		@Override
 		public void run() {
-			for (int i = 0; i < widgets.length; i++) {
-				final LightWidget lightWidget = (LightWidget) widgets[i];
+			for (int i = 0; i < this.widgets.length; i++) {
+				final LightWidget lightWidget = (LightWidget) this.widgets[i];
 				if (lightWidget.isEnabled()) {
 					lightWidget.startAnimation();
 					synchronized (lightWidget) {
 						try {
 							lightWidget.wait();
 						} catch (final InterruptedException e) {
+							// When interrupted, stop the thread.
 							return;
 						}
 					}
 				}
 			}
-			animationThread = null;
+			LightPage.this.animationThread = null;
 		}
+	}
+
+	/**
+	 * Counts the number of available lights.
+	 * Used by the robot.
+	 * @return the number of available lights.
+	 */
+	public int countLights() {
+		return this.devicesMap.size();
+	}
+
+	/**
+	 * Checks if a light is on.
+	 * Used by the robot.
+	 * @param lightId the light id.
+	 * @return true if the light is on.
+	 */
+	public boolean isLightOn(int lightId) {
+		return this.lights.get(lightId).isOn();
+	}
+
+	/**
+	 * Sets the brightness of a light.
+	 * Used by the robot.
+	 * @param lightId the light id.
+	 * @param brightness the brightness.
+	 */
+	public void setLightBrightness(int lightId, float brightness) {
+		this.lights.get(lightId).setBrightness(brightness);
+		
+	}
+
+	/**
+	 * Switches on a light.
+	 * Used by the robot.
+	 * @param lightId the light id.
+	 * @param on the new state.
+	 */
+	public void switchOn(int lightId, boolean on) {
+		this.lights.get(lightId).switchOn(on);
+		
+	}
+
+	/**
+	 * Opens the color picker of a light.
+	 * Used by the robot.
+	 * @param lightId the light id.
+	 */
+	public void openColorPicker(int lightId) {
+		LightWidget widget = (LightWidget) this.devicesMap.get(this.lights.get(lightId));
+		widget.openColorPicker();
+		
 	}
 }

@@ -34,7 +34,7 @@ public class LightCircleWidget extends CircleWidget implements LightEventListene
 
 	@Override
 	protected int getColor(final Style style) {
-		return light.getColor();
+		return this.light.getColor();
 	}
 
 	@Override
@@ -58,14 +58,14 @@ public class LightCircleWidget extends CircleWidget implements LightEventListene
 	@Override
 	public void showNotify() {
 		super.showNotify();
-		light.addListener(this);
-		setEnabled(light.isOn());
+		this.light.addListener(this);
+		setEnabled(this.light.isOn());
 	}
 
 	@Override
 	public void hideNotify() {
 		super.hideNotify();
-		light.removeListener(this);
+		this.light.removeListener(this);
 	}
 
 }

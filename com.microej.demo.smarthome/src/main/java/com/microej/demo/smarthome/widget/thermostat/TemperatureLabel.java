@@ -16,10 +16,12 @@ import ej.widget.composed.ButtonWrapper;
  */
 public class TemperatureLabel extends ButtonWrapper {
 
+	private static final int FAR_BASE = 32;
+	private static final double FAR_RATIO = 1.8;
+	private static final int TEMPERATURE_FACTOR = 10;
 	private final MaxWidthLabel label;
 	private boolean celsius = false;
 	private int temperature;
-
 
 	/**
 	 * Instatiate a TemperatureLabel.
@@ -29,10 +31,9 @@ public class TemperatureLabel extends ButtonWrapper {
 	 */
 	public TemperatureLabel(final int maxTemperature) {
 		super();
-		label = new MaxWidthLabel(toTemperatureString(convert(maxTemperature, false)));
-		setWidget(label);
+		this.label = new MaxWidthLabel(toTemperatureString(convert(maxTemperature, false)));
+		setWidget(this.label);
 	}
-
 
 	/**
 	 * Instatiate a TemperatureLabel.
@@ -60,8 +61,8 @@ public class TemperatureLabel extends ButtonWrapper {
 	}
 
 	private void updateText() {
-		final String temperatureString = toTemperatureString(convert(temperature, celsius));
-		label.setText(temperatureString);
+		final String temperatureString = toTemperatureString(convert(this.temperature, this.celsius));
+		this.label.setText(temperatureString);
 	}
 
 	/**
@@ -73,17 +74,17 @@ public class TemperatureLabel extends ButtonWrapper {
 	 *            true if the target temperature is in celsius, false if the target temperature is in F.
 	 * @return
 	 */
-	private int convert(final int temperature, final boolean celsius) {
+	private static int convert(final int temperature, final boolean celsius) {
 		if (celsius) {
 			return temperature;
 		}
-		return (int) (temperature * 1.8 + 32);
+		return (int) (temperature * FAR_RATIO + FAR_BASE);
 	}
 
 	private String toTemperatureString(final int temperature) {
 		final StringBuilder builder = new StringBuilder();
-		builder.append((temperature + 5) / 10);
-		if (celsius) {
+		builder.append((temperature + 5) / TEMPERATURE_FACTOR);
+		if (this.celsius) {
 			builder.append(Strings.DEGREE_CELSIUS);
 		} else {
 			builder.append(Strings.DEGREE_FAHRENHEIT);
@@ -92,28 +93,27 @@ public class TemperatureLabel extends ButtonWrapper {
 	}
 
 	@Override
-	public void performClick() {
-		super.performClick();
-		celsius = !celsius;
-		updateText();
-	}
-
-	@Override
 	public void addClassSelector(final String classSelector) {
 		super.addClassSelector(classSelector);
-		label.addClassSelector(classSelector);
+		this.label.addClassSelector(classSelector);
 	}
 
 	@Override
 	public void removeClassSelector(final String classSelector) {
 		super.removeClassSelector(classSelector);
-		label.removeClassSelector(classSelector);
+		this.label.removeClassSelector(classSelector);
 	}
 
 	@Override
 	public void removeAllClassSelectors() {
 		super.removeAllClassSelectors();
-		label.removeAllClassSelectors();
+		this.label.removeAllClassSelectors();
 
+	}
+
+	@Override
+	public void onClick() {
+		this.celsius = !this.celsius;
+		updateText();
 	}
 }

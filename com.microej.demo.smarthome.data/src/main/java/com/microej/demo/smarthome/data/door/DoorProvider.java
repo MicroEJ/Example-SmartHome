@@ -9,8 +9,8 @@ package com.microej.demo.smarthome.data.door;
 import com.microej.demo.smarthome.data.Provider;
 
 /**
- *
+ * Provides a list of registered doors.
  */
 public interface DoorProvider extends Provider<Door> {
-
+	// Used for service loader.
 }

@@ -8,9 +8,9 @@ package com.microej.demo.smarthome.widget.light;
 
 import com.microej.demo.smarthome.Main;
 import com.microej.demo.smarthome.data.light.Light;
+import com.microej.demo.smarthome.data.light.LightEventListener;
 import com.microej.demo.smarthome.page.ColorPickerPage;
 import com.microej.demo.smarthome.style.ClassSelectors;
-import com.microej.demo.smarthome.widget.ColorPicker;
 import com.microej.demo.smarthome.widget.DeviceWidget;
 import com.microej.demo.smarthome.widget.LimitedButtonWrapper;
 import com.microej.demo.smarthome.widget.OnAnimationEndListener;
@@ -29,14 +29,14 @@ import ej.widget.toggle.ToggleModel;
 /**
  * A widget displaying the state of a light.
  */
-public class LightWidget extends DeviceWidget<Light>
-implements OnStateChangeListener, OnAnimationEndListener {
+public class LightWidget extends DeviceWidget<Light> implements OnStateChangeListener, OnAnimationEndListener, LightEventListener, OnValueChangeListener {
 
 	/**
-	 * Attributes
+	 * Attributes.
 	 */
 	private final LightCircularProgress progress;
 	private final ImageSwitch switchButton;
+	private boolean isChangingState;
 
 	/**
 	 * Instantiates a LightWidget.
@@ -46,36 +46,18 @@ implements OnStateChangeListener, OnAnimationEndListener {
 	 */
 	public LightWidget(final Light light) {
 		super(light);
+		
 		addClassSelector(ClassSelectors.LIGHT_WIDGET);
 
 		final OverlapComposite overlapingComposite = new OverlapComposite();
 		// circular progress
 		final BoundedRangeModel boundedRange = new DefaultBoundedRangeModel(0, 1000, 0);
-		progress = new LightCircularProgress(boundedRange, light);
-		progress.resetAnimation();
+		this.progress = new LightCircularProgress(boundedRange, light);
+		this.progress.resetAnimation();
 
-		progress.addOnValueChangeListener(new OnValueChangeListener() {
+		this.progress.addClassSelector(ClassSelectors.LIGHT_PROGRESS);
 
-			@Override
-			public void onValueChange(final int newValue) {
-				light.setBrightness(progress.getPercentComplete());
-
-			}
-
-			@Override
-			public void onMinimumValueChange(final int newMinimum) {
-			}
-
-			@Override
-			public void onMaximumValueChange(final int newMaximum) {
-			}
-		});
-
-		progress.addClassSelector(ClassSelectors.LIGHT_PROGRESS);
-		progress.setOnAnimationEndListener(this);
-
-		overlapingComposite.add(progress);
-
+		overlapingComposite.add(this.progress);
 
 		final ButtonWrapper circularButton = new LimitedButtonWrapper();
 		final LightCircleWidget lightCircleWidget = new LightCircleWidget(light);
@@ -95,10 +77,10 @@ implements OnStateChangeListener, OnAnimationEndListener {
 		final ToggleModel toggle = new ToggleModel(light.isOn());
 		toggle.addOnStateChangeListener(this);
 		final ToggleWrapper wrapper = new ToggleWrapper(toggle);
-		switchButton = new ImageSwitch();
-		switchButton.setChecked(light.isOn());
+		this.switchButton = new ImageSwitch();
+		this.switchButton.setChecked(light.isOn());
 		wrapper.addClassSelector(ClassSelectors.LIGHT_PROGRESS);
-		wrapper.setWidget(switchButton);
+		wrapper.setWidget(this.switchButton);
 
 		// place widgets
 		addBottom(wrapper);
@@ -106,61 +88,63 @@ implements OnStateChangeListener, OnAnimationEndListener {
 
 	@Override
 	public boolean isEnabled() {
-		return model.isOn();
+		return this.model.isOn();
 	}
 
 	/**
-	 * Handle state change event
+	 * Handle state change event.
 	 */
 	@Override
-	public void onStateChange(final boolean on) {
-		if (on != model.isOn()) {
+	public synchronized void onStateChange(final boolean on) {
+		if (!this.isChangingState && (on != this.model.isOn() || this.switchButton.isChecked()!=on)) {
+			this.isChangingState = true;
 			if (on) {
-				progress.resetAnimation();
-				progress.startAnimation();
+				this.progress.resetAnimation();
+				this.progress.startAnimation();
 			}
-			switchButton.setChecked(on);
-			model.switchOn(on);
+			this.switchButton.setChecked(on);
+			this.model.switchOn(on);
 		}
+		this.isChangingState = false;
 	}
 
 	/**
-	 * Changes light color
+	 * Changes light color.
 	 */
-	private void openColorPicker() {
+	// Public to provide access to robot.
+	public void openColorPicker() {
 		// calculate animation source position
-		final int sourceX = progress.getAbsoluteX() + progress.getWidth() / 2;
-		final int sourceY = progress.getAbsoluteY() + progress.getHeight() / 2;
+		final int sourceX = this.progress.getAbsoluteX() + this.progress.getWidth() / 2;
+		final int sourceY = this.progress.getAbsoluteY() + this.progress.getHeight() / 2;
 
 		// create color picker
-		Main.getTransitionManager().setTarget(sourceX, sourceY);
+
+		Main.SetAnchor(sourceX, sourceY);
 
 		// create dialog
-		final ColorPickerPage page = new ColorPickerPage(model);
-		final ColorPicker colorPicker = page.getColorPicker();
-		// colorPicker.addOnValueChangeListener(listener);
-		Main.getNavigator().show(page, true);
+		final ColorPickerPage page = new ColorPickerPage(this.model);
+		Main.Show(page, true);
 	}
 
 	/**
 	 * Starts the animation.
 	 */
 	public void startAnimation() {
-		progress.startAnimation();
+		this.progress.startAnimation();
 	}
 
 	/**
 	 * Resets the animation.
 	 */
 	public void resetAnimation() {
-		progress.resetAnimation();
+		this.progress.resetAnimation();
 	}
 
 	/**
 	 * Stops the animation.
 	 */
 	public void stopAnimation() {
-		progress.stopAnimation();
+		this.progress.stopAnimation();
 	}
 
 	@Override
@@ -169,4 +153,53 @@ implements OnStateChangeListener, OnAnimationEndListener {
 			notify();
 		}
 	}
+	
+	@Override
+	public void showNotify() {
+		this.model.addListener(this);
+		this.progress.addOnValueChangeListener(this);
+		this.progress.setOnAnimationEndListener(this);
+		boolean on = this.model.isOn();
+		this.switchButton.setChecked(on);
+		this.model.switchOn(on);
+		super.showNotify();
+	}
+	
+	@Override
+	public void hideNotify() {
+		this.model.removeListener(this);
+		this.progress.removeOnValueChangeListener(this);
+		this.progress.setOnAnimationEndListener(null);
+		super.hideNotify();
+	}
+
+	@Override
+	public void onColorChange(int color) {
+		// Nothing to do.
+		
+	}
+
+	@Override
+	public void onBrightnessChange(float brightness) {
+		this.progress.setValue((int)((this.progress.getMaximum()-this.progress.getMinimum())*brightness+this.progress.getMinimum()));
+	}
+
+	@Override
+	public void onValueChange(int newValue) {
+		this.model.setBrightness(LightWidget.this.progress.getPercentComplete());
+		
+	}
+
+	@Override
+	public void onMaximumValueChange(int newMaximum) {
+		// Nothing to do.
+		
+	}
+
+	@Override
+	public void onMinimumValueChange(int newMinimum) {
+		// Nothing to do.
+		
+	}
+	
 }

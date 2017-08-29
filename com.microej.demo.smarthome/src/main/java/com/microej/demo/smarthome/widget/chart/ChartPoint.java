@@ -10,12 +10,12 @@ import ej.style.Element;
 import ej.style.util.ElementAdapter;
 
 /**
- * Represents a point of a Chart
+ * Represents a point of a Chart.
  */
 public class ChartPoint extends ElementAdapter {
 
 	/**
-	 * Attributes
+	 * Attributes.
 	 */
 	private String name;
 	private String fullName;
@@ -23,13 +23,14 @@ public class ChartPoint extends ElementAdapter {
 	private Element parentElement;
 
 	/**
-	 * Constructor
+	 * Constructor.
+	 * 
 	 * @param name
-	 *          the name.
+	 *            the name.
 	 * @param fullName
-	 *          the full name.
+	 *            the full name.
 	 * @param value
-	 *          the value.
+	 *            the value.
 	 */
 	public ChartPoint(final String name, final String fullName, final float value) {
 		super();
@@ -41,6 +42,7 @@ public class ChartPoint extends ElementAdapter {
 
 	/**
 	 * Gets the name.
+	 * 
 	 * @return the name.
 	 */
 	public String getName() {
@@ -49,8 +51,9 @@ public class ChartPoint extends ElementAdapter {
 
 	/**
 	 * Sets the name.
+	 * 
 	 * @param name
-	 *          the name to set.
+	 *            the name to set.
 	 */
 	public void setName(final String name) {
 		this.name = name;
@@ -58,6 +61,7 @@ public class ChartPoint extends ElementAdapter {
 
 	/**
 	 * Gets the full name.
+	 * 
 	 * @return the full name.
 	 */
 	public String getFullName() {
@@ -66,8 +70,9 @@ public class ChartPoint extends ElementAdapter {
 
 	/**
 	 * Sets the full name.
+	 * 
 	 * @param fullName
-	 *          the full name to set.
+	 *            the full name to set.
 	 */
 	public void setFullName(final String fullName) {
 		this.fullName = fullName;
@@ -75,6 +80,7 @@ public class ChartPoint extends ElementAdapter {
 
 	/**
 	 * Gets the value.
+	 * 
 	 * @return the value.
 	 */
 	public float getValue() {
@@ -83,8 +89,9 @@ public class ChartPoint extends ElementAdapter {
 
 	/**
 	 * Sets the value.
+	 * 
 	 * @param value
-	 *          the value to set.
+	 *            the value to set.
 	 */
 	public void setValue(final float value) {
 		this.value = value;
@@ -92,8 +99,8 @@ public class ChartPoint extends ElementAdapter {
 
 	/**
 	 * Gets the parentElement.
-	 * @return parentElement
-	 *          the parentElement.
+	 * 
+	 * @return parentElement the parentElement.
 	 */
 	@Override
 	public Element getParentElement() {
@@ -102,8 +109,9 @@ public class ChartPoint extends ElementAdapter {
 
 	/**
 	 * Sets the parentElement.
+	 * 
 	 * @param parentElement
-	 *          the parentElement to set.
+	 *            the parentElement to set.
 	 */
 	public void setParentElement(final Element parentElement) {
 		this.parentElement = parentElement;

@@ -31,18 +31,18 @@ public class DoorDashboard extends DeviceDashboard {
 	public DoorDashboard() {
 		super(Images.SECURITY);
 
-		lockLabel = new Label();
-		lockLabel.addClassSelector(ClassSelectors.DASHBOARD_ITEM_TEXT);
-		add(lockLabel);
+		this.lockLabel = new Label();
+		this.lockLabel.addClassSelector(ClassSelectors.DASHBOARD_ITEM_TEXT);
+		add(this.lockLabel);
 
-		listener = new DoorEventListener() {
+		this.listener = new DoorEventListener() {
 
 			@Override
 			public void onStateChange(final boolean open) {
 				if (open) {
-					doorOpen++;
+					DoorDashboard.this.doorOpen++;
 				} else {
-					doorOpen--;
+					DoorDashboard.this.doorOpen--;
 				}
 				updateDoors();
 
@@ -55,23 +55,23 @@ public class DoorDashboard extends DeviceDashboard {
 		super.showNotify();
 		final DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class);
 		final Door[] list = provider.list();
-		doorOpen = 0;
+		this.doorOpen = 0;
 		for (final Door door : list) {
 			if (door.isOpen()) {
-				doorOpen++;
+				this.doorOpen++;
 			}
-			door.addListener(listener);
+			door.addListener(this.listener);
 		}
 		updateDoors();
 	}
 
 	private void updateDoors() {
-		if (doorOpen > 0) {
-			lockLabel.setText(Strings.LOCKS_ARE_CLOSED);
-			setActive(false);
-		} else {
-			lockLabel.setText(Strings.LOCKS_ARE_OPENED);
+		if (this.doorOpen > 0) {
+			this.lockLabel.setText(Strings.LOCKS_ARE_CLOSED);
 			setActive(true);
+		} else {
+			this.lockLabel.setText(Strings.LOCKS_ARE_OPENED);
+			setActive(false);
 		}
 		repaint();
 	}
@@ -82,7 +82,7 @@ public class DoorDashboard extends DeviceDashboard {
 		final DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class);
 		final Door[] list = provider.list();
 		for (final Door door : list) {
-			door.removeListener(listener);
+			door.removeListener(this.listener);
 		}
 	}
 

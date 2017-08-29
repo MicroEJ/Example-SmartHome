@@ -27,22 +27,21 @@ public class ThermostatDashboard extends DeviceDashboard {
 	 */
 	public ThermostatDashboard() {
 		super(Images.AIRCONDITIONNER);
-		thermostat = ServiceLoaderFactory.getServiceLoader().getService(Thermostat.class);
+		this.thermostat = ServiceLoaderFactory.getServiceLoader().getService(Thermostat.class);
 
-		final TemperatureLabel thermostatLabel = new TemperatureLabel(thermostat.getTemperature(),
-				thermostat.getMaxTemperature());
+		final TemperatureLabel thermostatLabel = new TemperatureLabel(this.thermostat.getTemperature(),
+				this.thermostat.getMaxTemperature());
 		add(thermostatLabel);
 		thermostatLabel.addClassSelector(ClassSelectors.DASHBOARD_ITEM_TEXT);
 		thermostatLabel.addClassSelector(ClassSelectors.DASHBOARD_HUGE_TEXT);
 
-		listener = new ThermostatEventListener() {
+		this.listener = new ThermostatEventListener() {
 
 			@Override
 			public void onTemperatureChange(final int temperature) {
 				updateState();
 
 			}
-
 
 			@Override
 			public void onTargetTemperatureChange(final int targetTemperature) {
@@ -55,18 +54,18 @@ public class ThermostatDashboard extends DeviceDashboard {
 	@Override
 	public void showNotify() {
 		super.showNotify();
-		thermostat.addListener(listener);
+		this.thermostat.addListener(this.listener);
 		updateState();
 	}
 
 	@Override
 	public void hideNotify() {
 		super.hideNotify();
-		thermostat.removeListener(listener);
+		this.thermostat.removeListener(this.listener);
 	}
 
 	private void updateState() {
-		setActive(thermostat.getTargetTemperature() != thermostat.getTemperature());
+		setActive(this.thermostat.getTargetTemperature() != this.thermostat.getTemperature());
 		repaint();
 	}
 

@@ -6,11 +6,13 @@
  */
 package com.microej.demo.smarthome.data.power;
 
-import com.microej.demo.smarthome.data.ElementListener;
-
 /**
- *
+ * A power meter event listener.
  */
-public interface PowerEventListener extends ElementListener {
+public interface PowerEventListener  {
+	/**
+	 * Call back function when an instant power is generated.
+	 * @param instantPower the instantPower.
+	 */
 	void onInstantPower(InstantPower instantPower);
 }

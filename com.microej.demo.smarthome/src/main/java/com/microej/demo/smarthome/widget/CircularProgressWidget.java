@@ -6,17 +6,21 @@
  */
 package com.microej.demo.smarthome.widget;
 
+import java.util.concurrent.Executor;
+
 import ej.animation.Animation;
 import ej.animation.Animator;
 import ej.components.dependencyinjection.ServiceLoaderFactory;
 import ej.microui.display.GraphicsContext;
 import ej.microui.display.shape.AntiAliasedShapes;
 import ej.microui.event.Event;
+import ej.microui.event.generator.Buttons;
 import ej.microui.event.generator.Pointer;
 import ej.style.Style;
 import ej.style.container.AlignmentHelper;
 import ej.style.container.Rectangle;
 import ej.style.util.StyleHelper;
+import ej.util.concurrent.SingleThreadExecutor;
 import ej.widget.basic.BoundedRange;
 import ej.widget.listener.OnValueChangeListener;
 import ej.widget.model.BoundedRangeModel;
@@ -26,7 +30,7 @@ import ej.widget.model.BoundedRangeModel;
  */
 public class CircularProgressWidget extends BoundedRange implements Animation {
 
-	private static final int EVENT_RATE = 50;
+	private static final int FULL_CIRCLE = 360;
 
 	private static final int DEFAULT_START_ANGLE = -120;
 	private static final int DEFAULT_ARC_ANGLE = -300;
@@ -35,10 +39,10 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 	private static final int DEFAULT_FADE = 2;
 	private static final int DEFAULT_THICKNESS = 3;
 
+	private final OnValueChangeListener listener;
 	private int arcAngle = DEFAULT_ARC_ANGLE;
 	private int fadeFull = DEFAULT_FADE_FULL;
 	private int thicknessFull = DEFAULT_THICKNESS_FULL;
-	private final OnValueChangeListener listener;
 	private OnAnimationEndListener onAnimationEndListener;
 	private int fade = DEFAULT_FADE;
 	private int thickness = DEFAULT_THICKNESS;
@@ -52,38 +56,25 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 	private int currentArcAngle;
 	private final ValueAnimation valueAnimation;
 
-	private long nextEvent;
-
 	private boolean animated;
 
 
+	private boolean isSettingValue;
+
 	/**
-	 * Instantiates a CircularProgressWidget
+	 *
+	 * Instantiates a CircularProgressWidget.
 	 *
 	 * @param model
 	 *            the model.
 	 */
 	public CircularProgressWidget(final BoundedRangeModel model) {
-		this(model, ValueAnimation.DEFAULT_DURATION);
-	}
-
-	/**
-	 *
-	 * Instantiates a CircularProgressWidget
-	 *
-	 * @param model
-	 *            the model.
-	 * @param duration
-	 *            the duration of the animation.
-	 */
-	public CircularProgressWidget(final BoundedRangeModel model, final int duration) {
 		super(model);
-		currentArcAngle = computeAngle(getMinimum());
-		listener = new OnValueChangeListener() {
+		this.currentArcAngle = computeAngle(getMinimum());
+		this.listener = new OnValueChangeListener() {
 			@Override
 			public void onValueChange(final int newValue) {
 				setValue(newValue);
-
 			}
 
 			@Override
@@ -99,26 +90,27 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 			}
 		};
 
-		valueAnimation = new ValueAnimation(model.getMinimum(), model.getValue(), model.getValue(), model.getMaximum());
+		this.isSettingValue = false;
+		this.valueAnimation = new ValueAnimation(model.getMinimum(), model.getValue(), model.getValue(), model.getMaximum());
 	}
 
 	@Override
 	public void renderContent(final GraphicsContext g, final Style style, final Rectangle bounds) {
-		circleX = AlignmentHelper.computeXLeftCorner(getDiameter(), 0, bounds.getWidth(), style.getAlignment());
-		circleY = AlignmentHelper.computeYTopCorner(getDiameter(), 0, bounds.getHeight(), style.getAlignment());
+		this.circleX = AlignmentHelper.computeXLeftCorner(getDiameter(), 0, bounds.getWidth(), style.getAlignment());
+		this.circleY = AlignmentHelper.computeYTopCorner(getDiameter(), 0, bounds.getHeight(), style.getAlignment());
 		final AntiAliasedShapes shapes = AntiAliasedShapes.Singleton;
 		g.setColor(style.getBackgroundColor());
-		shapes.setFade(fadeFull);
-		shapes.setThickness(thicknessFull);
-		shapes.drawCircleArc(g, getCircleX(), getCircleY(), getDiameter(), startAngle, arcAngle);
+		shapes.setFade(this.fadeFull);
+		shapes.setThickness(this.thicknessFull);
+		shapes.drawCircleArc(g, getCircleX(), getCircleY(), getDiameter(), this.startAngle, this.arcAngle);
 
 		if (isEnabled() && getCurrentArcAngle() != 0) {
 			g.setColor(getColor(style));
 
-			shapes.setFade(fade);
-			shapes.setThickness(thickness);
-			shapes.drawCircleArc(g, getCircleOffset() + getCircleX(), getCircleOffset() + getCircleY(), (getDiameter() - (getCircleOffset() << 1)), startAngle,
-					getCurrentArcAngle());
+			shapes.setFade(this.fade);
+			shapes.setThickness(this.thickness);
+			shapes.drawCircleArc(g, getCircleOffset() + getCircleX(), getCircleOffset() + getCircleY(),
+					(getDiameter() - (getCircleOffset() << 1)), this.startAngle, getCurrentArcAngle());
 		}
 	}
 
@@ -138,19 +130,20 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 		super.setBounds(x, y, width, height);
 		final Rectangle bounds = getContentBounds();
 
-		final int diameterAvailable = Math.min(bounds.getWidth() - bounds.getX() * 2, bounds.getHeight() - bounds.getY() * 2);
-		offset = ((thicknessFull + fadeFull) >> 1);
-		diameter = diameterAvailable - getCircleOffset();
+		final int diameterAvailable = Math.min(bounds.getWidth() - bounds.getX() * 2,
+				bounds.getHeight() - bounds.getY() * 2);
+		this.offset = ((this.thicknessFull + this.fadeFull) >> 1);
+		this.diameter = diameterAvailable - getCircleOffset();
 	}
 
 	/**
 	 * Computes the angle for a value within the BoundedRangeModel.
-	 *
+	 * @param value the value.
 	 * @return the angle.
 	 */
 	protected int computeAngle(final int value) {
-		final float min =getMinimum();
-		final int angle = (int) (((value - min) / (getMaximum() - min)) * arcAngle);
+		final float min = getMinimum();
+		final int angle = (int) (((value - min) / (getMaximum() - min)) * this.arcAngle);
 		return angle;
 	}
 
@@ -163,26 +156,34 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 	@Override
 	public boolean handleEvent(final int event) {
 		if (isEnabled()) {
-			final long currentTime = System.currentTimeMillis();
-			if (currentTime > nextEvent) {
-				nextEvent = currentTime + EVENT_RATE;
-				if(Event.getType(event)==Event.POINTER){
-					final Pointer pointer = (Pointer) Event.getGenerator(event);
-					final int action = Pointer.getAction(event);
-					switch (action) {
-					case Pointer.DRAGGED:
-					case Pointer.PRESSED:
-					case Pointer.RELEASED:
-						final Rectangle rect = new Rectangle();
-						getStyle().getMargin().wrap(rect);
-						final int pointerX = pointer.getX() + rect.getX();
-						final int pointerY = pointer.getY() + rect.getY();
-						final int computeValue = computeValue(this.getRelativeX(pointerX), this.getRelativeY(pointerY));
-						performValueChange(computeValue);
-						return true;
-					}
+			//			final long currentTime = System.currentTimeMillis();
+			//			if (currentTime > this.nextEvent) {
+			//				this.nextEvent = currentTime + EVENT_RATE;
+			if (Event.getType(event) == Event.POINTER) {
+				final Pointer pointer = (Pointer) Event.getGenerator(event);
+				final int action = Buttons.getAction(event);
+				switch (action) {
+				case Pointer.DRAGGED:
+				case Buttons.PRESSED:
+				case Buttons.RELEASED:
+					final Rectangle rect = new Rectangle();
+					getStyle().getMargin().wrap(rect);
+					final int pointerX = pointer.getX() + rect.getX();
+					final int pointerY = pointer.getY() + rect.getY();
+					ServiceLoaderFactory.getServiceLoader().getService(Executor.class, SingleThreadExecutor.class).execute(new Runnable() {
+
+						@Override
+						public void run() {
+							final int computeValue = computeValue(getRelativeX(pointerX), getRelativeY(pointerY));
+							performValueChange(computeValue);
+						}
+					});
+					return true;
+				default:
+					break;
 				}
 			}
+			//			}
 		}
 		return super.handleEvent(event);
 	}
@@ -190,8 +191,10 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 	@Override
 	public void setValue(final int value) {
 		synchronized (this) {
-			if (value != getValue()) {
+			if (!this.isSettingValue && value != getValue()) {
+				this.isSettingValue = true;
 				super.setValue(value);
+				this.isSettingValue = false;
 				getValueAnimation().setTargetValue(value);
 				startAnimation();
 			}
@@ -208,28 +211,27 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 		setValue(value);
 	}
 
-
 	private int computeValue(final int pointerX, final int pointerY) {
-		final int dx = pointerX - (getCircleX() + (getDiameter() >> 1));
-		final int dy = pointerY - (getCircleY() + (getDiameter() >> 1));
+		final int radius = getDiameter() >> 1;
+		final int dx = pointerX - (getCircleX() + radius);
+		final int dy = pointerY - (getCircleY() + radius);
 
 		double atan2 = Math.toDegrees(Math.atan2(dy, dx));
 
 		if (atan2 < 0) {
-			atan2 += 360;
+			atan2 += FULL_CIRCLE;
 		}
-		atan2 += startAngle;
+		atan2 += this.startAngle;
 		if (atan2 < 0) {
-			atan2 = 360 + atan2;
+			atan2 = FULL_CIRCLE + atan2;
 		}
 
-		final int absArc = Math.abs(arcAngle);
+		final int absArc = Math.abs(this.arcAngle);
 		if (atan2 > absArc) {
 			if (dx < 0) {
 				return getMinimum();
-			} else {
-				return getMaximum();
 			}
+			return getMaximum();
 		}
 		if (atan2 == 0) {
 			return getMinimum();
@@ -241,14 +243,14 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 
 	@Override
 	public void showNotify() {
-		addOnValueChangeListener(listener);
+		addOnValueChangeListener(this.listener);
 		super.showNotify();
 	}
 
 	@Override
 	public void hideNotify() {
 		super.hideNotify();
-		removeOnValueChangeListener(listener);
+		removeOnValueChangeListener(this.listener);
 	}
 
 	/**
@@ -257,15 +259,15 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 	public void resetAnimation() {
 		stopAnimation();
 		getValueAnimation().reset();
-		currentArcAngle = computeAngle(getValueAnimation().getCurrentValue());
+		this.currentArcAngle = computeAngle(getValueAnimation().getCurrentValue());
 	}
 
 	/**
 	 * Starts the animation.
 	 */
-	public void startAnimation() {
-		if (!animated) {
-			animated = true;
+	public synchronized void startAnimation() {
+		if (!this.animated) {
+			this.animated = true;
 			getValueAnimation().start();
 			final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
 			animator.startAnimation(this);
@@ -291,10 +293,10 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 		return true;
 	}
 
-	private void animationEnd() {
-		animated = false;
-		if (onAnimationEndListener != null) {
-			onAnimationEndListener.onAnimationEnd();
+	private synchronized void animationEnd() {
+		this.animated = false;
+		if (this.onAnimationEndListener != null) {
+			this.onAnimationEndListener.onAnimationEnd();
 		}
 	}
 
@@ -321,57 +323,63 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 			return false;
 		}
 		getValueAnimation().tick(currentTimeMillis);
-		currentArcAngle = computeAngle(getValueAnimation().getCurrentValue());
+		this.currentArcAngle = computeAngle(getValueAnimation().getCurrentValue());
 		repaint();
 		return true;
 	}
 
 	/**
 	 * Gets the diameter.
+	 * 
 	 * @return the diameter.
 	 */
 	public int getDiameter() {
-		return diameter;
+		return this.diameter;
 	}
 
 	/**
 	 * Gets the x.
+	 * 
 	 * @return the x.
 	 */
 	public int getCircleX() {
-		return circleX;
+		return this.circleX;
 	}
 
 	/**
 	 * Gets the y.
+	 * 
 	 * @return the y.
 	 */
 	public int getCircleY() {
-		return circleY;
+		return this.circleY;
 	}
 
 	/**
 	 * Gets the valueAnimation.
+	 * 
 	 * @return the valueAnimation.
 	 */
 	public ValueAnimation getValueAnimation() {
-		return valueAnimation;
+		return this.valueAnimation;
 	}
 
 	/**
 	 * Gets the offset.
+	 * 
 	 * @return the offset.
 	 */
 	public int getCircleOffset() {
-		return offset;
+		return this.offset;
 	}
 
 	/**
 	 * Gets the currentArcAngle.
+	 * 
 	 * @return the currentArcAngle.
 	 */
 	public int getCurrentArcAngle() {
-		return currentArcAngle;
+		return this.currentArcAngle;
 	}
 
 	/**
@@ -380,7 +388,7 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 	 * @return the startAngle.
 	 */
 	public int getStartAngle() {
-		return startAngle;
+		return this.startAngle;
 	}
 
 	/**
@@ -390,7 +398,7 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 	 *            the startAngle to set.
 	 */
 	public void setStartAngle(final int startAngle) {
-		this.startAngle = startAngle % 360;
+		this.startAngle = startAngle % FULL_CIRCLE;
 		repaint();
 	}
 
@@ -400,7 +408,7 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 	 * @return the arcAngle.
 	 */
 	public int getArcAngle() {
-		return arcAngle;
+		return this.arcAngle;
 	}
 
 	/**
@@ -410,7 +418,7 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 	 *            the arcAngle to set.
 	 */
 	public void setArcAngle(final int arcAngle) {
-		this.arcAngle = arcAngle % 360;
+		this.arcAngle = arcAngle % FULL_CIRCLE;
 		repaint();
 	}
 
@@ -420,7 +428,7 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 	 * @return the fadeFull.
 	 */
 	public int getFadeFull() {
-		return fadeFull;
+		return this.fadeFull;
 	}
 
 	/**
@@ -439,7 +447,7 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 	 * @return the thicknessFull.
 	 */
 	public int getThicknessFull() {
-		return thicknessFull;
+		return this.thicknessFull;
 	}
 
 	/**
@@ -458,7 +466,7 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 	 * @return the fade.
 	 */
 	public int getFade() {
-		return fade;
+		return this.fade;
 	}
 
 	/**
@@ -477,7 +485,7 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 	 * @return the thickness.
 	 */
 	public int getThickness() {
-		return thickness;
+		return this.thickness;
 	}
 
 	/**

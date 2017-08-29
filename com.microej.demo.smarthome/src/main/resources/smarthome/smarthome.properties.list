@@ -3,3 +3,4 @@ ej.style.font.loader.FontLoader=com.microej.demo.smarthome.style.HomeFontLoader
 ej.style.image.ImageLoader=com.microej.demo.smarthome.style.HomeImageLoader
 ej.widget.basic.image.ImageTheme=com.microej.demo.smarthome.style.HomeImageTheme
 ej.animation.Animator.period=50
+ej.microui.util.events.EventsWatcher=ej.microui.util.events.internal.EventsWatcherImpl

@@ -9,7 +9,6 @@ package com.microej.demo.smarthome.style;
 
 /**
  * Collection of used fonts within the applications.
- *
  */
 public interface FontFamilies {
 	/**

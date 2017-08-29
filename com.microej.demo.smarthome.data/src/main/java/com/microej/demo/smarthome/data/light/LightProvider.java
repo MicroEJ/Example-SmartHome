@@ -9,8 +9,8 @@ package com.microej.demo.smarthome.data.light;
 import com.microej.demo.smarthome.data.Provider;
 
 /**
- *
+ * Provides a list of registered lights.
  */
 public interface LightProvider extends Provider<Light> {
-
+	// Used for service loader.
 }

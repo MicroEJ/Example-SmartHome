@@ -9,16 +9,16 @@ package com.microej.demo.smarthome.page;
 import com.microej.demo.smarthome.widget.Menu;
 
 import ej.widget.composed.ToggleWrapper;
-import ej.widget.navigation.navigator.SimpleNavigator;
+import ej.widget.container.transition.TransitionContainer;
 import ej.widget.navigation.page.ClassNameURLResolver;
 
 /**
  * Abstract page providing a navigator and a menu.
  */
-public class MenuNavigatorPage extends MenuPage {
+public abstract class MenuNavigatorPage extends MenuPage {
 
 	private MenuPage[] pages;
-	private final SimpleNavigator navigator;
+	private final TransitionContainer transitionContainer;
 	private final Menu menu;
 
 	/**
@@ -29,24 +29,23 @@ public class MenuNavigatorPage extends MenuPage {
 	 */
 	public MenuNavigatorPage(final String[] pagesURL) {
 		super();
-		navigator = new SimpleNavigator();
-		menu = new Menu(navigator);
+		this.transitionContainer = createTransitionContainer();
+		this.menu = new Menu(this.transitionContainer);
 		initPages(pagesURL);
 
-		getNavigator().show(pages[0], true);
+		this.transitionContainer.show(this.pages[0], true);
 	}
 
 	private void initPages(final String[] pagesURL) {
-		pages = new MenuPage[pagesURL.length];
+		this.pages = new MenuPage[pagesURL.length];
 		final ClassNameURLResolver urlResolver = new ClassNameURLResolver();
 		for (int i = 0; i < pagesURL.length; i++) {
 			final String pageName = pagesURL[i];
 			final MenuPage p = (MenuPage) urlResolver.resolve(pageName);
-			p.setMenu(menu);
-			pages[i] = p;
+			p.setMenu(this.menu);
+			this.pages[i] = p;
 		}
 	}
-
 
 	/**
 	 * Initialize the menu.
@@ -54,10 +53,10 @@ public class MenuNavigatorPage extends MenuPage {
 	 * @return The menu.
 	 */
 	protected Menu initMenu() {
-		for (final MenuPage page : pages) {
-			menu.add(page.getMenuButton());
+		for (final MenuPage page : this.pages) {
+			this.menu.add(page.getMenuButton());
 		}
-		return menu;
+		return this.menu;
 	}
 
 	@Override
@@ -70,8 +69,26 @@ public class MenuNavigatorPage extends MenuPage {
 	 * 
 	 * @return the navigator.
 	 */
-	public SimpleNavigator getNavigator() {
-		return navigator;
+	public TransitionContainer getTransitionContainer() {
+		return this.transitionContainer;
 	}
 
+	/**
+	 * Creates the transition container.
+	 * @return the transition container.
+	 */
+	protected abstract TransitionContainer createTransitionContainer();
+
+	/**
+	 * Gets the current shownPage.
+	 * Used by the robot.
+	 * @return the current shownPage.
+	 */
+	public MenuPage getCurrentPage() {
+		MenuPage page = this.menu.getCurrentPage();
+		if(page==null){
+			return this.pages[0];
+		}
+		return page;
+	}
 }

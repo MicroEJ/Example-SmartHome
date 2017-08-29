@@ -9,10 +9,14 @@ package com.microej.demo.smarthome.data.door;
 import com.microej.demo.smarthome.data.Device;
 
 /**
- *
+ * A door.
  */
 public interface Door extends Device<DoorEventListener> {
 
+	/**
+	 * Checks whether the door is open or closed.
+	 * @return true if the door is open.
+	 */
 	boolean isOpen();
 
 }

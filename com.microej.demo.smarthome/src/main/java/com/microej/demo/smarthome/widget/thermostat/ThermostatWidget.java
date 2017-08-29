@@ -27,6 +27,7 @@ import ej.widget.listener.OnValueChangeListener;
  */
 public class ThermostatWidget extends Grid {
 
+	private static final int TEMPERATURE_FACTOR = 10;
 	private final Thermostat thermostat;
 	private final ThermostatBoundedRangeModel model;
 	private final ButtonWrapper button;
@@ -35,6 +36,7 @@ public class ThermostatWidget extends Grid {
 	private String lastClassSelector = null;
 	private Label desiredLabel;
 	private final OverlapComposite composite;
+	private ThermostatCircularProgress thermostatCircularProgress;
 
 	/**
 	 * Instantiates a ThermostatWidget.
@@ -45,24 +47,24 @@ public class ThermostatWidget extends Grid {
 	public ThermostatWidget(final Thermostat thermostat) {
 		super(true, 3);
 		this.thermostat = thermostat;
-		model = new ThermostatBoundedRangeModel(thermostat);
+		this.model = new ThermostatBoundedRangeModel(thermostat);
 
-		composite = new OverlapComposite();
+		this.composite = new OverlapComposite();
 
-		final ThermostatCircularProgress thermostatCircularProgress = new ThermostatCircularProgress(model);
+		thermostatCircularProgress = new ThermostatCircularProgress(this.model);
 		thermostatCircularProgress.addClassSelector(ClassSelectors.THERMOSTAT);
-		composite.add(thermostatCircularProgress);
+		this.composite.add(thermostatCircularProgress);
 		final OnValueChangeListener onValueChangeListener = new ThermostatValueChangeListener(
 				thermostatCircularProgress);
 		thermostatCircularProgress.addOnTargetValueChangeListener(onValueChangeListener);
 		thermostatCircularProgress.addOnValueChangeListener(onValueChangeListener);
 
-		button = new LimitedButtonWrapper();
-		button.setAdjustedToChild(false);
+		this.button = new LimitedButtonWrapper();
+		this.button.setAdjustedToChild(false);
 		final Label okLabel = new Label(Strings.OK);
 		okLabel.addClassSelector(ClassSelectors.THERMOSTAT_VALIDATE);
-		button.setWidget(okLabel);
-		button.addOnClickListener(new OnClickListener() {
+		this.button.setWidget(okLabel);
+		this.button.addOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick() {
@@ -72,36 +74,35 @@ public class ThermostatWidget extends Grid {
 
 			}
 		});
-		composite.add(button);
-		button.setVisible(false);
-
+		this.composite.add(this.button);
+		this.button.setVisible(false);
 
 		add(createCurrentLabel());
-		add(composite);
+		add(this.composite);
 
 		add(createDesiredLabel());
-		updateClassSelectors(model.getValue(), model.getTargetValue());
+		updateClassSelectors(this.model.getValue(), this.model.getTargetValue());
 	}
 
 	private Widget createDesiredLabel() {
-		desiredLabel = new Label(Strings.DESIRED);
-		desiredLabel.addClassSelector(ClassSelectors.THERMOSTAT_TOP_LABEL);
-		desiredTemperature = new TemperatureLabel(thermostat.getTargetTemperature(), thermostat.getMaxTemperature());
-		desiredTemperature.addClassSelector(ClassSelectors.THERMOSTAT_BOTTOM_LABEL);
-		return createLabel(desiredLabel, desiredTemperature);
+		this.desiredLabel = new Label(Strings.DESIRED);
+		this.desiredLabel.addClassSelector(ClassSelectors.THERMOSTAT_TOP_LABEL);
+		this.desiredTemperature = new TemperatureLabel(this.thermostat.getTargetTemperature(), this.thermostat.getMaxTemperature());
+		this.desiredTemperature.addClassSelector(ClassSelectors.THERMOSTAT_BOTTOM_LABEL);
+		return createLabel(this.desiredLabel, this.desiredTemperature);
 	}
 
 	private Widget createCurrentLabel() {
 		final Label topLabel = new Label(Strings.CURRENT);
 		topLabel.addClassSelector(ClassSelectors.THERMOSTAT_TOP_LABEL);
 		topLabel.addClassSelector(ClassSelectors.THERMOSTAT_CURRENT);
-		currentTemperature = new TemperatureLabel(model.getValue(), model.getMaximum());
-		currentTemperature.addClassSelector(ClassSelectors.THERMOSTAT_BOTTOM_LABEL);
+		this.currentTemperature = new TemperatureLabel(this.model.getValue(), this.model.getMaximum());
+		this.currentTemperature.addClassSelector(ClassSelectors.THERMOSTAT_BOTTOM_LABEL);
 
-		return createLabel(topLabel, currentTemperature);
+		return createLabel(topLabel, this.currentTemperature);
 	}
 
-	private Widget createLabel(final Widget top, final Widget bottom) {
+	private static Widget createLabel(final Widget top, final Widget bottom) {
 		final Wrapper label = new Wrapper();
 		final List list = new List(false);
 		list.add(top);
@@ -128,53 +129,52 @@ public class ThermostatWidget extends Grid {
 	}
 
 	private void setDesiredClassSelector(final String classSelector) {
-		if (lastClassSelector != classSelector) {
-			if (lastClassSelector != null) {
-				desiredTemperature.removeClassSelector(lastClassSelector);
-				desiredLabel.removeClassSelector(lastClassSelector);
+		if (this.lastClassSelector != classSelector) {
+			if (this.lastClassSelector != null) {
+				this.desiredTemperature.removeClassSelector(this.lastClassSelector);
+				this.desiredLabel.removeClassSelector(this.lastClassSelector);
 			}
 			if (classSelector != null) {
-				desiredTemperature.addClassSelector(classSelector);
-				desiredLabel.addClassSelector(classSelector);
+				this.desiredTemperature.addClassSelector(classSelector);
+				this.desiredLabel.addClassSelector(classSelector);
 			}
 
-			lastClassSelector = classSelector;
+			this.lastClassSelector = classSelector;
 		}
 	}
 
 	private void updateButton(final int targetTemperature, final int targetValue) {
-		if (targetTemperature == targetValue && button.isVisible()) {
-			button.setVisible(false);
+		if (targetTemperature == targetValue && this.button.isVisible()) {
+			this.button.setVisible(false);
 			if (isShown()) {
-				composite.revalidateSubTree();
+				this.composite.revalidateSubTree();
 			}
-		} else if (targetTemperature != targetValue && !button.isVisible()) {
-			button.setVisible(true);
+		} else if (targetTemperature != targetValue && !this.button.isVisible()) {
+			this.button.setVisible(true);
 			if (isShown()) {
-				composite.revalidateSubTree();
+				this.composite.revalidateSubTree();
 			}
 		}
 	}
 
-	private class ThermostatValueChangeListener implements OnValueChangeListener
-	{
+	private class ThermostatValueChangeListener implements OnValueChangeListener {
 
 		private final ThermostatCircularProgress thermostatCircularProgress;
 
 		/**
 		 * @param thermostatCircularProgress
 		 */
-		public ThermostatValueChangeListener(final ThermostatCircularProgress thermostatCircularProgress) {
+		ThermostatValueChangeListener(final ThermostatCircularProgress thermostatCircularProgress) {
 			this.thermostatCircularProgress = thermostatCircularProgress;
 		}
 
 		@Override
 		public void onValueChange(final int newValue) {
-			desiredTemperature.setTemperature(thermostatCircularProgress.getTargetValue());
-			currentTemperature.setTemperature(thermostat.getTemperature());
-			final int localTarget = thermostatCircularProgress.getTargetValue() / 10;
-			final int target = thermostat.getTargetTemperature() / 10;
-			updateClassSelectors(thermostat.getTemperature() / 10, localTarget);
+			ThermostatWidget.this.desiredTemperature.setTemperature(this.thermostatCircularProgress.getTargetValue());
+			ThermostatWidget.this.currentTemperature.setTemperature(ThermostatWidget.this.thermostat.getTemperature());
+			final int localTarget = this.thermostatCircularProgress.getTargetValue() / TEMPERATURE_FACTOR;
+			final int target = ThermostatWidget.this.thermostat.getTargetTemperature() / TEMPERATURE_FACTOR;
+			updateClassSelectors(ThermostatWidget.this.thermostat.getTemperature() / TEMPERATURE_FACTOR, localTarget);
 			updateButton(target, localTarget);
 		}
 
@@ -189,5 +189,24 @@ public class ThermostatWidget extends Grid {
 			// Not used.
 
 		}
-	};
+	}
+
+	/**
+	 * Sets the target temperature.
+	 * Used by the robot.
+	 * @param value the target temperature.
+	 */
+	public void setTargetTemperature(float value) {
+		final int temperature = (int) ((this.thermostatCircularProgress.getMaximum() - this.thermostatCircularProgress.getMinimum()) * value
+				+ this.thermostatCircularProgress.getMinimum());
+		this.thermostatCircularProgress.setLocalTarget(temperature);
+	}
+	
+	/**
+	 * Validate the target temperature.
+	 * Used by the robot.
+	 */
+	public void validateTemperature(){
+		button.performClick();
+	}
 }

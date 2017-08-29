@@ -15,6 +15,7 @@ import ej.microui.display.Font;
 import ej.microui.display.GraphicsContext;
 import ej.microui.display.shape.AntiAliasedShapes;
 import ej.microui.event.Event;
+import ej.microui.event.generator.Buttons;
 import ej.microui.event.generator.Pointer;
 import ej.motion.Motion;
 import ej.motion.linear.LinearMotion;
@@ -39,6 +40,12 @@ public abstract class BasicChart extends Chart implements Animation {
 	 * The distance in between points.
 	 */
 	protected static final int STEP_X = 40;
+	/**
+	 * Top position of the chart content.
+	 */
+	private static final int BAR_TOP = 5;
+
+	private static final int MAX_BUBLLE_OFFSET = 3;
 
 	private static final int APPARITION_DURATION = 400;
 	private static final int APPARITION_STEPS = 100;
@@ -49,16 +56,12 @@ public abstract class BasicChart extends Chart implements Animation {
 	private static final int BUBBLE_ANIM_DURATION = 200;
 	private static final int BUBBLE_ANIM_NUM_STEPS = 100;
 
-	/**
-	 * Elements
-	 */
+	private static final int TEXT_DRAWING_MINIMUM_STEP = BUBBLE_ANIM_NUM_STEPS * 3 / 4;
+
 	private final ElementAdapter scaleElement;
 	private final ElementAdapter selectedInfoElement;
 	private final ElementAdapter selectedValueElement;
 
-	/**
-	 * Animation
-	 */
 	private Motion motion;
 	private int currentApparitionStep;
 	private int bubbleAnimationStep;
@@ -74,9 +77,8 @@ public abstract class BasicChart extends Chart implements Animation {
 		this.selectedInfoElement.addClassSelector(ClassSelectors.CHART_SELECTED_INFO);
 		this.selectedValueElement = new ElementAdapter();
 		this.selectedValueElement.addClassSelector(ClassSelectors.CHART_SELECTED_VALUE);
-		motion = new NoMotion(0, 0);
+		this.motion = new NoMotion(0, 0);
 	}
-
 
 	@Override
 	public void showNotify() {
@@ -135,9 +137,8 @@ public abstract class BasicChart extends Chart implements Animation {
 		final int threshold = APPARITION_STEPS / 3;
 		if (this.currentApparitionStep < threshold) {
 			return 0.0f;
-		} else {
-			return (float) (this.currentApparitionStep - threshold) / (APPARITION_STEPS - threshold);
 		}
+		return (float) (this.currentApparitionStep - threshold) / (APPARITION_STEPS - threshold);
 	}
 
 	@Override
@@ -148,12 +149,13 @@ public abstract class BasicChart extends Chart implements Animation {
 
 			final Pointer pointer = (Pointer) Event.getGenerator(event);
 			final int pointerX = pointer.getX() - getAbsoluteX() - margin.getX();
-			final int pointerY = pointer.getY() - getAbsoluteY() - margin.getY();
 
-			final int action = Pointer.getAction(event);
+			final int action = Buttons.getAction(event);
 			switch (action) {
-			case Pointer.RELEASED:
-				onPointerClicked(pointerX, pointerY);
+			case Buttons.RELEASED:
+				onPointerClicked(pointerX);
+				break;
+			default:
 				break;
 			}
 		}
@@ -161,14 +163,14 @@ public abstract class BasicChart extends Chart implements Animation {
 	}
 
 	/**
-	 * Handles pointer clicked event
+	 * Handles pointer clicked event.
 	 */
-	private void onPointerClicked(final int pointerX, final int pointerY) {
+	private void onPointerClicked(final int pointerX) {
 		final int xStart = LEFT_PADDING;
 		final int xEnd = xStart + getPoints().size() * STEP_X;
 		if (pointerX >= xStart && pointerX < xEnd) {
 			final int selectedPoint = getPoints().size() * (pointerX - xStart) / (xEnd - xStart);
-			selectPoint(new Integer(selectedPoint));
+			selectPoint(Integer.valueOf(selectedPoint));
 		} else {
 			selectPoint(null);
 		}
@@ -181,7 +183,7 @@ public abstract class BasicChart extends Chart implements Animation {
 	}
 
 	/**
-	 * Play bubble animation
+	 * Play bubble animation.
 	 */
 	private void playBubbleAnimation(final boolean expand) {
 		final Motion bubbleMotion;
@@ -190,7 +192,7 @@ public abstract class BasicChart extends Chart implements Animation {
 		} else {
 			bubbleMotion = new LinearMotion(BUBBLE_ANIM_NUM_STEPS, 0, BUBBLE_ANIM_DURATION);
 		}
-		bubbleAnimationStep = bubbleMotion.getStartValue();
+		this.bubbleAnimationStep = bubbleMotion.getStartValue();
 
 		final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
 		animator.startAnimation(new Animation() {
@@ -210,15 +212,19 @@ public abstract class BasicChart extends Chart implements Animation {
 
 	/**
 	 * Render the scale.
+	 * @param g the graphic context.
+	 * @param style the style.
+	 * @param bounds the bounds.
 	 */
-	protected void renderScale(final GraphicsContext g, final Style style, final Rectangle bounds, final float topValue) {
+	protected void renderScale(final GraphicsContext g, final Style style, final Rectangle bounds) {
+		final float topValue = getMaxScaleValue();
 		final Font font = StyleHelper.getFont(style);
 		final int fontHeight = font.getHeight();
 
 		final int numScaleValues = getNumScaleValues();
 		final int yBarBottom = getBarBottom(fontHeight, bounds);
 		final int yBarTop = getBarTop(fontHeight, bounds);
-		final int xScale = LEFT_PADDING - fontHeight / 2;
+		final int xScale = LEFT_PADDING - (fontHeight >> 1);
 
 		final Style scaleStyle = this.scaleElement.getStyle();
 		final Font scaleFont = StyleHelper.getFont(scaleStyle);
@@ -258,109 +264,145 @@ public abstract class BasicChart extends Chart implements Animation {
 	}
 
 	/**
-	 * Render selected point value
+	 * Checks wether a point is display.
+	 * @param firstDisplay the first point display.
+	 * @param lastDisplay the last point display.
+	 * @param selectedPointIndex the point to check.
+	 * @return True if the point is displayed.
 	 */
-	protected void renderSelectedPointValue(final GraphicsContext g, final Style style, final Rectangle bounds, final int firstDisplay,
-			final int lastDisplay) {
-		final Integer selectedPointIndex = getSelectedPoint();
+	protected boolean selectIsDisplay(final int firstDisplay, final int lastDisplay, final Integer selectedPointIndex){
 		// TODO remove magic number (3=the further you can see a part of the bubble).
-		if (selectedPointIndex != null && selectedPointIndex > firstDisplay - 3
-				&& selectedPointIndex < lastDisplay + 3) {
-			final ChartPoint selectedPoint = getPoints().get(selectedPointIndex);
-			final float selectedPointValue = selectedPoint.getValue();
-			final int fontHeight = StyleHelper.getFont(style).getHeight();
+		return (selectedPointIndex != null && selectedPointIndex > firstDisplay - MAX_BUBLLE_OFFSET
+				&& selectedPointIndex < lastDisplay + MAX_BUBLLE_OFFSET);
+	}
+	/**
+	 * Render selected point value.
+	 * @param g the graphic context.
+	 * @param style the style.
+	 * @param bounds the bounds.
+	 * @param selectedPointIndex the point to display.
+	 */
+	protected void renderSelectedPointValue(final GraphicsContext g, final Style style, final Rectangle bounds, final int selectedPointIndex) {
+		final ChartPoint selectedPoint = getPoints().get(selectedPointIndex);
+		final float selectedPointValue = selectedPoint.getValue();
 
-			// calculate value position
-			final int valueX = LEFT_PADDING + selectedPointIndex * STEP_X;
-			final int valueY = getValueY(fontHeight, bounds, selectedPointValue);
+		// calculate value position
+		final int valueX = LEFT_PADDING + selectedPointIndex * STEP_X;
+		final int valueY = getValueY(style, bounds, selectedPointValue);
 
-			// calculate radius
-			final float animationRatio = (float) this.bubbleAnimationStep / BUBBLE_ANIM_NUM_STEPS;
-			final int bubbleRadius = (int) (BUBBLE_RADIUS * animationRatio);
-			final int arrowRadius = (int) (ARROW_RADIUS * animationRatio);
-			final int fullRadius = bubbleRadius + arrowRadius;
+		// calculate radius
+		final float animationRatio = (float) this.bubbleAnimationStep / BUBBLE_ANIM_NUM_STEPS;
+		final int bubbleRadius = (int) (BUBBLE_RADIUS * animationRatio);
+		final int arrowRadius = (int) (ARROW_RADIUS * animationRatio);
+		final int fullRadius = bubbleRadius + arrowRadius;
 
-			// calculate bubble position
-			final int diffY = bounds.getHeight()/2 - valueY;
-			final int centerY = valueY + (int) (diffY * animationRatio);
-			final double angle = Math.asin((double) (centerY - valueY) / fullRadius);
-			final int moveX = (int) (Math.cos(angle) * fullRadius);
-			int centerX = valueX;
-			if (centerX-moveX < fullRadius) {
+		// calculate bubble position
+		final int centerY = computeCenterY(bounds, valueY, animationRatio);
+		final int centerX = computeCenterX(valueX, fullRadius, valueY, centerY);
+
+		drawArow(g, valueX, valueY, bubbleRadius, centerY, centerX);
+		drawBubble(g, bubbleRadius, centerY, centerX);
+
+		if (this.bubbleAnimationStep >= TEXT_DRAWING_MINIMUM_STEP) {
+			drawBubbleText(g, selectedPoint, bubbleRadius, centerY, centerX);
+		}
+	}
+
+	private void drawBubbleText(final GraphicsContext g, final ChartPoint selectedPoint, final int bubbleRadius,
+			final int centerY, int centerX) {
+		// set info style
+		final Style infoStyle = this.selectedInfoElement.getStyle();
+		final Font infoFont = StyleHelper.getFont(infoStyle);
+		g.setFont(infoFont);
+		g.setColor(infoStyle.getForegroundColor());
+
+		// draw info string
+		final String infoString = selectedPoint.getFullName();
+		g.drawString(infoString, centerX, centerY - (bubbleRadius >> 1),
+				GraphicsContext.HCENTER | GraphicsContext.VCENTER);
+
+		// set value style
+		final Style valueStyle = this.selectedValueElement.getStyle();
+		final Font valueFont = StyleHelper.getFont(valueStyle);
+		g.setFont(valueFont);
+		g.setColor(valueStyle.getForegroundColor());
+
+		// draw value string
+		final float value = selectedPoint.getValue();
+		StringBuffer valueString = new StringBuffer();
+		valueString.append((int) value);
+		String unit = getUnit();
+		if (unit != null) {
+			valueString.append(unit);
+		}
+		g.drawString(valueString.toString(), centerX, centerY + bubbleRadius / 6,
+				GraphicsContext.HCENTER | GraphicsContext.VCENTER);
+	}
+
+	private int computeCenterY(final Rectangle bounds, final int valueY, final float animationRatio) {
+		final int diffY = (bounds.getHeight() >> 1) - valueY;
+		final int centerY = valueY + (int) (diffY * animationRatio);
+		return centerY;
+	}
+
+	private int computeCenterX(final int valueX, final int fullRadius, final int valueY, final int centerY) {
+		final double angle = Math.asin((double) (centerY - valueY) / fullRadius);
+		final int moveX = (int) (Math.cos(angle) * fullRadius);
+		int centerX = valueX;
+		if (centerX - moveX < fullRadius) {
+			centerX += moveX;
+		} else if (centerX + moveX >= getWidth() - fullRadius) {
+			centerX -= moveX;
+		} else {
+			if (valueX + getX() < (getPanel().getWidth() >> 1)) {
 				centerX += moveX;
-			} else if(centerX+moveX >= getWidth()-fullRadius) {
+			} else {
 				centerX -= moveX;
-			} else {
-				if (valueX + getX() < getPanel().getWidth() / 2) {
-					centerX += moveX;
-				} else {
-					centerX -= moveX;
-				}
 			}
+		}
+		return centerX;
+	}
 
-			// calculate arrow position
-			final int arrow1X = centerX;
-			final int radius = bubbleRadius * 3 / 4;
-			final int arrow1Y = centerY - radius;
-			final int arrow2X = centerX;
-			final int arrow2Y = centerY + radius;
+	private void drawBubble(final GraphicsContext g, final int bubbleRadius, final int centerY, int centerX) {
+		// fill bubble
+		final int cX = centerX - bubbleRadius;
+		final int cY = centerY - bubbleRadius;
+		final int diameter = 2 * bubbleRadius;
+		g.fillCircle(cX, cY, diameter);
 
-			// fill arrow
-			g.fillPolygon(new int[] { valueX, valueY, arrow1X, arrow1Y, arrow2X, arrow2Y });
+		// draw anti aliased bubble
+		final AntiAliasedShapes antiAliasedShapes = AntiAliasedShapes.Singleton;
+		antiAliasedShapes.setThickness(2);
+		if (!isAnimated()) {
+			antiAliasedShapes.drawCircle(g, cX, cY, diameter);
+		} else {
+			g.drawCircle(cX, cY, diameter);
+		}
+	}
 
-			// draw anti aliased arrow
-			final AntiAliasedShapes antiAliasedShapes = AntiAliasedShapes.Singleton;
-			antiAliasedShapes.setThickness(1);
-			antiAliasedShapes.setFade(1);
+	private void drawArow(final GraphicsContext g, final int valueX, final int valueY,
+			final int bubbleRadius, final int centerY, int centerX) {
+		// calculate arrow position
+		final int arrow1X = centerX;
+		final int radius = bubbleRadius * 3 / 4;
+		final int arrow1Y = centerY - radius;
+		final int arrow2X = centerX;
+		final int arrow2Y = centerY + radius;
 
-			if (!isAnimated()) {
-				antiAliasedShapes.drawLine(g, valueX, valueY, arrow1X, arrow1Y);
-				antiAliasedShapes.drawLine(g, valueX, valueY, arrow2X, arrow2Y);
-			} else {
-				g.drawLine(valueX, valueY, arrow1X, arrow1Y);
-				g.drawLine(valueX, valueY, arrow2X, arrow2Y);
-			}
+		// fill arrow
+		g.fillPolygon(new int[] { valueX, valueY, arrow1X, arrow1Y, arrow2X, arrow2Y });
 
-			// fill bubble
-			final int cX = centerX - bubbleRadius;
-			final int cY = centerY - bubbleRadius;
-			final int cD = 2 * bubbleRadius;
-			g.fillCircle(cX, cY, cD);
+		// draw anti aliased arrow
+		final AntiAliasedShapes antiAliasedShapes = AntiAliasedShapes.Singleton;
+		antiAliasedShapes.setThickness(1);
+		antiAliasedShapes.setFade(1);
 
-			// draw anti aliased bubble
-			antiAliasedShapes.setThickness(2);
-			if (!isAnimated()) {
-				antiAliasedShapes.drawCircle(g, cX, cY, cD);
-			} else {
-				g.drawCircle(cX, cY, cD);
-			}
-
-			if (this.bubbleAnimationStep >= BUBBLE_ANIM_NUM_STEPS*3/4) {
-				// set info style
-				final Style infoStyle = this.selectedInfoElement.getStyle();
-				final Font infoFont = StyleHelper.getFont(infoStyle);
-				g.setFont(infoFont);
-				g.setColor(infoStyle.getForegroundColor());
-
-				// draw info string
-				final String infoString = selectedPoint.getFullName();
-				g.drawString(infoString, centerX, centerY-bubbleRadius/2, GraphicsContext.HCENTER | GraphicsContext.VCENTER);
-
-				// set value style
-				final Style valueStyle = this.selectedValueElement.getStyle();
-				final Font valueFont = StyleHelper.getFont(valueStyle);
-				g.setFont(valueFont);
-				g.setColor(valueStyle.getForegroundColor());
-
-				// draw value string
-				final float value = selectedPoint.getValue();
-				String valueString = Integer.toString((int) value);
-				if (getUnit() != null) {
-					valueString += getUnit();
-				}
-				g.drawString(valueString, centerX, centerY + bubbleRadius / 6,
-						GraphicsContext.HCENTER | GraphicsContext.VCENTER);
-			}
+		if (!isAnimated()) {
+			antiAliasedShapes.drawLine(g, valueX, valueY, arrow1X, arrow1Y);
+			antiAliasedShapes.drawLine(g, valueX, valueY, arrow2X, arrow2Y);
+		} else {
+			g.drawLine(valueX, valueY, arrow1X, arrow1Y);
+			g.drawLine(valueX, valueY, arrow2X, arrow2Y);
 		}
 	}
 
@@ -370,7 +412,7 @@ public abstract class BasicChart extends Chart implements Animation {
 		int width = bounds.getWidth();
 		final int fontHeight = StyleHelper.getFont(style).getHeight();
 		if (height == MWT.NONE) {
-			height = 4 * fontHeight;
+			height = fontHeight << 2;
 		}
 		if (width == MWT.NONE) {
 			width = LEFT_PADDING + getPoints().size() * STEP_X;
@@ -384,23 +426,34 @@ public abstract class BasicChart extends Chart implements Animation {
 	}
 
 	/**
-	 * Gets the top position of the chart content
+	 * Gets the top position of the chart content.
+	 * @param fontHeight the font height.
+	 * @param bounds the bounds.
+	 * @return the top position of the chart content.
 	 */
 	protected int getBarTop(final int fontHeight, final Rectangle bounds) {
-		return 5;
+		return BAR_TOP;
 	}
 
 	/**
-	 * Gets the bottom position of the chart content
+	 * Gets the bottom position of the chart content.
+	 * @param fontHeight the font height.
+	 * @param bounds the bounds.
+	 * @return the bottom position of the chart content.
 	 */
 	protected int getBarBottom(final int fontHeight, final Rectangle bounds) {
 		return bounds.getHeight() - fontHeight;
 	}
 
 	/**
-	 * Gets the position of a chart value
+	 * Gets the position of a chart value.
+	 * @param style the style.
+	 * @param bounds the bounds of the chart.
+	 * @param value the value.
+	 * @return the y position of the value.
 	 */
-	protected int getValueY(final int fontHeight, final Rectangle bounds, final float value) {
+	protected int getValueY(final Style style, final Rectangle bounds, final float value) {
+		final int fontHeight = StyleHelper.getFont(style).getHeight();
 		final int yBarBottom = getBarBottom(fontHeight, bounds);
 		final int yBarTop = getBarTop(fontHeight, bounds);
 		final float topValue = getMaxScaleValue();

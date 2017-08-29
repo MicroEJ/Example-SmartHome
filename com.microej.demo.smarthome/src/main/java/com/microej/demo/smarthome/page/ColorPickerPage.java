@@ -12,7 +12,6 @@ import com.microej.demo.smarthome.widget.ColorPicker;
 
 import ej.widget.navigation.page.Page;
 
-
 /**
  * A page presenting the color picker.
  */
@@ -27,9 +26,9 @@ public class ColorPickerPage extends Page {
 	 *            the light to update.
 	 */
 	public ColorPickerPage(final Light light) {
-		colorPicker = new ColorPicker(light);
+		this.colorPicker = new ColorPicker(light);
 		addClassSelector(ClassSelectors.BODY);
-		setWidget(colorPicker);
+		setWidget(this.colorPicker);
 	}
 
 	/**
@@ -38,6 +37,6 @@ public class ColorPickerPage extends Page {
 	 * @return the colorPicker.
 	 */
 	public ColorPicker getColorPicker() {
-		return colorPicker;
+		return this.colorPicker;
 	}
 }

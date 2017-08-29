@@ -29,15 +29,15 @@ public abstract class MenuPage extends Page {
 	public MenuPage() {
 		super();
 
-		button = createMenuButton();
+		this.button = createMenuButton();
 		addClassSelector(ClassSelectors.BODY);
-		if (button != null) {
-			button.addOnStateChangeListener(new OnStateChangeListener() {
+		if (this.button != null) {
+			this.button.addOnStateChangeListener(new OnStateChangeListener() {
 
 				@Override
 				public void onStateChange(final boolean newState) {
 					if (newState) {
-						menu.show(MenuPage.this);
+						MenuPage.this.menu.show(MenuPage.this);
 					}
 				}
 			});
@@ -50,7 +50,7 @@ public abstract class MenuPage extends Page {
 	 * @return the button.
 	 */
 	public ToggleWrapper getMenuButton() {
-		return button;
+		return this.button;
 	}
 
 	/**
@@ -59,7 +59,7 @@ public abstract class MenuPage extends Page {
 	 * @return the menu.
 	 */
 	public Menu getMenu() {
-		return menu;
+		return this.menu;
 	}
 
 	/**
@@ -78,4 +78,12 @@ public abstract class MenuPage extends Page {
 	 * @return the button.
 	 */
 	protected abstract ToggleWrapper createMenuButton();
+
+	/**
+	 * Goes to the next page
+	 * Used by the robot.
+	 */
+	public void goToNextPage() {
+		getMenu().goToNextPage();
+	}
 }

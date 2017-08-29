@@ -6,12 +6,19 @@
  */
 package com.microej.demo.smarthome.data.power;
 
+/**
+ * An implementation of an {@link InstantPower}.
+ */
 public class DefaultInstantPower implements InstantPower {
 
 	private final long date;
 	private final int power;
 
-
+	/**
+	 * Instantiate an {@link InstantPower}.
+	 * @param date the date of the power measurement.
+	 * @param power the power.
+	 */
 	public DefaultInstantPower(final long date, final int power) {
 		super();
 		this.date = date;
@@ -20,12 +27,12 @@ public class DefaultInstantPower implements InstantPower {
 
 	@Override
 	public long getDate() {
-		return date;
+		return this.date;
 	}
 
 	@Override
 	public int getPower() {
-		return power;
+		return this.power;
 	}
 
 }

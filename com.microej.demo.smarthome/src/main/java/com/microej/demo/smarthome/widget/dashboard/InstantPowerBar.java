@@ -23,23 +23,26 @@ import ej.widget.basic.BoundedRange;
  */
 public class InstantPowerBar extends BoundedRange {
 
+	private static final int FADE = 1;
+	private static final int THICKNESS = 4;
+	/**
+	 * The duration of a motion.
+	 */
 	protected static final int MOTION_DURATION = 500;
+	private final Object sync = new Object();
 	private int target;
 	private Animation animation;
-	private final Object sync = new Object();
 	private Motion motion;
 
 	/**
-	 * Intantiates an InstantPowerBar.
+	 * Instantiates an InstantPowerBar.
+	 * @param min the minimum value possible.
+	 * @param max the maximum value possible.
+	 * @param initialValue the initial value.
 	 */
 	public InstantPowerBar(final int min, final int max, final int initialValue) {
 		super(min, max, initialValue);
-		target = initialValue;
-	}
-
-	@Override
-	public void showNotify() {
-		super.showNotify();
+		this.target = initialValue;
 	}
 
 	@Override
@@ -48,11 +51,10 @@ public class InstantPowerBar extends BoundedRange {
 		stopAnimation();
 	}
 
-
 	@Override
 	public void setValue(final int value) {
-		if (value != target) {
-			target = value;
+		if (value != this.target) {
+			this.target = value;
 			startAnimation();
 		}
 	}
@@ -66,8 +68,8 @@ public class InstantPowerBar extends BoundedRange {
 		g.drawLine(x, y, endX, y);
 
 		g.setColor(style.getForegroundColor());
-		AntiAliasedShapes.Singleton.setFade(1);
-		AntiAliasedShapes.Singleton.setThickness(4);
+		AntiAliasedShapes.Singleton.setFade(FADE);
+		AntiAliasedShapes.Singleton.setThickness(THICKNESS);
 		final float complete = getPercentComplete();
 		AntiAliasedShapes.Singleton.drawLine(g, x, y, (int) (endX * complete), y);
 
@@ -80,22 +82,22 @@ public class InstantPowerBar extends BoundedRange {
 	}
 
 	private void startAnimation() {
-		synchronized (sync) {
-			if (animation == null) {
-				motion = new LinearMotion(getValue(), target, MOTION_DURATION);
+		synchronized (this.sync) {
+			if (this.animation == null) {
+				this.motion = new LinearMotion(getValue(), this.target, MOTION_DURATION);
 
-				motion.start();
+				this.motion.start();
 				final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
 				animator.startAnimation(new Animation() {
 
 					@Override
 					public boolean tick(final long currentTimeMillis) {
-						final int dif = target - getValue();
+						final int dif = InstantPowerBar.this.target - getValue();
 						if (dif == 0) {
-							animation = null;
+							InstantPowerBar.this.animation = null;
 							return false;
 						}
-						setModelValue(motion.getCurrentValue());
+						setModelValue(InstantPowerBar.this.motion.getCurrentValue());
 						return true;
 					}
 				});
@@ -109,11 +111,11 @@ public class InstantPowerBar extends BoundedRange {
 	}
 
 	private void stopAnimation() {
-		synchronized (sync) {
-			if (animation != null) {
+		synchronized (this.sync) {
+			if (this.animation != null) {
 				final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
-				animator.stopAnimation(animation);
-				animation = null;
+				animator.stopAnimation(this.animation);
+				this.animation = null;
 			}
 		}
 	}
