@@ -1,1 +1,5 @@
 java.util.concurrent.Executor=ej.util.concurrent.SingleThreadExecutor
+com.microej.demo.smarthome.data.door.DoorProvider=com.microej.demo.smarthome.data.door.DefaultDoorProvider
+com.microej.demo.smarthome.data.thermostat.Thermostat=com.microej.demo.smarthome.data.thermostat.DefaultThermostat
+com.microej.demo.smarthome.data.light.LightProvider=com.microej.demo.smarthome.data.light.DefaultLightProvider
+com.microej.demo.smarthome.data.power.PowerMeter=com.microej.demo.smarthome.data.power.DefaultPowerMeter

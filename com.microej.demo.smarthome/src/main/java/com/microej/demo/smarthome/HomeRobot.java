@@ -21,7 +21,7 @@ import com.microej.demo.smarthome.page.ThermostatPage;
 import com.microej.demo.smarthome.widget.ColorPicker;
 
 import ej.automaton.Automaton;
-import ej.automaton.impl.AutomatonManagerImpl;
+import ej.automaton.AutomatonManager;
 import ej.bon.Timer;
 import ej.bon.TimerTask;
 import ej.microui.display.Display;
@@ -38,7 +38,7 @@ public class HomeRobot implements Automaton {
 	/**
 	 * Delay before the robot starts.
 	 */
-	private static final int INACTIVITY = 5_000;
+	private static final int INACTIVITY = 40_000;
 	/**
 	 * The period in between two actions.
 	 */
@@ -49,7 +49,7 @@ public class HomeRobot implements Automaton {
 	private Timer robotTimer;
 	private Logger logger;
 	private int state;
-	private AutomatonManagerImpl<Automaton> manager;
+	private AutomatonManager manager;
 	private boolean isNavigatingDashboard;
 
 	/**
@@ -67,7 +67,7 @@ public class HomeRobot implements Automaton {
 				Thread.currentThread().setPriority(Thread.NORM_PRIORITY - 2);
 			}
 		}, 0);
-		this.manager = new AutomatonManagerImpl<Automaton>(this.robotTimer, this, INACTIVITY);
+		this.manager = new AutomatonManager(this, INACTIVITY, this.robotTimer);
 	}
 
 	@Override
