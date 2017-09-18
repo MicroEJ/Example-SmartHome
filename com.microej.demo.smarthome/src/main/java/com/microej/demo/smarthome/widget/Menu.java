@@ -101,6 +101,10 @@ public class Menu extends Grid {
 		}
 	}
 
+	/**
+	 * Gets the current page.
+	 * @return the current page.
+	 */
 	public MenuPage getCurrentPage() {
 		return this.currentPage;
 	}

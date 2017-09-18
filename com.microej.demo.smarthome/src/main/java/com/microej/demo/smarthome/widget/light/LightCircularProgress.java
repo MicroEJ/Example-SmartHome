@@ -95,7 +95,14 @@ public class LightCircularProgress extends CircularProgressWidget implements Lig
 	public void showNotify() {
 		super.showNotify();
 
+		this.light.addListener(this);
 		onBrightnessChange(this.light.getBrightness());
 		onStateChange(this.light.isOn());
+	}
+	
+	@Override
+	public void hideNotify() {
+		super.hideNotify();
+		this.light.removeListener(this);
 	}
 }

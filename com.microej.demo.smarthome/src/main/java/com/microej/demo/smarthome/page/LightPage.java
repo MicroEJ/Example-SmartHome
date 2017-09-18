@@ -19,8 +19,6 @@ import com.microej.demo.smarthome.widget.light.LightWidget;
 
 import ej.components.dependencyinjection.ServiceLoaderFactory;
 import ej.mwt.Widget;
-import ej.widget.animation.AnimationListener;
-import ej.widget.animation.AnimationListenerRegistry;
 import ej.widget.composed.ToggleBox;
 import ej.widget.composed.ToggleWrapper;
 import ej.widget.container.Grid;
@@ -33,6 +31,7 @@ public class LightPage extends DevicePage<Light> implements ProviderListener<Lig
 
 	private Thread animationThread;
 	private List<Light> lights;
+	private boolean isOddShowNotify;
 
 	/**
 	 * Instantiates a LightPage.
@@ -45,7 +44,7 @@ public class LightPage extends DevicePage<Light> implements ProviderListener<Lig
 		for (final Light light : list) {
 			newElement(light);
 		}
-		
+
 	}
 
 	@Override
@@ -60,6 +59,7 @@ public class LightPage extends DevicePage<Light> implements ProviderListener<Lig
 	public void newElement(final Light element) {
 		this.lights.add(element);
 		final LightWidget device = new LightWidget(element);
+		device.resetAnimation();
 		addDevice(element, device);
 		if (isShown()) {
 			revalidate();
@@ -75,14 +75,29 @@ public class LightPage extends DevicePage<Light> implements ProviderListener<Lig
 
 	@Override
 	public void showNotify() {
-		startAnimation();
 		super.showNotify();
+
+		if(this.isOddShowNotify){
+			startAnimation();
+		}
+		this.isOddShowNotify = !this.isOddShowNotify;
 	}
 
 	@Override
 	public void hideNotify() {
 		stopAnimation();
 		super.hideNotify();
+		if(!this.isOddShowNotify){
+				resetLight();
+		}
+	}
+
+	private void resetLight() {
+		Widget[] widgets = ((Grid) getWidget(0)).getWidgets();
+		for (int i = 0; i < widgets.length; i++) {
+			LightWidget widget = (LightWidget) widgets[i];
+			widget.resetAnimation();
+		}
 	}
 
 	private synchronized void startAnimation() {
@@ -161,7 +176,7 @@ public class LightPage extends DevicePage<Light> implements ProviderListener<Lig
 	 */
 	public void setLightBrightness(int lightId, float brightness) {
 		this.lights.get(lightId).setBrightness(brightness);
-		
+
 	}
 
 	/**
@@ -172,7 +187,7 @@ public class LightPage extends DevicePage<Light> implements ProviderListener<Lig
 	 */
 	public void switchOn(int lightId, boolean on) {
 		this.lights.get(lightId).switchOn(on);
-		
+
 	}
 
 	/**
@@ -183,6 +198,5 @@ public class LightPage extends DevicePage<Light> implements ProviderListener<Lig
 	public void openColorPicker(int lightId) {
 		LightWidget widget = (LightWidget) this.devicesMap.get(this.lights.get(lightId));
 		widget.openColorPicker();
-		
 	}
 }
