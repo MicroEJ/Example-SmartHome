@@ -79,10 +79,11 @@ public class HomeImageLoader extends DefaultImageLoader {
 	 * @return The image name.
 	 */
 	private static String getImageName(String name, final boolean active) {
+		String imageName = name;
 		if (active) {
-			name += ACTIVE;
+			imageName += ACTIVE;
 		}
-		return name;
+		return imageName;
 	}
 
 	/**

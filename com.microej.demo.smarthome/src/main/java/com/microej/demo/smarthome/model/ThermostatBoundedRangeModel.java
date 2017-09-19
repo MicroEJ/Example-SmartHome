@@ -55,12 +55,13 @@ public class ThermostatBoundedRangeModel extends DefaultBoundedRangeModel implem
 	 *            target temperature.
 	 */
 	public void setTargetValue(int target) {
-		if (this.thermostat.getTargetTemperature() != target) {
-			target = Math.max(getMinimum(), target);
-			target = Math.min(getMaximum(), target);
-			this.thermostat.setTargetTemperature(target);
+		int targetValue = target;
+		if (this.thermostat.getTargetTemperature() != targetValue) {
+			targetValue = Math.max(getMinimum(), targetValue);
+			targetValue = Math.min(getMaximum(), targetValue);
+			this.thermostat.setTargetTemperature(targetValue);
 			for (final OnValueChangeListener onValueChangeListener : this.listeners) {
-				onValueChangeListener.onValueChange(target);
+				onValueChangeListener.onValueChange(targetValue);
 			}
 		}
 	}

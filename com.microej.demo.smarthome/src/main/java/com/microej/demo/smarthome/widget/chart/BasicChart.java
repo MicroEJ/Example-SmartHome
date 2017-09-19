@@ -272,8 +272,8 @@ public abstract class BasicChart extends Chart implements Animation {
 	 */
 	protected boolean selectIsDisplay(final int firstDisplay, final int lastDisplay, final Integer selectedPointIndex){
 		// TODO remove magic number (3=the further you can see a part of the bubble).
-		return (selectedPointIndex != null && selectedPointIndex > firstDisplay - MAX_BUBLLE_OFFSET
-				&& selectedPointIndex < lastDisplay + MAX_BUBLLE_OFFSET);
+		return (selectedPointIndex != null && selectedPointIndex.intValue() > firstDisplay - MAX_BUBLLE_OFFSET
+				&& selectedPointIndex.intValue() < lastDisplay + MAX_BUBLLE_OFFSET);
 	}
 	/**
 	 * Render selected point value.

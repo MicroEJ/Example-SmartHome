@@ -39,7 +39,7 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	private final ElementAdapter colors;
 	private final List<OnValueChangeListener> listeners;
 
-	private final AnimationListener animationListener;
+	private boolean isOddShow;
 
 	/**
 	 * Instantiates a ThermostatCircularProgress.
@@ -81,23 +81,7 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 		this.colors = new ElementAdapter(this);
 		this.colors.addClassSelector(ClassSelectors.THERMOSTAT_TARGET_COLOR);
 
-		this.animationListener = new AnimationListener() {
-
-			@Override
-			public void onStopAnimation() {
-				if (isShown()) {
-					resetAnimation();
-					startAnimation();
-				}
-			}
-
-			@Override
-			public void onStartAnimation() {
-				stopAnimation();
-				resetAnimation();
-
-			}
-		};
+		resetAnimation();
 	}
 
 	@Override
@@ -166,9 +150,11 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 
 	@Override
 	public void showNotify() {
-		this.animationListener.onStartAnimation();
-		AnimationListenerRegistry.register(this.animationListener);
-		setLocalTarget(this.model.getTargetValue());
+		if(this.isOddShow){
+			setLocalTarget(this.model.getTargetValue());
+			startAnimation();
+		}
+		this.isOddShow = !this.isOddShow;
 		this.model.addOnTargetValueChangeListener(this.listener);
 		this.model.register();
 		super.showNotify();
@@ -177,8 +163,8 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	@Override
 	public void hideNotify() {
 		super.hideNotify();
-		this.animationListener.onStartAnimation();
-		AnimationListenerRegistry.unregister(this.animationListener);
+		stopAnimation();
+		resetAnimation();
 		this.model.removeOnTargetValueChangeListener(this.listener);
 		this.model.unregister();
 	}

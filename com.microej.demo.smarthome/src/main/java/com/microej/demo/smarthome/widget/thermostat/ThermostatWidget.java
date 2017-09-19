@@ -51,13 +51,13 @@ public class ThermostatWidget extends Grid {
 
 		this.composite = new OverlapComposite();
 
-		thermostatCircularProgress = new ThermostatCircularProgress(this.model);
-		thermostatCircularProgress.addClassSelector(ClassSelectors.THERMOSTAT);
-		this.composite.add(thermostatCircularProgress);
+		this.thermostatCircularProgress = new ThermostatCircularProgress(this.model);
+		this.thermostatCircularProgress.addClassSelector(ClassSelectors.THERMOSTAT);
+		this.composite.add(this.thermostatCircularProgress);
 		final OnValueChangeListener onValueChangeListener = new ThermostatValueChangeListener(
-				thermostatCircularProgress);
-		thermostatCircularProgress.addOnTargetValueChangeListener(onValueChangeListener);
-		thermostatCircularProgress.addOnValueChangeListener(onValueChangeListener);
+				this.thermostatCircularProgress);
+		this.thermostatCircularProgress.addOnTargetValueChangeListener(onValueChangeListener);
+		this.thermostatCircularProgress.addOnValueChangeListener(onValueChangeListener);
 
 		this.button = new LimitedButtonWrapper();
 		this.button.setAdjustedToChild(false);
@@ -68,7 +68,7 @@ public class ThermostatWidget extends Grid {
 
 			@Override
 			public void onClick() {
-				thermostatCircularProgress.validateTagetValue();
+				ThermostatWidget.this.thermostatCircularProgress.validateTagetValue();
 				// Removes OK button.
 				updateButton(0, 0);
 
@@ -207,6 +207,6 @@ public class ThermostatWidget extends Grid {
 	 * Used by the robot.
 	 */
 	public void validateTemperature(){
-		button.performClick();
+		this.button.performClick();
 	}
 }
