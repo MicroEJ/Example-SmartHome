@@ -6,6 +6,7 @@
  */
 package com.microej.demo.smarthome.widget.dashboard;
 
+import com.microej.demo.smarthome.data.light.DefaultLightProvider;
 import com.microej.demo.smarthome.data.light.Light;
 import com.microej.demo.smarthome.data.light.LightEventListener;
 import com.microej.demo.smarthome.data.light.LightProvider;
@@ -70,7 +71,7 @@ public class LightsDashboard extends DeviceDashboard {
 	public void showNotify() {
 		super.showNotify();
 
-		final LightProvider provider = ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class);
+		final LightProvider provider = ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class, DefaultLightProvider.class);
 		final Light[] list = provider.list();
 		this.countOn = 0;
 		for (final Light light : list) {
@@ -107,7 +108,7 @@ public class LightsDashboard extends DeviceDashboard {
 	@Override
 	public void hideNotify() {
 		super.hideNotify();
-		final LightProvider provider = ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class);
+		final LightProvider provider = ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class, DefaultLightProvider.class);
 		final Light[] list = provider.list();
 		for (final Light light : list) {
 			light.removeListener(this.listener);

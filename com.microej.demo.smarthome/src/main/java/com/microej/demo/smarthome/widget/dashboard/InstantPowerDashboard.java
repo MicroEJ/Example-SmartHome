@@ -6,6 +6,7 @@
  */
 package com.microej.demo.smarthome.widget.dashboard;
 
+import com.microej.demo.smarthome.data.power.DefaultPowerMeter;
 import com.microej.demo.smarthome.data.power.InstantPower;
 import com.microej.demo.smarthome.data.power.PowerEventListener;
 import com.microej.demo.smarthome.data.power.PowerMeter;
@@ -36,7 +37,7 @@ public class InstantPowerDashboard extends Grid {
 	public InstantPowerDashboard() {
 		super(true, 2);
 		final Flow text = new Flow(true);
-		final PowerMeter myPower = ServiceLoaderFactory.getServiceLoader().getService(PowerMeter.class);
+		final PowerMeter myPower = ServiceLoaderFactory.getServiceLoader().getService(PowerMeter.class, DefaultPowerMeter.class);
 		this.power = new MaxWidthLabel(String.valueOf(myPower.getMaxPowerConsumption()));
 		this.power.addClassSelector(ClassSelectors.DASHBOARD_HUGE_TEXT);
 		this.power.addClassSelector(ClassSelectors.DASHBOARD_POWER_CONSUMPTION);
@@ -70,7 +71,7 @@ public class InstantPowerDashboard extends Grid {
 			@Override
 			public void onStopAnimation() {
 				if (isShown()) {
-					final PowerMeter myPower = ServiceLoaderFactory.getServiceLoader().getService(PowerMeter.class);
+					final PowerMeter myPower = ServiceLoaderFactory.getServiceLoader().getService(PowerMeter.class, DefaultPowerMeter.class);
 					myPower.addListener(InstantPowerDashboard.this.powerEventListener);
 					updateInstantPower(myPower.getInstantPowerConsumption());
 				}
@@ -83,7 +84,7 @@ public class InstantPowerDashboard extends Grid {
 	@Override
 	public void showNotify() {
 		super.showNotify();
-		final PowerMeter myPower = ServiceLoaderFactory.getServiceLoader().getService(PowerMeter.class);
+		final PowerMeter myPower = ServiceLoaderFactory.getServiceLoader().getService(PowerMeter.class, DefaultPowerMeter.class);
 		updateInstantPower(myPower.getInstantPowerConsumption());
 		AnimationListenerRegistry.register(this.animationListener);
 	}
@@ -91,7 +92,7 @@ public class InstantPowerDashboard extends Grid {
 	@Override
 	public void hideNotify() {
 		super.hideNotify();
-		final PowerMeter myPower = ServiceLoaderFactory.getServiceLoader().getService(PowerMeter.class);
+		final PowerMeter myPower = ServiceLoaderFactory.getServiceLoader().getService(PowerMeter.class, DefaultPowerMeter.class);
 		myPower.removeListener(this.powerEventListener);
 		AnimationListenerRegistry.unregister(this.animationListener);
 	}

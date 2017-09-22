@@ -6,6 +6,7 @@
  */
 package com.microej.demo.smarthome.widget.dashboard;
 
+import com.microej.demo.smarthome.data.door.DefaultDoorProvider;
 import com.microej.demo.smarthome.data.door.Door;
 import com.microej.demo.smarthome.data.door.DoorEventListener;
 import com.microej.demo.smarthome.data.door.DoorProvider;
@@ -53,7 +54,7 @@ public class DoorDashboard extends DeviceDashboard {
 	@Override
 	public void showNotify() {
 		super.showNotify();
-		final DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class);
+		final DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class, DefaultDoorProvider.class);
 		final Door[] list = provider.list();
 		this.doorOpen = 0;
 		for (final Door door : list) {
@@ -79,7 +80,7 @@ public class DoorDashboard extends DeviceDashboard {
 	@Override
 	public void hideNotify() {
 		super.hideNotify();
-		final DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class);
+		final DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class, DefaultDoorProvider.class);
 		final Door[] list = provider.list();
 		for (final Door door : list) {
 			door.removeListener(this.listener);

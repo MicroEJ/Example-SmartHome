@@ -6,6 +6,7 @@
  */
 package com.microej.demo.smarthome.widget.dashboard;
 
+import com.microej.demo.smarthome.data.thermostat.DefaultThermostat;
 import com.microej.demo.smarthome.data.thermostat.Thermostat;
 import com.microej.demo.smarthome.data.thermostat.ThermostatEventListener;
 import com.microej.demo.smarthome.style.ClassSelectors;
@@ -27,7 +28,7 @@ public class ThermostatDashboard extends DeviceDashboard {
 	 */
 	public ThermostatDashboard() {
 		super(Images.AIRCONDITIONNER);
-		this.thermostat = ServiceLoaderFactory.getServiceLoader().getService(Thermostat.class);
+		this.thermostat = ServiceLoaderFactory.getServiceLoader().getService(Thermostat.class, DefaultThermostat.class);
 
 		final TemperatureLabel thermostatLabel = new TemperatureLabel(this.thermostat.getTemperature(),
 				this.thermostat.getMaxTemperature());

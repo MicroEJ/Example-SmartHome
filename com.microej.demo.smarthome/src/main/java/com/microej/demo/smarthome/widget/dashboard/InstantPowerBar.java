@@ -64,15 +64,18 @@ public class InstantPowerBar extends BoundedRange {
 		g.setColor(style.getBackgroundColor());
 		final int y = (bounds.getY() + bounds.getHeight()) >> 1;
 		final int x = bounds.getX();
-		final int endX = x + bounds.getWidth();
-		g.drawLine(x, y, endX, y);
+		int width = bounds.getWidth();
+		g.drawLine(x, y, x + width, y);
 
 		g.setColor(style.getForegroundColor());
 		AntiAliasedShapes.Singleton.setFade(FADE);
 		AntiAliasedShapes.Singleton.setThickness(THICKNESS);
 		final float complete = getPercentComplete();
-		AntiAliasedShapes.Singleton.drawLine(g, x, y, (int) (endX * complete), y);
-
+		width = (int) (width * complete);
+		if(width<=0){
+			width = 1;
+		}
+		AntiAliasedShapes.Singleton.drawLine(g, x, y, x + width, y);
 	}
 
 	@Override

@@ -6,6 +6,7 @@
  */
 package com.microej.demo.smarthome.page;
 
+import com.microej.demo.smarthome.data.power.DefaultPowerMeter;
 import com.microej.demo.smarthome.data.power.PowerMeter;
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Strings;
@@ -28,7 +29,7 @@ public class GraphPage extends MenuPage {
 	 */
 	public GraphPage() {
 		super();
-		final PowerMeter power = ServiceLoaderFactory.getServiceLoader().getService(PowerMeter.class);
+		final PowerMeter power = ServiceLoaderFactory.getServiceLoader().getService(PowerMeter.class, DefaultPowerMeter.class);
 		this.powerWidget = new PowerWidget(power);
 		setWidget(this.powerWidget);
 	}

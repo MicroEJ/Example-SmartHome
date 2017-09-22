@@ -64,7 +64,7 @@ public class HomeRobot implements Automaton {
 			@Override
 			public void run() {
 				Thread.currentThread().setName(TIMER_NAME);
-				Thread.currentThread().setPriority(Thread.NORM_PRIORITY - 2);
+				Thread.currentThread().setPriority(Thread.NORM_PRIORITY - 1);
 			}
 		}, 0);
 		this.manager = new AutomatonManager(this, INACTIVITY, this.robotTimer);
@@ -110,21 +110,27 @@ public class HomeRobot implements Automaton {
 		display.waitForEvent();
 		display.waitForEvent();
 
-		final Page lastPage = Main.getCurrentPage();
-		if (lastPage instanceof DashBoardPage) {
-			automate((DashBoardPage) lastPage);
-		} else if (lastPage instanceof ThermostatPage) {
-			automate((ThermostatPage) lastPage);
-		} else if (lastPage instanceof LightPage) {
-			automate((LightPage) lastPage);
-		} else if (lastPage instanceof DoorPage) {
-			automate((DoorPage) lastPage);
-		} else if (lastPage instanceof ColorPickerPage) {
-			automate((ColorPickerPage) lastPage);
-		} else {
-			this.logger.warning("Robot Unsupported: " + lastPage); //$NON-NLS-1$
-		}
-		this.state++;
+		display.callSerially(new Runnable() {
+			
+			@Override
+			public void run() {
+				final Page lastPage = Main.getCurrentPage();
+				if (lastPage instanceof DashBoardPage) {
+					automate((DashBoardPage) lastPage);
+				} else if (lastPage instanceof ThermostatPage) {
+					automate((ThermostatPage) lastPage);
+				} else if (lastPage instanceof LightPage) {
+					automate((LightPage) lastPage);
+				} else if (lastPage instanceof DoorPage) {
+					automate((DoorPage) lastPage);
+				} else if (lastPage instanceof ColorPickerPage) {
+					automate((ColorPickerPage) lastPage);
+				} else {
+					logger.warning("Robot Unsupported Page: " + lastPage); //$NON-NLS-1$
+				}				
+				state++;
+			}
+		});
 	}
 
 
