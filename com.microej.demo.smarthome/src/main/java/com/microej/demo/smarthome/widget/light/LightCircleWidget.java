@@ -40,7 +40,6 @@ public class LightCircleWidget extends CircleWidget implements LightEventListene
 	@Override
 	public void onColorChange(final int color) {
 		repaint();
-
 	}
 
 	@Override

@@ -215,7 +215,7 @@ public class HomeRobot implements Automaton {
 	private void automate(final LightPage lastPage) {
 		int lightsCount = lastPage.countLights();
 		// If there aren't any light, jump to the next page
-		if (lightsCount == 0 && this.state < INITIAL_STATE + 4) {
+		if (lightsCount <= 0 && this.state < INITIAL_STATE + 5) {
 			this.state = INITIAL_STATE + 4;
 			return;
 		}
