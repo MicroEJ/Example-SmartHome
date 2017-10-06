@@ -6,6 +6,8 @@
  */
 package com.microej.demo.smarthome.widget;
 
+import java.util.concurrent.Executor;
+
 import com.microej.demo.smarthome.Main;
 import com.microej.demo.smarthome.data.light.DefaultLight;
 import com.microej.demo.smarthome.data.light.Light;
@@ -15,6 +17,7 @@ import com.microej.demo.smarthome.util.Images;
 import com.microej.demo.smarthome.util.Strings;
 import com.microej.demo.smarthome.widget.light.LightCircleWidget;
 
+import ej.components.dependencyinjection.ServiceLoaderFactory;
 import ej.microui.display.GraphicsContext;
 import ej.microui.display.shape.AntiAliasedShapes;
 import ej.microui.event.Event;
@@ -22,6 +25,7 @@ import ej.microui.event.generator.Buttons;
 import ej.microui.event.generator.Pointer;
 import ej.style.Style;
 import ej.style.container.Rectangle;
+import ej.util.concurrent.SingleThreadExecutor;
 import ej.widget.basic.Button;
 import ej.widget.basic.Image;
 import ej.widget.composed.Wrapper;
@@ -68,12 +72,13 @@ public class ColorPicker extends Dock {
 					renderSelectedCircle(g, style);
 				}
 			}
-		};
 
-		// image wrapper
-		final Wrapper imageWrapper = new Wrapper();
-		imageWrapper.setAdjustedToChild(false);
-		imageWrapper.setWidget(this.image);
+			@Override
+			public boolean isTransparent() {
+				return false;
+			}
+		};
+		this.image.addClassSelector(ClassSelectors.PICKER_PLAIN_BACKGROUND);
 
 		final OnClickListener onClickCloseListener = new OnClickListener() {
 			@Override
@@ -115,16 +120,18 @@ public class ColorPicker extends Dock {
 		initialColorWidgetButton.setWidget(initialColorWidget);
 		initialColorWidgetButton.addOnClickListener(onClickResetListener);
 		initialColorWidget.addClassSelector(ClassSelectors.LIGHT_PROGRESS);
+		initialColorWidget.addClassSelector(ClassSelectors.PICKER_PLAIN_BACKGROUND);
 
 		LightCircleWidget currentColorWidget = new LightCircleWidget(light);
 		final LimitedButtonWrapper currentColorWidgetButton = new LimitedButtonWrapper();
 		currentColorWidgetButton.setWidget(currentColorWidget);
 		currentColorWidgetButton.addOnClickListener(onClickCloseListener);
 		currentColorWidget.addClassSelector(ClassSelectors.LIGHT_PROGRESS);
+		currentColorWidget.addClassSelector(ClassSelectors.PICKER_PLAIN_BACKGROUND);
 
 		initialColorWidget.setPreferredSize(CIRCLE_DIAMETER, CIRCLE_DIAMETER);
 		addLeft(initialColorWidgetButton);
-		setCenter(imageWrapper);
+		setCenter(this.image);
 		currentColorWidget.setPreferredSize(CIRCLE_DIAMETER, CIRCLE_DIAMETER);
 		addRight(currentColorWidgetButton);
 
@@ -147,7 +154,7 @@ public class ColorPicker extends Dock {
 			final AntiAliasedShapes antiAliasedShapes = AntiAliasedShapes.Singleton;
 			antiAliasedShapes.setThickness(1);
 			antiAliasedShapes.setFade(1);
-			antiAliasedShapes.drawCircle(g, circleX, circleY, 2 * SELECTED_CIRCLE_RADIUS);
+			antiAliasedShapes.drawCircle(g, circleX, circleY, SELECTED_CIRCLE_RADIUS << 1);
 		}
 	}
 
@@ -163,9 +170,7 @@ public class ColorPicker extends Dock {
 			Main.SetAnchor(this.clickX, this.clickY);
 			final int pointerX = this.image.getRelativeX(this.clickX);
 			final int pointerY = this.image.getRelativeY(this.clickY);
-			if (pointerX > 0 && pointerX < this.image.getWidth() && pointerY > 0
-					&& pointerY < this.image.getHeight()) {
-				performTouch(Buttons.getAction(event), pointerX, pointerY);
+			if(performTouch(Buttons.getAction(event), pointerX, pointerY)){						
 				return true;
 			}
 		}
@@ -184,37 +189,47 @@ public class ColorPicker extends Dock {
 	 * @return true if the event has been handled.
 	 */
 	public boolean performTouch(final int action, int pointerX, int pointerY) {
-		final int centerX = (this.image.getWidth() >> 1);
-		final int centerY = this.image.getHeight() >> 1;
-		final int dX = pointerX - centerX;
-		final int dY = pointerY - centerY;
-		final int d = (int) Math.sqrt(dX * dX + dY * dY);
-		final int r = getRadius();
+		ej.microui.display.Image source = this.image.getSource();
+		int width = source.getWidth();
+		int height = source.getHeight();
+		int widgetWidth = this.image.getWidth();
+		int widgetHeight = this.image.getHeight();
+		int xOffset = (widgetWidth - width) >> 1;
+			int yOffset = (widgetHeight - height) >> 1;
+			if (pointerX > xOffset && pointerX < widgetWidth -xOffset && pointerY > yOffset
+					&& pointerY < widgetHeight-yOffset) {
+				final int centerX = (width >> 1) + xOffset;
+				final int centerY = (height >> 1) + yOffset;
+				final int dX = pointerX - centerX;
+				final int dY = pointerY - centerY;
+				final int d = (int) Math.sqrt(dX * dX + dY * dY);
+				final int r = getRadius();
 
-		// Use closest position within the circle.
-		if (d > r) {
-			pointerX = centerX + dX * r / d;
-			pointerY = centerY + dY * r / d;
-		} else {
-			if (action == Buttons.PRESSED) {
-				this.pressedInside = true;
+				// Use closest position within the circle.
+				if (d > r) {
+					pointerX = centerX + dX * r / d;
+					pointerY = centerY + dY * r / d;
+				} else {
+					if (action == Buttons.PRESSED) {
+						this.pressedInside = true;
+					}
+				}
+
+				if (this.pressedInside && (this.selectedX != pointerX || this.selectedY != pointerY)) {
+					if (action == Buttons.RELEASED) {
+						this.pressedInside = false;
+					}
+
+					this.selectedX = pointerX;
+					this.selectedY = pointerY;
+					this.image.repaint();
+
+					final int readPixel = source.readPixel(pointerX - xOffset, pointerY - yOffset);
+					this.light.setColor(readPixel);
+					return true;
+				}
 			}
-		}
-
-		if (!this.pressedInside || (this.selectedX == pointerX && this.selectedY != pointerY)) {
 			return false;
-		}
-
-		if (action == Buttons.RELEASED) {
-			this.pressedInside = false;
-		}
-
-		this.selectedX = pointerX;
-		this.selectedY = pointerY;
-		this.image.repaint();
-		final int readPixel = this.image.getSource().readPixel(this.selectedX, this.selectedY);
-		this.light.setColor(readPixel);
-		return true;
 	}
 
 	/**
@@ -222,7 +237,7 @@ public class ColorPicker extends Dock {
 	 * @return the circle radius.
 	 */
 	public int getRadius() {
-		return (this.image.getWidth() >> 1) - (SELECTED_CIRCLE_RADIUS + 1);
+		return (this.image.getSource().getWidth() >> 1) - (SELECTED_CIRCLE_RADIUS + 1);
 	}
 
 	/**

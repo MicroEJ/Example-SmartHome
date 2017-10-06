@@ -144,7 +144,7 @@ public class StylePopulator {
 			{ // Picker
 				final EditableStyle pickerStyle = new EditableStyle();
 				pickerStyle.setForegroundColor(Colors.BLACK_50);
-				pickerStyle.setBackgroundColor(Colors.WHITE);
+				pickerStyle.setBackgroundColor(Colors.CONCRETE_90);
 				stylesheet.addRule(new ClassSelector(ClassSelectors.PICKER), pickerStyle);
 			}
 
@@ -165,7 +165,14 @@ public class StylePopulator {
 						.setPadding(new ComplexOutline(SIMPLE_OUTLINE, DOUBLE_OUTLINE, SIMPLE_OUTLINE, DOUBLE_OUTLINE));
 				stylesheet.addRule(new ClassSelector(ClassSelectors.PICKER_CLOSE_BUTTON), pickerCloseStyle);
 			}
-
+			
+			{ // Picker Image
+				final EditableStyle pickerImageStyle = new EditableStyle();
+				pickerImageStyle.setBackground(plainBackground);
+				pickerImageStyle.setBackgroundColor(Colors.CONCRETE_90);
+				stylesheet.addRule(new ClassSelector(ClassSelectors.PICKER_PLAIN_BACKGROUND), pickerImageStyle);
+			}
+			
 		}
 
 		{ // Door widget
