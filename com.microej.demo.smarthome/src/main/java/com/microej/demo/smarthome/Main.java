@@ -28,9 +28,11 @@ import ej.widget.navigation.page.Page;
 public class Main {
 
 	private static final int ANIMATION_DURATION = 200;
+	public static final boolean USE_ANIMATION = true;
 
 	// The time use at boot time.
 	private static final long START_TIME = 1467324061000l;
+
 
 	private static OnClickListener ON_CLICK_LISTENER;
 	private static SplashScreenshotTransitionContainer TRANSITION_CONTAINER;
@@ -111,15 +113,6 @@ public class Main {
 	public static void stopRobot() {
 		AUTOMATON.stop();
 	}
-
-//	/**
-//	 * Gets the navigator.
-//	 *
-//	 * @return the navigator.
-//	 */
-//	public static SplashScreenshotTransitionContainer getTransitionContainer() {
-//		return TRANSITION_CONTAINER;
-//	}
 
 	/**
 	 * Go back to the main page.

@@ -6,6 +6,7 @@
  */
 package com.microej.demo.smarthome.widget.chart;
 
+import com.microej.demo.smarthome.Main;
 import com.microej.demo.smarthome.style.ClassSelectors;
 
 import ej.animation.Animation;
@@ -94,15 +95,17 @@ public abstract class BasicChart extends Chart implements Animation {
 	 * Reset the animation.
 	 */
 	public void resetAnimation() {
-		this.currentApparitionStep = 0;
+		if(Main.USE_ANIMATION){
+			this.currentApparitionStep = 0;
+		}
 	}
 
 	/**
 	 * Starts the animation.
 	 */
 	public void startAnimation() {
-		this.motion = new LinearMotion(0, APPARITION_STEPS, APPARITION_DURATION);
 		resetAnimation();
+		this.motion = new LinearMotion(this.currentApparitionStep, APPARITION_STEPS, APPARITION_DURATION);
 		final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
 		animator.startAnimation(this);
 	}

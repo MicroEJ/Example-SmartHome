@@ -52,12 +52,6 @@ public class GraphPage extends MenuPage {
 		this.powerWidget.reload();
 		this.powerWidget.startAnimation();
 	}
-
-	@Override
-	public void hideNotify() {
-		super.hideNotify();
-		this.powerWidget.reload();
-	}
 	
 	/**
 	 * Select a point in the chart.

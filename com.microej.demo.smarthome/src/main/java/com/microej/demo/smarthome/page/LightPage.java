@@ -89,20 +89,23 @@ public class LightPage extends DevicePage<Light> implements ProviderListener<Lig
 		stopAnimation();
 		super.hideNotify();
 		if(!this.isOddShowNotify){
-				resetLight();
+			resetLight();
 		}
 	}
 
 	private void resetLight() {
 		Widget[] widgets = ((Grid) getWidget(0)).getWidgets();
 		for (int i = 0; i < widgets.length; i++) {
-			LightWidget widget = (LightWidget) widgets[i];
-			widget.resetAnimation();
+			Widget widget = widgets[i];
+			if(widget instanceof LightWidget){
+				LightWidget light = (LightWidget) widget;
+				light.resetAnimation();
+			}
 		}
 	}
 
 	private synchronized void startAnimation() {
-		if (this.animationThread == null) {
+		if (this.animationThread == null && this.lights.size()>0) {
 			stopAnimation();
 			final Widget[] widgets = ((Grid) getWidget(0)).getWidgets();
 			final SequentialAnimation animation = new SequentialAnimation(widgets);
@@ -133,7 +136,8 @@ public class LightPage extends DevicePage<Light> implements ProviderListener<Lig
 		@Override
 		public void run() {
 			for (int i = 0; i < this.widgets.length; i++) {
-				final LightWidget lightWidget = (LightWidget) this.widgets[i];
+				Widget widget = this.widgets[i];
+				final LightWidget lightWidget = (LightWidget) widget;
 				if (lightWidget.isEnabled()) {
 					lightWidget.startAnimation();
 					synchronized (lightWidget) {

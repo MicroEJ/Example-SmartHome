@@ -10,3 +10,4 @@ com.microej.demo.smarthome.page.ThermostatPage
 com.microej.demo.smarthome.page.InformationPage
 com.microej.demo.smarthome.page.GraphPage
 
+ej.animation.Animator
