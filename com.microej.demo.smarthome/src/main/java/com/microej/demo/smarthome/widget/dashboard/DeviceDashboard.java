@@ -31,15 +31,15 @@ public abstract class DeviceDashboard extends List {
 	public DeviceDashboard(final String name) {
 		super();
 		this.name = name;
-		image = new Image(HomeImageLoader.loadDashBoard(name));
-		image.addClassSelector(ClassSelectors.DASHBOARD_ITEM_ICON);
-		add(image);
+		this.image = new Image(HomeImageLoader.loadDashBoard(name));
+		this.image.addClassSelector(ClassSelectors.DASHBOARD_ITEM_ICON);
+		add(this.image);
 	}
 
 	@Override
 	public boolean isInState(final State state) {
 		if (state == State.Active) {
-			return active;
+			return this.active;
 		}
 		return super.isInState(state);
 	}
@@ -53,7 +53,7 @@ public abstract class DeviceDashboard extends List {
 	public void setActive(final boolean active) {
 		if (active != this.active) {
 			this.active = active;
-			image.setSource(HomeImageLoader.loadDashBoard(name, active));
+			this.image.setSource(HomeImageLoader.loadDashBoard(this.name, active));
 		}
 	}
 }

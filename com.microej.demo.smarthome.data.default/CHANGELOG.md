@@ -1,3 +1,9 @@
+## 3.0.0 (2017-08-24)
+Features:
+  - Refactor.
+  - Use build type 4.+
+  - Add comments.
+
 ## 2.0.0 (2016-12-22)
 Features:
   - Change organization.

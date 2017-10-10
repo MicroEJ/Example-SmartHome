@@ -25,7 +25,7 @@ import ej.widget.toggle.RadioModel;
 public class InformationPage extends MenuPage {
 
 	/**
-	 * Instantes an Information Page
+	 * Instantiates an Information Page.
 	 */
 	public InformationPage() {
 		final Grid grid = new Grid(false, 2);

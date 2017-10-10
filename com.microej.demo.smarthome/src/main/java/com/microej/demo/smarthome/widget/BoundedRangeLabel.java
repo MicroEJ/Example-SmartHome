@@ -29,24 +29,24 @@ public class BoundedRangeLabel extends StyledComposite {
 	private final OnValueChangeListener onValueChangeListener;
 
 	/**
-	 * Instantiates a BoundedRangeLabel
+	 * Instantiates a BoundedRangeLabel.
 	 * 
 	 * @param boundedRange
 	 *            the model.
 	 */
 	public BoundedRangeLabel(final BoundedRangeModel boundedRange) {
 		this.model = boundedRange;
-		value = new MaxWidthLabel(computeText(getValue(boundedRange.getValue())),
+		this.value = new MaxWidthLabel(computeText(getValue(boundedRange.getValue())),
 				String.valueOf(getValue(boundedRange.getMaximum())));
-		type = new Label(Strings.PERCENT);
-		type.addClassSelector(ClassSelectors.TYPE);
-		this.add(value);
-		this.add(type);
-		onValueChangeListener = new OnValueChangeListener() {
+		this.type = new Label(Strings.PERCENT);
+		this.type.addClassSelector(ClassSelectors.TYPE);
+		this.add(this.value);
+		this.add(this.type);
+		this.onValueChangeListener = new OnValueChangeListener() {
 
 			@Override
 			public void onValueChange(final int newValue) {
-				value.setText(computeText(newValue));
+				BoundedRangeLabel.this.value.setText(computeText(newValue));
 
 			}
 
@@ -64,36 +64,39 @@ public class BoundedRangeLabel extends StyledComposite {
 		};
 	}
 
-	private int getValue(final int value) {
-		return value / 10;
+	@Override
+	public void addClassSelector(final String classSelector) {
+		super.addClassSelector(classSelector);
+		this.value.addClassSelector(classSelector);
+		this.type.addClassSelector(classSelector);
 	}
 
-	private String computeText(final int newValue) {
-		if (!isEnabled()) {
-			return "";
-		}
-		return String.valueOf(getValue(newValue));
+	@Override
+	public void removeClassSelector(final String classSelector) {
+		super.removeClassSelector(classSelector);
+		this.value.removeClassSelector(classSelector);
+		this.type.removeClassSelector(classSelector);
 	}
 
 	@Override
 	public void showNotify() {
 		super.showNotify();
-		model.addOnValueChangeListener(onValueChangeListener);
-		value.setText(computeText(model.getValue()));
+		this.model.addOnValueChangeListener(this.onValueChangeListener);
+		this.value.setText(computeText(this.model.getValue()));
 	}
 
 	@Override
 	public void hideNotify() {
-		model.removeOnValueChangeListener(onValueChangeListener);
+		this.model.removeOnValueChangeListener(this.onValueChangeListener);
 		super.hideNotify();
 	}
 
 	@Override
 	public Rectangle validateContent(final Style style, final Rectangle bounds) {
-		value.validate(MWT.NONE, MWT.NONE);
-		type.validate(MWT.NONE, MWT.NONE);
-		final int widthHint = value.getPreferredWidth() + type.getPreferredWidth();
-		final int heightHint = Math.max(value.getPreferredHeight(), value.getPreferredHeight());
+		this.value.validate(MWT.NONE, MWT.NONE);
+		this.type.validate(MWT.NONE, MWT.NONE);
+		final int widthHint = this.value.getPreferredWidth() + this.type.getPreferredWidth();
+		final int heightHint = Math.max(this.value.getPreferredHeight(), this.value.getPreferredHeight());
 
 		return new Rectangle(0, 0, widthHint, heightHint);
 	}
@@ -105,28 +108,26 @@ public class BoundedRangeLabel extends StyledComposite {
 		final int boundsWidth = bounds.getWidth();
 		final int boundsHeight = bounds.getHeight();
 
-		final int valueWidth = value.getPreferredWidth();
-		final int typeWidth = type.getPreferredWidth();
-		final int height = Math.max(value.getPreferredHeight(), value.getPreferredHeight());
+		final int valueWidth = this.value.getPreferredWidth();
+		final int typeWidth = this.type.getPreferredWidth();
+		final int height = Math.max(this.value.getPreferredHeight(), this.value.getPreferredHeight());
 
 		final int alignment = getStyle().getAlignment();
 		final int x = AlignmentHelper.computeXLeftCorner(valueWidth + typeWidth, boundsX, boundsWidth, alignment);
 		final int y = AlignmentHelper.computeYTopCorner(height, boundsY, boundsHeight, alignment);
-		value.setBounds(x, y, valueWidth, height);
-		type.setBounds(x + valueWidth, y, typeWidth, height);
+		this.value.setBounds(x, y, valueWidth, height);
+		this.type.setBounds(x + valueWidth, y, typeWidth, height);
 	}
 
-	@Override
-	public void addClassSelector(final String classSelector) {
-		super.addClassSelector(classSelector);
-		value.addClassSelector(classSelector);
-		type.addClassSelector(classSelector);
+	private static int getValue(final int value) {
+		return value / 10;
+	}
+	
+	private String computeText(final int newValue) {
+		if (!isEnabled()) {
+			return ""; //$NON-NLS-1$
+		}
+		return String.valueOf(getValue(newValue));
 	}
 
-	@Override
-	public void removeClassSelector(final String classSelector) {
-		super.removeClassSelector(classSelector);
-		value.removeClassSelector(classSelector);
-		type.removeClassSelector(classSelector);
-	}
 }

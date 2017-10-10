@@ -24,15 +24,9 @@ import ej.widget.basic.Image;
  */
 public class DoorWidget extends DeviceWidget<Door> implements DoorEventListener, Animation {
 
-	/**
-	 * Values
-	 */
 	private static final int ANIMATION_DURATION = 400;
 	private static final int ANIMATION_STEPS = 4;
 
-	/**
-	 * Attributes
-	 */
 	private final Image door;
 	private boolean open;
 	private Motion motion;
@@ -67,14 +61,14 @@ public class DoorWidget extends DeviceWidget<Door> implements DoorEventListener,
 			final String image = getImage(animStep);
 
 			this.open = open;
-			this.motion = new LinearMotion(animStep, ANIMATION_STEPS-animStep, ANIMATION_DURATION);
+			this.motion = new LinearMotion(animStep, ANIMATION_STEPS - animStep, ANIMATION_DURATION);
 			this.door.setSource(HomeImageLoader.getAbsolutePath(image));
 			final Animator animator = ServiceLoaderFactory.getServiceLoader().getService(Animator.class);
 			animator.startAnimation(this);
 		}
 	}
 
-	private String getImage(final int animStep) {
+	private static String getImage(final int animStep) {
 		switch (animStep) {
 		case 0:
 			return Images.DOOR_OPEN;

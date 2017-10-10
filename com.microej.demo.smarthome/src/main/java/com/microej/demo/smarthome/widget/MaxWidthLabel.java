@@ -46,7 +46,7 @@ public class MaxWidthLabel extends Label {
 	@Override
 	public Rectangle validateContent(final Style style, final Rectangle availableSize) {
 		final Font font = StyleHelper.getFont(style);
-		return style.getTextManager().computeContentSize(maxText, font, availableSize);
+		return style.getTextManager().computeContentSize(this.maxText, font, availableSize);
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class MaxWidthLabel extends Label {
 	 * @return the maxText.
 	 */
 	public String getMaxText() {
-		return maxText;
+		return this.maxText;
 	}
 
 	/**

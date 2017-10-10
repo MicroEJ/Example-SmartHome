@@ -7,15 +7,16 @@
 package com.microej.demo.smarthome.page;
 
 import com.microej.demo.smarthome.data.ProviderListener;
+import com.microej.demo.smarthome.data.door.DefaultDoorProvider;
 import com.microej.demo.smarthome.data.door.Door;
 import com.microej.demo.smarthome.data.door.DoorProvider;
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Images;
 import com.microej.demo.smarthome.widget.DoorWidget;
 import com.microej.demo.smarthome.widget.ImageMenuButton;
-import com.microej.demo.smarthome.widget.ToggleBox;
 
 import ej.components.dependencyinjection.ServiceLoaderFactory;
+import ej.widget.composed.ToggleBox;
 import ej.widget.composed.ToggleWrapper;
 import ej.widget.toggle.RadioModel;
 
@@ -28,7 +29,7 @@ public class DoorPage extends DevicePage<com.microej.demo.smarthome.data.door.Do
 	 * Instantiates a DoorPage.
 	 */
 	public DoorPage() {
-		final DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class);
+		final DoorProvider provider = ServiceLoaderFactory.getServiceLoader().getService(DoorProvider.class, DefaultDoorProvider.class);
 		final Door[] list = provider.list();
 		for (final Door door : list) {
 			newElement(door);

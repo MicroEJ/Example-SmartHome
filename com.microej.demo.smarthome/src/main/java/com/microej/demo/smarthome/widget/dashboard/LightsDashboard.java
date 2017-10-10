@@ -6,6 +6,7 @@
  */
 package com.microej.demo.smarthome.widget.dashboard;
 
+import com.microej.demo.smarthome.data.light.DefaultLightProvider;
 import com.microej.demo.smarthome.data.light.Light;
 import com.microej.demo.smarthome.data.light.LightEventListener;
 import com.microej.demo.smarthome.data.light.LightProvider;
@@ -31,23 +32,23 @@ public class LightsDashboard extends DeviceDashboard {
 	 */
 	public LightsDashboard() {
 		super(Images.LIGHTS);
-		number = new Label();
-		number.addClassSelector(ClassSelectors.DASHBOARD_HUGE_TEXT);
-		number.addClassSelector(ClassSelectors.DASHBOARD_LIGHT_COUNT);
-		lightLabel = new Label();
-		lightLabel.addClassSelector(ClassSelectors.DASHBOARD_ITEM_TEXT);
+		this.number = new Label();
+		this.number.addClassSelector(ClassSelectors.DASHBOARD_HUGE_TEXT);
+		this.number.addClassSelector(ClassSelectors.DASHBOARD_LIGHT_COUNT);
+		this.lightLabel = new Label();
+		this.lightLabel.addClassSelector(ClassSelectors.DASHBOARD_ITEM_TEXT);
 
-		add(number);
-		add(lightLabel);
+		add(this.number);
+		add(this.lightLabel);
 
-		listener = new LightEventListener() {
+		this.listener = new LightEventListener() {
 
 			@Override
 			public void onStateChange(final boolean on) {
 				if (on) {
-					countOn++;
+					LightsDashboard.this.countOn++;
 				} else {
-					countOn--;
+					LightsDashboard.this.countOn--;
 				}
 				updateCount();
 			}
@@ -70,27 +71,27 @@ public class LightsDashboard extends DeviceDashboard {
 	public void showNotify() {
 		super.showNotify();
 
-		final LightProvider provider = ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class);
+		final LightProvider provider = ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class, DefaultLightProvider.class);
 		final Light[] list = provider.list();
-		countOn = 0;
+		this.countOn = 0;
 		for (final Light light : list) {
-			if(light.isOn()){
-				countOn++;
+			if (light.isOn()) {
+				this.countOn++;
 			}
 
-			light.addListener(listener);
+			light.addListener(this.listener);
 		}
 		updateCount();
 	}
 
 	private void updateCount() {
-		number.setText(String.valueOf(countOn));
-		if (countOn > 1) {
-			lightLabel.setText(Strings.LIGHTS_ON);
+		this.number.setText(String.valueOf(this.countOn));
+		if (this.countOn > 1) {
+			this.lightLabel.setText(Strings.LIGHTS_ON);
 		} else {
-			lightLabel.setText(Strings.LIGHT_ON);
+			this.lightLabel.setText(Strings.LIGHT_ON);
 		}
-		if (countOn == 0) {
+		if (this.countOn == 0) {
 			setActive(false);
 		} else {
 			setActive(true);
@@ -101,16 +102,16 @@ public class LightsDashboard extends DeviceDashboard {
 	@Override
 	public void setActive(final boolean active) {
 		super.setActive(active);
-		number.setEnabled(active);
+		this.number.setEnabled(active);
 	}
 
 	@Override
 	public void hideNotify() {
 		super.hideNotify();
-		final LightProvider provider = ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class);
+		final LightProvider provider = ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class, DefaultLightProvider.class);
 		final Light[] list = provider.list();
 		for (final Light light : list) {
-			light.removeListener(listener);
+			light.removeListener(this.listener);
 		}
 	}
 }

@@ -18,11 +18,15 @@ import ej.widget.container.Grid;
 
 /**
  * An abstract page to display a type of device.
+ * @param <D> the type of device.
  */
 public abstract class DevicePage<D extends Device<?>> extends MenuPage {
 
-	private final Object sync = new Object();
+	/**
+	 * Map of the devices and views.
+	 */
 	protected final Map<D, Widget> devicesMap;
+	private final Object sync = new Object();
 	private final Grid devices;
 	private final Label noDeviceWidget;
 
@@ -31,11 +35,11 @@ public abstract class DevicePage<D extends Device<?>> extends MenuPage {
 	 */
 	public DevicePage() {
 		super();
-		devices = new Grid(false, 1);
-		devicesMap = new HashMap<>();
-		noDeviceWidget = new Label(Strings.NO_DEVICE_FOUND);
-		devices.add(noDeviceWidget);
-		setWidget(devices);
+		this.devices = new Grid(false, 1);
+		this.devicesMap = new HashMap<>();
+		this.noDeviceWidget = new Label(Strings.NO_DEVICE_FOUND);
+		this.devices.add(this.noDeviceWidget);
+		setWidget(this.devices);
 	}
 
 	/**
@@ -47,13 +51,13 @@ public abstract class DevicePage<D extends Device<?>> extends MenuPage {
 	 *            The assiciated widget.
 	 */
 	public void addDevice(final D element, final Widget device) {
-		synchronized (sync) {
-			if (devices.getWidgetsCount() == 1 && devices.getWidgets()[0] == noDeviceWidget) {
-				devices.remove(noDeviceWidget);
+		synchronized (this.sync) {
+			if (this.devices.getWidgetsCount() == 1 && this.devices.getWidgets()[0] == this.noDeviceWidget) {
+				this.devices.remove(this.noDeviceWidget);
 			}
 
-			devices.add(device);
-			devicesMap.put(element, device);
+			this.devices.add(device);
+			this.devicesMap.put(element, device);
 
 			revalidate();
 		}
@@ -66,13 +70,13 @@ public abstract class DevicePage<D extends Device<?>> extends MenuPage {
 	 *            the device.
 	 */
 	public void removeDevice(final D device) {
-		synchronized (sync) {
-			final Widget deviceWidget = devicesMap.get(device);
-			devices.remove(deviceWidget);
-			devicesMap.remove(device);
+		synchronized (this.sync) {
+			final Widget deviceWidget = this.devicesMap.get(device);
+			this.devices.remove(deviceWidget);
+			this.devicesMap.remove(device);
 
-			if (devices.getChildrenCount() == 0) {
-				devices.add(noDeviceWidget);
+			if (this.devices.getChildrenCount() == 0) {
+				this.devices.add(this.noDeviceWidget);
 				revalidate();
 			}
 		}
@@ -82,11 +86,11 @@ public abstract class DevicePage<D extends Device<?>> extends MenuPage {
 	 * Removes all the devices.
 	 */
 	protected void removeDevices() {
-		synchronized (sync) {
-			devices.removeAllWidgets();
-			devicesMap.clear();
+		synchronized (this.sync) {
+			this.devices.removeAllWidgets();
+			this.devicesMap.clear();
 
-			devices.add(noDeviceWidget);
+			this.devices.add(this.noDeviceWidget);
 			revalidate();
 		}
 	}

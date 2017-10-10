@@ -6,58 +6,36 @@
  */
 package com.microej.demo.smarthome.page;
 
-import com.microej.demo.smarthome.data.power.Power;
+import com.microej.demo.smarthome.data.power.DefaultPowerMeter;
+import com.microej.demo.smarthome.data.power.PowerMeter;
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.util.Strings;
 import com.microej.demo.smarthome.widget.chart.PowerWidget;
 
 import ej.components.dependencyinjection.ServiceLoaderFactory;
-import ej.mwt.Widget;
 import ej.widget.basic.Label;
 import ej.widget.composed.ToggleWrapper;
-import ej.widget.navigation.TransitionListener;
-import ej.widget.navigation.TransitionManager;
 import ej.widget.toggle.RadioModel;
 
 /**
- * This class represents the page which shows the power chart
+ * This class represents the page which shows the power chart.
  */
 public class GraphPage extends MenuPage {
 
-	private final TransitionListener listener;
+	private PowerWidget powerWidget;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public GraphPage() {
 		super();
-		final Power power = ServiceLoaderFactory.getServiceLoader().getService(Power.class);
-		final PowerWidget powerWidget = new PowerWidget(power);
-		setWidget(powerWidget);
-
-		listener = new TransitionListener() {
-
-			@Override
-			public void onTransitionStart(final TransitionManager transitionManager) {
-				if (isInHierarchy(GraphPage.this, transitionManager.getTo())) {
-					powerWidget.reload();
-				}
-
-			}
-
-			@Override
-			public void onTransitionStop(final TransitionManager manager) {
-				if (isShown()) {
-					powerWidget.startAnimation();
-				}
-
-			}
-
-		};
+		final PowerMeter power = ServiceLoaderFactory.getServiceLoader().getService(PowerMeter.class, DefaultPowerMeter.class);
+		this.powerWidget = new PowerWidget(power);
+		setWidget(this.powerWidget);
 	}
 
 	/**
-	 * Creates the menu button
+	 * Creates the menu button.
 	 */
 	@Override
 	protected ToggleWrapper createMenuButton() {
@@ -68,29 +46,19 @@ public class GraphPage extends MenuPage {
 		return menuButton;
 	}
 
-
 	@Override
 	public void showNotify() {
-		TransitionManager.addTransitionListener(listener);
 		super.showNotify();
+		this.powerWidget.reload();
+		this.powerWidget.startAnimation();
 	}
-
-	@Override
-	public void hideNotify() {
-		super.hideNotify();
-		TransitionManager.removeTransitionListener(listener);
-	}
-
-	private boolean isInHierarchy(Widget widget, final Widget hierarchy) {
-		if (hierarchy == null) {
-			return false;
-		}
-		while (widget != null) {
-			if (hierarchy == widget) {
-				return true;
-			}
-			widget = widget.getParent();
-		}
-		return false;
+	
+	/**
+	 * Select a point in the chart.
+	 * Used by the robot.
+	 * @param id the id of the point, null for none.
+	 */
+	public void selectPoint(Integer id) {
+		this.powerWidget.selectPoint(id);
 	}
 }

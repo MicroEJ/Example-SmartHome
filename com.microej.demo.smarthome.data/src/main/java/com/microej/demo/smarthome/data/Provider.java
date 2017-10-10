@@ -7,12 +7,25 @@
 package com.microej.demo.smarthome.data;
 
 /**
- *
+ * A provider provide a list of device.
+ * @param <T> the type of device.
  */
 public interface Provider<T extends Device<?>> {
+	/**
+	 * Gets the list of device.
+	 * @return A list of device.
+	 */
 	T[] list();
 
+	/**
+	 * Adds a listener to be notify when a device is register or unregistered.
+	 * @param listener the listener.
+	 */
 	void addListener(ProviderListener<T> listener);
 
+	/**
+	 * Removes a listener.
+	 * @param listener the listener.
+	 */
 	void removeListener(ProviderListener<T> listener);
 }

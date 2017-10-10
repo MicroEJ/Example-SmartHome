@@ -12,21 +12,33 @@ import ej.bon.Timer;
 import ej.bon.TimerTask;
 import ej.components.dependencyinjection.ServiceLoaderFactory;
 
-
+/**
+ * An implementation of a {@link Thermostat}.
+ */
 public class DefaultThermostat extends AbstractDevice<ThermostatEventListener> implements Thermostat {
 
+	private static final int TEMP_CHANGE_DELAY = 10_000;
+	private static final String NAME = "Thermostat"; //$NON-NLS-1$
+	private static final int INITIAL_TARGET = 240;
+	private static final int INITIAL_TEMPERATURE = 220;
 	private static final int MAX = 400;
 	private static final int MIN = 50;
 	private int temperature;
 	private int target;
 
+	/**
+	 * Instantiates a {@link DefaultThermostat} with {@value NAME} name.
+	 */
 	public DefaultThermostat() {
-		this("Thermostat");
-		temperature = 220;
-		target = 240;
+		this(NAME); 
+		this.temperature = INITIAL_TEMPERATURE;
+		this.target = INITIAL_TARGET;
 	}
 
-
+	/**
+	 * Instantiates a {@link DefaultThermostat}.
+	 * @param name the thermostat name.
+	 */
 	public DefaultThermostat(final String name) {
 		super(name);
 
@@ -41,12 +53,12 @@ public class DefaultThermostat extends AbstractDevice<ThermostatEventListener> i
 				}
 				setTemperature(temperature);
 			}
-		}, 1_000, 10_000);
+		}, TEMP_CHANGE_DELAY, TEMP_CHANGE_DELAY);
 	}
 
 	@Override
 	public int getTemperature() {
-		return temperature;
+		return this.temperature;
 	}
 
 	@Override
@@ -61,20 +73,20 @@ public class DefaultThermostat extends AbstractDevice<ThermostatEventListener> i
 
 	@Override
 	public int getTargetTemperature() {
-		return target;
+		return this.target;
 	}
 
 	@Override
 	public void setTargetTemperature(final int temperature) {
 		this.target = temperature;
-		for (final ThermostatEventListener thermostatEventListener : listeners) {
+		for (final ThermostatEventListener thermostatEventListener : this.listeners) {
 			thermostatEventListener.onTargetTemperatureChange(temperature);
 		}
 	}
-
-	public void setTemperature(final int temperature) {
+	
+	private void setTemperature(final int temperature) {
 		this.temperature = temperature;
-		for (final ThermostatEventListener thermostatEventListener : listeners) {
+		for (final ThermostatEventListener thermostatEventListener : this.listeners) {
 			thermostatEventListener.onTemperatureChange(temperature);
 		}
 	}

@@ -13,6 +13,7 @@ import ej.widget.container.Dock;
 
 /**
  * An abstract device widget.
+ * @param <D> The device type.
  */
 public abstract class DeviceWidget<D extends Device<?>> extends Dock {
 

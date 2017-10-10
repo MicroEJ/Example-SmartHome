@@ -19,14 +19,16 @@ import ej.microui.display.shape.AntiAliasedShapes;
 import ej.style.Style;
 import ej.style.container.Rectangle;
 import ej.style.util.ElementAdapter;
+import ej.widget.animation.AnimationListener;
+import ej.widget.animation.AnimationListenerRegistry;
 import ej.widget.listener.OnValueChangeListener;
-import ej.widget.navigation.TransitionListener;
-import ej.widget.navigation.TransitionManager;
 
 /**
  * A circulat progress for a thermostat.
  */
 public class ThermostatCircularProgress extends CircularProgressWidget {
+
+	private static final int THICKNESS = 8;
 
 	private final ThermostatBoundedRangeModel model;
 
@@ -37,7 +39,7 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	private final ElementAdapter colors;
 	private final List<OnValueChangeListener> listeners;
 
-	private final TransitionListener transitionListener;
+	private boolean isOddShow;
 
 	/**
 	 * Instantiates a ThermostatCircularProgress.
@@ -47,18 +49,16 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	 */
 	public ThermostatCircularProgress(final ThermostatBoundedRangeModel model) {
 		super(model);
-		setThickness(8);
+		setThickness(THICKNESS);
 		this.model = model;
-		target = new ValueAnimation(model.getValue(), model.getTargetValue(), model.getTargetValue(),
+		this.target = new ValueAnimation(model.getValue(), model.getTargetValue(), model.getTargetValue(),
 				model.getMaximum());
-		listener = new OnValueChangeListener(){
+		this.listener = new OnValueChangeListener() {
 			@Override
 			public void onValueChange(final int newValue) {
-				target.setTargetValue(newValue);
+				ThermostatCircularProgress.this.target.setTargetValue(newValue);
 				startAnimation();
 				notifyListeners();
-
-
 			}
 
 			@Override
@@ -74,52 +74,34 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 			}
 		};
 
-		listeners = new ArrayList<>();
+		this.listeners = new ArrayList<>();
 
 		// colors is used to handle multiple colors, the background color of colors is the color to use to draw target
 		// arc when colder
-		colors = new ElementAdapter(this);
-		colors.addClassSelector(ClassSelectors.THERMOSTAT_TARGET_COLOR);
+		this.colors = new ElementAdapter(this);
+		this.colors.addClassSelector(ClassSelectors.THERMOSTAT_TARGET_COLOR);
 
-		transitionListener = new TransitionListener() {
-
-			@Override
-			public void onTransitionStart(final TransitionManager transitionManager) {
-				stopAnimation();
-				resetAnimation();
-
-			}
-
-			@Override
-			public void onTransitionStop(final TransitionManager manager) {
-				if (isShown()) {
-					resetAnimation();
-					startAnimation();
-				}
-
-			}
-		};
+		resetAnimation();
 	}
 
 	@Override
 	public void renderContent(final GraphicsContext g, final Style style, final Rectangle bounds) {
 		super.renderContent(g, style, bounds);
-		if (targetAngle != 0 && getValueAnimation().isFinished()) {
+		if (this.targetAngle != 0 && getValueAnimation().isFinished()) {
 			final AntiAliasedShapes shapes = AntiAliasedShapes.Singleton;
-			if (targetAngle > 0) {
-				g.setColor(colors.getStyle().getForegroundColor());
+			if (this.targetAngle > 0) {
+				g.setColor(this.colors.getStyle().getForegroundColor());
 			} else {
-				g.setColor(colors.getStyle().getBackgroundColor());
+				g.setColor(this.colors.getStyle().getBackgroundColor());
 			}
-			shapes.drawCircleArc(g, getCircleOffset() + getCircleX(), getCircleOffset() + getCircleY(), (getDiameter() - (getCircleOffset() << 1)),
-					getStartAngle() + getCurrentArcAngle(),
-					targetAngle);
+			shapes.drawCircleArc(g, getCircleOffset() + getCircleX(), getCircleOffset() + getCircleY(),
+					(getDiameter() - (getCircleOffset() << 1)), getStartAngle() + getCurrentArcAngle(), this.targetAngle);
 		}
 	}
 
 	@Override
 	public void setValue(final int value) {
-		target.setStart(value);
+		this.target.setStart(value);
 		super.setValue(value);
 	}
 
@@ -129,21 +111,21 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	 * @return the target temperature.
 	 */
 	public int getTargetValue() {
-		return target.getTargetValue();
+		return this.target.getTargetValue();
 	}
 
 	/**
 	 * Saves the target temperature into the model.
 	 */
 	public void validateTagetValue() {
-		model.setTargetValue(target.getTargetValue());
+		this.model.setTargetValue(this.target.getTargetValue());
 	}
 
 	private void updateAngle() {
 		final int computeAngle = computeAngle(
-				target.getCurrentValue() - getValueAnimation().getCurrentValue() + model.getMinimum());
-		if (computeAngle != targetAngle) {
-			targetAngle = computeAngle;
+				this.target.getCurrentValue() - getValueAnimation().getCurrentValue() + this.model.getMinimum());
+		if (computeAngle != this.targetAngle) {
+			this.targetAngle = computeAngle;
 			repaint();
 		}
 	}
@@ -160,29 +142,31 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	 *            the temperature.
 	 */
 	public void setLocalTarget(final int value) {
-		target.setTargetValue(value);
-		target.start();
+		this.target.setTargetValue(value);
+		this.target.start();
 		startAnimation();
 		notifyListeners();
 	}
 
 	@Override
 	public void showNotify() {
-		transitionListener.onTransitionStart(null);
-		TransitionManager.addTransitionListener(transitionListener);
-		setLocalTarget(model.getTargetValue());
-		model.addOnTargetValueChangeListener(listener);
-		model.register();
+		if(this.isOddShow){
+			setLocalTarget(this.model.getTargetValue());
+			startAnimation();
+		}
+		this.isOddShow = !this.isOddShow;
+		this.model.addOnTargetValueChangeListener(this.listener);
+		this.model.register();
 		super.showNotify();
 	}
 
 	@Override
 	public void hideNotify() {
 		super.hideNotify();
-		transitionListener.onTransitionStart(null);
-		TransitionManager.addTransitionListener(transitionListener);
-		model.removeOnTargetValueChangeListener(listener);
-		model.unregister();
+		stopAnimation();
+		resetAnimation();
+		this.model.removeOnTargetValueChangeListener(this.listener);
+		this.model.unregister();
 	}
 
 	/**
@@ -192,7 +176,7 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	 *            the listener.
 	 */
 	public void addOnTargetValueChangeListener(final OnValueChangeListener listener) {
-		listeners.add(listener);
+		this.listeners.add(listener);
 	}
 
 	/**
@@ -202,34 +186,34 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	 *            the listener.
 	 */
 	public void removeOnTargetValueChangeListener(final OnValueChangeListener listener) {
-		listeners.remove(listener);
+		this.listeners.remove(listener);
 	}
 
 	private void notifyListeners() {
-		for (final OnValueChangeListener changeListener : listeners) {
-			changeListener.onValueChange(target.getTargetValue());
+		for (final OnValueChangeListener changeListener : this.listeners) {
+			changeListener.onValueChange(this.target.getTargetValue());
 		}
 	}
 
 	@Override
 	public void resetAnimation() {
 		super.resetAnimation();
-		target.reset();
-		targetAngle = 0;
+		this.target.reset();
+		this.targetAngle = 0;
 	}
 
 	@Override
 	public boolean doTick(final long currentTimeMillis) {
 		final boolean tick = super.doTick(currentTimeMillis);
 		if (!tick) {
-			if (target.isFinished()) {
+			if (this.target.isFinished()) {
 				return false;
 			}
-			target.tick(currentTimeMillis);
+			this.target.tick(currentTimeMillis);
 			updateAngle();
 		} else {
 			// So the animation starts at the end of the first one.
-			target.start(currentTimeMillis);
+			this.target.start(currentTimeMillis);
 		}
 		return true;
 	}

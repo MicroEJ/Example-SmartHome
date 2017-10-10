@@ -6,13 +6,21 @@
  */
 package com.microej.demo.smarthome.data.thermostat;
 
-import com.microej.demo.smarthome.data.ElementListener;
-
 /**
- *
+ * Listener of thermostat events.
  */
-public interface ThermostatEventListener extends ElementListener {
+public interface ThermostatEventListener  {
+	
+	/**
+	 * Call back function called when the temperature changed.
+	 * @param temperature the new temperature.
+	 */
 	void onTemperatureChange(int temperature);
 
+
+	/**
+	 * Call back function called when the target temperature changed.
+	 * @param targetTemperature the new target temperature.
+	 */
 	void onTargetTemperatureChange(int targetTemperature);
 }

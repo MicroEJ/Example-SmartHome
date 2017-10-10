@@ -3,6 +3,5 @@
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/main/resources"/>
 	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=com.microej.demo.smarthome&amp;ivyXmlPath=module.ivy&amp;confs=*"/>
-	<classpathentry kind="lib" path="lib/widget-2.2.0-RC201702021437.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -15,11 +15,11 @@ import ej.style.util.StyleHelper;
  */
 public class HomeImageLoader extends DefaultImageLoader {
 
-	private static final String SUFFIX = ".png";
-	private static final String ACTIVE = "_active";
-	private static final String BASE = "/images/";
-	private static final String MENU = "menu/";
-	private static final String DASHBOARD = "dashboard/";
+	private static final String SUFFIX = ".png"; //$NON-NLS-1$
+	private static final String ACTIVE = "_active"; //$NON-NLS-1$
+	private static final String BASE = "/images/"; //$NON-NLS-1$
+	private static final String MENU = "menu/"; //$NON-NLS-1$
+	private static final String DASHBOARD = "dashboard/"; //$NON-NLS-1$
 
 	/**
 	 * Gets the path for a menu image.
@@ -42,8 +42,7 @@ public class HomeImageLoader extends DefaultImageLoader {
 	 * @return the path from the images root folder the the image.
 	 */
 	public static String getMenuPath(String name, final boolean active) {
-		name = MENU + name;
-		return getImageName(name, active);
+		return getImageName(MENU + name, active);
 	}
 
 	/**
@@ -67,8 +66,7 @@ public class HomeImageLoader extends DefaultImageLoader {
 	 * @return the path from the images root folder the the image.
 	 */
 	public static String getDashBoardPath(String name, final boolean active) {
-		name = DASHBOARD + name;
-		return getImageName(name, active);
+		return getImageName(DASHBOARD + name, active);
 	}
 
 	/**
@@ -81,10 +79,11 @@ public class HomeImageLoader extends DefaultImageLoader {
 	 * @return The image name.
 	 */
 	private static String getImageName(String name, final boolean active) {
+		String imageName = name;
 		if (active) {
-			name += ACTIVE;
+			imageName += ACTIVE;
 		}
-		return name;
+		return imageName;
 	}
 
 	/**

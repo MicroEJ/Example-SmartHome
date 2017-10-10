@@ -17,7 +17,10 @@ import ej.bon.TimerTask;
 import ej.components.dependencyinjection.ServiceLoaderFactory;
 
 
-public class DefaultPower extends AbstractDevice<PowerEventListener> implements Power {
+/**
+ * An implementation of a {@link PowerMeter}.
+ */
+public class DefaultPowerMeter extends AbstractDevice<PowerEventListener> implements PowerMeter {
 
 	private static final long HOUR_IN_MS = 1000 * 60 * 60;
 
@@ -30,12 +33,14 @@ public class DefaultPower extends AbstractDevice<PowerEventListener> implements 
 	private final List<InstantPower> powers;
 	private long lastPowerTime;
 
+	/**
+	 * Instantiates a {@link DefaultPowerMeter}.
+	 */
+	public DefaultPowerMeter() {
+		super(DefaultPowerMeter.class.getSimpleName());
+		this.powers = new ArrayList<InstantPower>(MAX_POWER_AT_A_TIME);
 
-	public DefaultPower() {
-		super(DefaultPower.class.getSimpleName());
-		powers = new ArrayList<InstantPower>(MAX_POWER_AT_A_TIME);
-
-		lastPowerTime = System.currentTimeMillis();
+		this.lastPowerTime = System.currentTimeMillis();
 		for (int i = INITIAL_HOUR; i < getMaxPowerAtATime() + INITIAL_HOUR; i++) {
 			addInstantPower();
 		}
@@ -50,16 +55,16 @@ public class DefaultPower extends AbstractDevice<PowerEventListener> implements 
 
 	@Override
 	public InstantPower getInstantPowerConsumption() {
-		synchronized (powers) {
-			return powers.get(powers.size() - 1);
+		synchronized (this.powers) {
+			return this.powers.get(this.powers.size() - 1);
 		}
 	}
 
 	@Override
 	public InstantPower[] getPowerConsumptions() {
-		synchronized (powers) {
-			final InstantPower[] powersArray = new InstantPower[powers.size()];
-			return powers.toArray(powersArray);
+		synchronized (this.powers) {
+			final InstantPower[] powersArray = new InstantPower[this.powers.size()];
+			return this.powers.toArray(powersArray);
 		}
 	}
 
@@ -68,25 +73,19 @@ public class DefaultPower extends AbstractDevice<PowerEventListener> implements 
 		return MAX_PC;
 	}
 
-	/**
-	 * Gets the maximum number of power values
-	 */
-	public int getMaxPowerAtATime() {
+	private int getMaxPowerAtATime() {
 		return MAX_POWER_AT_A_TIME;
 	}
 
-	/**
-	 * Adds an instant power
-	 */
-	public void addInstantPower(final InstantPower instantPower) {
-		synchronized (powers) {
-			if (powers.size() >= MAX_POWER_AT_A_TIME) {
-				powers.remove(0);
+	private void addInstantPower(final InstantPower instantPower) {
+		synchronized (this.powers) {
+			if (this.powers.size() >= MAX_POWER_AT_A_TIME) {
+				this.powers.remove(0);
 			}
-			powers.add(instantPower);
+			this.powers.add(instantPower);
 		}
 
-		for (final PowerEventListener powerEventListener : listeners) {
+		for (final PowerEventListener powerEventListener : this.listeners) {
 			powerEventListener.onInstantPower(instantPower);
 		}
 	}
@@ -96,9 +95,9 @@ public class DefaultPower extends AbstractDevice<PowerEventListener> implements 
 	 * Adds a power data value
 	 */
 	private synchronized void addInstantPower() {
-		lastPowerTime += HOUR_IN_MS;
+		this.lastPowerTime += HOUR_IN_MS;
 		final int powerValue = RAND.nextInt(getMaxPowerConsumption());
-		final InstantPower instantPower = new DefaultInstantPower(lastPowerTime, powerValue);
+		final InstantPower instantPower = new DefaultInstantPower(this.lastPowerTime, powerValue);
 		addInstantPower(instantPower);
 	}
 }

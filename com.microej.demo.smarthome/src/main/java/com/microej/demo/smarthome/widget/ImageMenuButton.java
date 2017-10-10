@@ -30,15 +30,14 @@ public class ImageMenuButton extends ImageToggle {
 
 	@Override
 	protected String getCheckedImagePath() {
-		final String absolutePath = HomeImageLoader.getAbsolutePath(HomeImageLoader.getMenuPath(name, true));
+		final String absolutePath = HomeImageLoader.getAbsolutePath(HomeImageLoader.getMenuPath(this.name, true));
 		return absolutePath;
 	}
 
 	@Override
 	protected String getUncheckedImagePath() {
-		final String absolutePath = HomeImageLoader.getAbsolutePath(HomeImageLoader.getMenuPath(name, false));
+		final String absolutePath = HomeImageLoader.getAbsolutePath(HomeImageLoader.getMenuPath(this.name, false));
 		return absolutePath;
 	}
-
 
 }

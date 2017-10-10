@@ -17,8 +17,8 @@ import ej.style.container.Rectangle;
  */
 public class CircularPlainBackground implements Background {
 
-	private static int THICKNESS = 2;
-	private static int FADE = 1;
+	private static final int THICKNESS = 2;
+	private static final int FADE = 1;
 
 	@Override
 	public boolean isTransparent() {

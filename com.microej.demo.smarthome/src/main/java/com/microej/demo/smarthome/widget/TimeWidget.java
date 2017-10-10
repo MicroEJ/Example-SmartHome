@@ -9,7 +9,6 @@ package com.microej.demo.smarthome.widget;
 import java.util.Calendar;
 
 import com.microej.demo.smarthome.util.Strings;
-import com.microej.demo.smarthome.util.Utils;
 
 import ej.bon.Timer;
 import ej.bon.TimerTask;
@@ -26,8 +25,9 @@ import ej.widget.StyledWidget;
  */
 public class TimeWidget extends StyledWidget {
 
+	private static final int MID_DAY = 12;
 	// used for size.
-	private static final String DATE = "00:00 PM";
+	private static final String DATE = "00:00 PM"; //$NON-NLS-1$
 	private static final int REFRESH_RATE = 800;
 	private static final int UPDATE_RATE = 30;
 	private TimerTask update;
@@ -47,40 +47,39 @@ public class TimeWidget extends StyledWidget {
 	@Override
 	public void renderContent(final GraphicsContext g, final Style style, final Rectangle bounds) {
 		final Font font = StyleHelper.getFont(style);
-		final StringBuilder builder = new StringBuilder(start);
-		if ((refresh & 1) == 0) {
+		final StringBuilder builder = new StringBuilder(this.start);
+		if ((this.refresh & 1) == 0) {
 			builder.append(Strings.HOUR_MIN_SEPARATOR);
 		} else {
 			builder.append(' ');
 		}
-		builder.append(end);
+		builder.append(this.end);
 
 		style.getTextManager().drawText(g, builder.toString(), font, style.getForegroundColor(), bounds,
 				style.getAlignment());
 	}
 
-
 	private void update() {
-		if (isShown() && getPanel().isActive() || start == null) {
+		if (isShown() && getPanel().isActive() || this.start == null) {
 
-			refresh++;
-			if (refresh > UPDATE_RATE) {
+			this.refresh++;
+			if (this.refresh > UPDATE_RATE) {
 				final Calendar calendar = Calendar.getInstance();
 				final boolean am = calendar.get(Calendar.AM_PM) == Calendar.AM;
 				int hour = calendar.get(Calendar.HOUR);
 				if (hour == 0) {
-					hour = 12;
+					hour = MID_DAY;
 				}
 				final int min = calendar.get(Calendar.MINUTE);
-				start = Utils.formatDoubleDigits(hour);
-				final StringBuilder builder = new StringBuilder(Utils.formatDoubleDigits(min));
+				this.start = formatDoubleDigits(hour);
+				final StringBuilder builder = new StringBuilder(formatDoubleDigits(min));
 				builder.append(Strings.TIME_SEPARATOR);
 				if (am) {
 					builder.append(Strings.AM);
 				} else {
 					builder.append(Strings.PM);
 				}
-				end = builder.toString();
+				this.end = builder.toString();
 			}
 
 			repaint();
@@ -97,9 +96,9 @@ public class TimeWidget extends StyledWidget {
 	public void showNotify() {
 		super.showNotify();
 		final Timer timer = ServiceLoaderFactory.getServiceLoader().getService(Timer.class);
-		synchronized (sync) {
-			if (update == null) {
-				update = new TimerTask() {
+		synchronized (this.sync) {
+			if (this.update == null) {
+				this.update = new TimerTask() {
 
 					@Override
 					public void run() {
@@ -107,7 +106,7 @@ public class TimeWidget extends StyledWidget {
 
 					}
 				};
-				timer.schedule(update, REFRESH_RATE, REFRESH_RATE);
+				timer.schedule(this.update, REFRESH_RATE, REFRESH_RATE);
 			}
 		}
 	}
@@ -115,9 +114,22 @@ public class TimeWidget extends StyledWidget {
 	@Override
 	public void hideNotify() {
 		super.hideNotify();
-		if (update != null) {
-			update.cancel();
-			update=null;
+		if (this.update != null) {
+			this.update.cancel();
+			this.update = null;
 		}
+	}
+	
+	/**
+	 * Format an integer to a double digit string.
+	 *
+	 * @param integer
+	 * @return the integer as a string.
+	 */
+	private static String formatDoubleDigits(final int integer) {
+		if (integer < 10) {
+			return '0' + String.valueOf(integer);
+		}
+		return String.valueOf(integer);
 	}
 }

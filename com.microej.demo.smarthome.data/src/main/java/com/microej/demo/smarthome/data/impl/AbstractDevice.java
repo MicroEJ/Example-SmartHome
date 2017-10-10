@@ -10,37 +10,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.microej.demo.smarthome.data.Device;
-import com.microej.demo.smarthome.data.ElementListener;
 
+/**
+ * An abstraction of a device.
+ * @param <EL> the type of device listener.
+ */
+public abstract class AbstractDevice<EL extends Object> implements Device<EL> {
 
-public abstract class AbstractDevice<EL extends ElementListener> implements Device<EL> {
-
+	/**
+	 * The device listeners.
+	 */
 	protected final List<EL> listeners;
 	private final String name;
 
 	/**
-	 * @param name
+	 * Instantiates a device.
+	 * @param name the name of the device.
 	 */
 	public AbstractDevice(final String name) {
 		super();
 		this.name = name;
-		listeners = new ArrayList<>();
+		this.listeners = new ArrayList<>();
 	}
 
 	@Override
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	@Override
 	public void addListener(final EL listener) {
-		listeners.add(listener);
+		this.listeners.add(listener);
 
 	}
 
 	@Override
 	public void removeListener(final EL listener) {
-		listeners.remove(listener);
+		this.listeners.remove(listener);
 
 	}
 }
