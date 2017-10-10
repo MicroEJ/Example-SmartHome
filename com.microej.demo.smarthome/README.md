@@ -2,7 +2,7 @@
 Connect to various appliances (thermostats, lights, doors, power controls...), monitor and control them with useful services including home status overview, and various control for temperature, light and door.
 This project contains the business and view of smarthome, as well as an entry point.
 
-## Usage
+# Usage
 ## Run on MicroEJ Simulator
 1. Right Click on the project
 2. Select **Run as -> MicroEJ Application**
@@ -35,15 +35,11 @@ This project contains the business and view of smarthome, as well as an entry po
   * BON-1.2 or higher
   * MICROUI-2.0 or higher
 
-## Dependencies
+# Dependencies
 _All dependencies are retrieved transitively by Ivy resolver_.
-
-## Project dependencies
-* [com.microej.demo.smarthome.data](com.microej.demo.smarthome.data)
-* [com.microej.demo.smarthome.data.default](com.microej.demo.smarthome.data.default)
 
 # Source
 N/A
 
-## Restrictions
+# Restrictions
 None.
