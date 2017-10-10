@@ -1,19 +1,14 @@
-<!--
-	Markdown
-	Copyright 2014-2016 IS2T. All rights reserved.
-	Use of this source code is subject to license terms.
--->
 # Overview
 This project contains a fake implemantation of the data provider of Smarthome.
 
-## Usage
+# Usage
 Add the following line to your `module.ivy` or your `ivy.xml`:
 > `<dependency org="com.microej.demo.smarthome" name="data.fake" rev="..."/>`
 
 # Requirements
   - EDC-1.2 or higher
 
-## Dependencies
+# Dependencies
 _All dependencies are retrieved transitively by Ivy resolver_.
 
 ## Project dependencies
@@ -22,5 +17,5 @@ _All dependencies are retrieved transitively by Ivy resolver_.
 # Source
 N/A
 
-## Restrictions
+# Restrictions
 None.

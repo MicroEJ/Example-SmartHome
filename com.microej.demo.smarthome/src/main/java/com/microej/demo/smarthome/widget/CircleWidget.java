@@ -57,9 +57,9 @@ public class CircleWidget extends StyledWidget {
 		final int radius = this.diameter / 2;
 		final int dX = x - (this.x + radius);
 		final int dY = y - (this.y + radius);
-		final int d2 = dX * dX + dY * dY;
-		final int r = radius >> 1;
-		return d2 <= r * r;
+		final int rPointer = dX * dX + dY * dY;
+		final int innerRadius = radius / 2;
+		return rPointer <= innerRadius * innerRadius;
 	}
 
 	@Override

@@ -219,7 +219,7 @@ public class HomeRobot implements Automaton {
 			this.state = INITIAL_STATE + 4;
 			return;
 		}
-		final int lightId = this.rand.nextInt(lightsCount);
+		final int lightId = (lightsCount>0)?this.rand.nextInt(lightsCount):0;
 
 		switch (this.state) {
 		case INITIAL_STATE:

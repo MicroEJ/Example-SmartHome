@@ -37,6 +37,7 @@ public class LightWidget extends DeviceWidget<Light> implements OnStateChangeLis
 	private final LightCircularProgress progress;
 	private final ImageSwitch switchButton;
 	private boolean isChangingState;
+	private ButtonWrapper circularButton;
 
 	/**
 	 * Instantiates a LightWidget.
@@ -59,10 +60,10 @@ public class LightWidget extends DeviceWidget<Light> implements OnStateChangeLis
 
 		overlapingComposite.add(this.progress);
 
-		final ButtonWrapper circularButton = new LimitedButtonWrapper();
+		this.circularButton = new LimitedButtonWrapper();
 		final LightCircleWidget lightCircleWidget = new LightCircleWidget(light);
-		circularButton.setWidget(lightCircleWidget);
-		circularButton.addOnClickListener(new OnClickListener() {
+		this.circularButton.setWidget(lightCircleWidget);
+		this.circularButton.addOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick() {
 				openColorPicker();
@@ -70,7 +71,7 @@ public class LightWidget extends DeviceWidget<Light> implements OnStateChangeLis
 		});
 
 		lightCircleWidget.addClassSelector(ClassSelectors.LIGHT_PROGRESS);
-		overlapingComposite.add(circularButton);
+		overlapingComposite.add(this.circularButton);
 		setCenter(overlapingComposite);
 
 		// toggle button
@@ -104,6 +105,7 @@ public class LightWidget extends DeviceWidget<Light> implements OnStateChangeLis
 			}
 			this.switchButton.setChecked(on);
 			this.model.switchOn(on);
+			this.circularButton.setEnabled(on);
 		}
 		this.isChangingState = false;
 	}
@@ -162,6 +164,7 @@ public class LightWidget extends DeviceWidget<Light> implements OnStateChangeLis
 		boolean on = this.model.isOn();
 		this.switchButton.setChecked(on);
 		this.model.switchOn(on);
+		
 		super.showNotify();
 	}
 	
