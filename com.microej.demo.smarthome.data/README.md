@@ -15,5 +15,5 @@ _All dependencies are retrieved transitively by Ivy resolver_.
 # Source
 N/A
 
-## Restrictions
+# Restrictions
 None.
