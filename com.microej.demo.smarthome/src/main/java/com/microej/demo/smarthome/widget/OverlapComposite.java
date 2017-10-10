@@ -61,4 +61,16 @@ public class OverlapComposite extends StyledComposite {
 	public void add(final Widget widget) throws NullPointerException, IllegalArgumentException {
 		super.add(widget);
 	}
+	
+	@Override
+	public boolean handleEvent(int event) {
+		Widget[] widgets = getWidgets();
+		for (int i = widgets.length - 1; i >=0 ; i--) {
+			Widget widget = widgets[i];
+			if(widget.isEnabled() && widget.handleEvent(event)){
+				break;
+			}
+		}
+		return true;
+	}
 }

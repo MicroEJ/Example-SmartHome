@@ -22,7 +22,8 @@ public class LimitedButtonWrapper extends ButtonWrapper {
 			final int x = this.getRelativeX(pointer.getAbsoluteX());
 			final int y = this.getRelativeY(pointer.getAbsoluteY());
 			if (getWidget(0).contains(x, y)) {
-				return super.handleEvent(event);
+				super.handleEvent(event);
+				return true;
 			}
 			return false;
 		}
