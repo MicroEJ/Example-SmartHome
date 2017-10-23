@@ -7,6 +7,7 @@
 package com.microej.demo.smarthome.widget;
 
 import ej.animation.Animation;
+import ej.bon.Util;
 import ej.motion.Motion;
 
 /**
@@ -79,13 +80,15 @@ public class ValueAnimation implements Motion, Animation {
 
 	@Override
 	public boolean tick(final long currentTimeMillis) {
-		if (this.targetValue == this.currentValue) {
+		int currentValue = this.currentValue;
+		if (this.targetValue == currentValue) {
 			return false;
 		}
-		if (this.targetValue > this.currentValue) {
-			this.currentValue = Math.min(this.targetValue, this.currentValue + getValueProgress(currentTimeMillis));
+		int progress = getValueProgress(currentTimeMillis);
+		if (this.targetValue > currentValue) {
+			this.currentValue = Math.min(this.targetValue, currentValue + progress);
 		} else /* if (targetValue < currentValue) */ {
-			this.currentValue = Math.max(this.targetValue, this.currentValue - getValueProgress(currentTimeMillis));
+			this.currentValue = Math.max(this.targetValue, currentValue - progress);
 		}
 		return true;
 	}
@@ -93,7 +96,8 @@ public class ValueAnimation implements Motion, Animation {
 	private int getValueProgress(final long currentTimeMillis) {
 		final long elapsed = currentTimeMillis - this.lastTick;
 		this.lastTick = currentTimeMillis;
-		return (int) (elapsed * this.valueProgress);
+		Long progress = Long.valueOf((long) (elapsed * this.valueProgress));
+		return progress.intValue();
 	}
 
 	@Override
@@ -132,7 +136,7 @@ public class ValueAnimation implements Motion, Animation {
 
 	@Override
 	public void start() {
-		start(System.currentTimeMillis());
+		start(Util.platformTimeMillis());
 
 	}
 
@@ -144,7 +148,6 @@ public class ValueAnimation implements Motion, Animation {
 	 */
 	public void start(final long currentTimeMillis) {
 		this.lastTick = currentTimeMillis;
-
 	}
 
 	/**
