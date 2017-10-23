@@ -1,3 +1,7 @@
+## 1.2.1 (2017-10-23)
+Bugfixes:
+  - J0004DSMH-60 Animation error with widget 2.3.1.
+
 ## 1.2.0 (2017-10-06)
 Features:
   - J0004DSMH-54 Add possibility to skip graph animation 
