@@ -1,3 +1,7 @@
+[//]: # (Markdown)
+[//]: # (Copyright 2017 IS2T. All rights reserved.)
+[//]: # (Use of this source code is subject to license terms.)
+
 # Overview
 This project defines the interface to provide data to the smart home project.
 

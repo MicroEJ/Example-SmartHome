@@ -1,3 +1,7 @@
+[//]: # (Markdown)
+[//]: # (Copyright 2017 IS2T. All rights reserved.)
+[//]: # (Use of this source code is subject to license terms.)
+
 # Overview
 Connect to various appliances (thermostats, lights, doors, power controls...), monitor and control them with useful services including home status overview, and various control for temperature, light and door.
 This project contains the business and view of smarthome, as well as an entry point.

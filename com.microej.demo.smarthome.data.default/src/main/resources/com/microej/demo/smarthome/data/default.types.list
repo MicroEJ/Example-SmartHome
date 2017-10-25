@@ -1,3 +1,6 @@
+# Copyright 2017 IS2T. All rights reserved.
+# Use of this source code is subject to license terms.
+
 ej.util.concurrent.SingleThreadExecutor
 com.microej.demo.smarthome.data.door.DefaultDoorProvider
 com.microej.demo.smarthome.data.thermostat.DefaultThermostat
