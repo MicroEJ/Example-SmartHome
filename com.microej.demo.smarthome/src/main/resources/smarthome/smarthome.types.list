@@ -1,3 +1,7 @@
+# Copyright 2017 IS2T. All rights reserved.
+# For demonstration purpose only.
+# IS2T PROPRIETARY. Use is subject to license terms.
+
 com.microej.demo.smarthome.style.HomeFontLoader
 com.microej.demo.smarthome.style.HomeImageLoader
 com.microej.demo.smarthome.style.HomeImageTheme

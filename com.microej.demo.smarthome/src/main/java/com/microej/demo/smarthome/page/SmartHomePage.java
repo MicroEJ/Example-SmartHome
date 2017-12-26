@@ -1,10 +1,14 @@
 /*
  * Java
  *
- * Copyright 2016 IS2T. All rights reserved.
- * Use of this source code is subject to license terms.
+ * Copyright 2016-2017 IS2T. All rights reserved.
+ * For demonstration purpose only.
+ * IS2T PROPRIETARY. Use is subject to license terms.
  */
 package com.microej.demo.smarthome.page;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.style.HomeImageLoader;
@@ -15,6 +19,7 @@ import com.microej.demo.smarthome.widget.TimeWidget;
 
 import ej.mwt.MWT;
 import ej.mwt.Widget;
+import ej.style.image.DefaultImageLoader;
 import ej.widget.basic.ButtonImage;
 import ej.widget.basic.Label;
 import ej.widget.container.Dock;
@@ -56,7 +61,12 @@ public class SmartHomePage extends MenuNavigatorPage {
 		final Dock dock = new Dock();
 		dock.setCenter(new Label(Strings.SMARTHOME_TITLE));
 		dock.addRight(new TimeWidget());
+		// Store image might not be in the path, disable the logger.
+		Logger logger = Logger.getLogger(DefaultImageLoader.class.getName());
+		Level level = logger.getLevel();
+		logger.setLevel(Level.SEVERE);
 		this.storeButton = new ButtonImage(HomeImageLoader.getAbsolutePath(Images.STORE));
+		logger.setLevel(level);
 		dock.addLeft(this.storeButton);
 		dock.addClassSelector(ClassSelectors.HEADER);
 		return dock;
