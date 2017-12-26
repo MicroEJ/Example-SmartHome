@@ -3,6 +3,10 @@
 [//]: # (For demonstration purpose only.)
 [//]: # (IS2T PROPRIETARY. Use is subject to license terms.)
 
+## 1.2.2 (2017-12-26)
+Features:
+  - J0004DSMH-62 Fix metadata for publication.
+  
 ## 1.2.1 (2017-10-23)
 Bugfixes:
   - J0004DSMH-60 Animation error with widget 2.3.1.

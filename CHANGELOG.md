@@ -3,6 +3,11 @@
 [//]: # (For demonstration purpose only.)
 [//]: # (IS2T PROPRIETARY. Use is subject to license terms.)
 
+
+## 2.0.1 (2017-12-26)
+Features:
+  - J0004DSMH-62 Fix metadata for publication.
+  
 ## 2.0.0 (2017-10-25)
 Features:
   - Update com.microej.demo.smarthome (v1.2.1).
