@@ -1,6 +1,7 @@
 [//]: # (Markdown)
 [//]: # (Copyright 2017 IS2T. All rights reserved.)
-[//]: # (Use of this source code is subject to license terms.)
+[//]: # (For demonstration purpose only.)
+[//]: # (IS2T PROPRIETARY. Use is subject to license terms.)
 
 ## 1.2.1 (2017-10-23)
 Bugfixes:

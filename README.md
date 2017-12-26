@@ -1,6 +1,7 @@
 [//]: # (Markdown)
 [//]: # (Copyright 2017 IS2T. All rights reserved.)
-[//]: # (Use of this source code is subject to license terms.)
+[//]: # (For demonstration purpose only.)
+[//]: # (IS2T PROPRIETARY. Use is subject to license terms.)
 
 # Overview
 This repository contains the smarthome demo.
@@ -16,7 +17,7 @@ There are two ways to do it:
 	1. Build the project [com.microej.demo.smarthome.data](com.microej.demo.smarthome.data) with easy Ant
 	2. Build the project [com.microej.demo.smarthome.data.default](com.microej.demo.smarthome.data.default) with easy Ant
 
-Now you can follow com.microej.demo.smarthome [README.md](com.microej.demo.smarthome/README.md).
+Now you can follow com.microej.demo.smarthome [README](com.microej.demo.smarthome/README.md).
 
 # Requirements
 * MicroEJ Studio or SDK 4.1 or later

@@ -1,5 +1,6 @@
 # Copyright 2017 IS2T. All rights reserved.
-# Use of this source code is subject to license terms.
+# For demonstration purpose only.
+# IS2T PROPRIETARY. Use is subject to license terms.
 
 ej.style.font.loader.FontLoader=com.microej.demo.smarthome.style.HomeFontLoader
 ej.style.image.ImageLoader=com.microej.demo.smarthome.style.HomeImageLoader

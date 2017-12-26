@@ -1,5 +1,6 @@
-# Copyright 2014-2015 IS2T. All rights reserved.
-# Use of this source code is governed by a BSD-style license that can be found at http://www.is2t.com/open-source-bsd-license/.
+# Copyright 2014-2017 IS2T. All rights reserved.
+# For demonstration purpose only.
+# IS2T PROPRIETARY. Use is subject to license terms.
 
 # font containing %,0,1,...9,a,b,...z,A,B,...Z,°
 #0x25,0x30-0x39,0x41-0x5a,0x61-0x7a,0xb0

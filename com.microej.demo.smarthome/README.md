@@ -1,6 +1,7 @@
 [//]: # (Markdown)
 [//]: # (Copyright 2017 IS2T. All rights reserved.)
-[//]: # (Use of this source code is subject to license terms.)
+[//]: # (For demonstration purpose only.)
+[//]: # (IS2T PROPRIETARY. Use is subject to license terms.)
 
 # Overview
 Connect to various appliances (thermostats, lights, doors, power controls...), monitor and control them with useful services including home status overview, and various control for temperature, light and door.
@@ -13,7 +14,6 @@ This project contains the business and view of smarthome, as well as an entry po
 3. Select your platform 
 4. Press **Ok**
 
-
 ## Run on device
 ### Build
 1. Right Click on [Main.java](com.microej.demo.smarthome/src/main/java/com/microej/demo/smarthome/Main.java)
@@ -25,6 +25,11 @@ This project contains the business and view of smarthome, as well as an entry po
 	2. In **Execution** frame
 		1. Select **Execute on Device**
 		2. In **Settings** field, select **Build & Deploy**
+	3. In **Configuration** frame
+		1. In **Target->Memory** set
+			1. **Java heap size** to **65536**.
+			2. **Number of threads** to **6**.
+			3. **Maximum size of thread stack** to **5**.
 6. Press **Apply**
 7. Press **Run**
 8. Copy the generated `.out` file path
