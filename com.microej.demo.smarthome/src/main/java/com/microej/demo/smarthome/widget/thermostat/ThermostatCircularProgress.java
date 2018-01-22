@@ -1,7 +1,7 @@
 /*
  * Java
  *
- * Copyright 2016-2017 IS2T. All rights reserved.
+ * Copyright 2016-2018 IS2T. All rights reserved.
  * For demonstration purpose only.
  * IS2T PROPRIETARY. Use is subject to license terms.
  */
@@ -101,9 +101,12 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 	}
 
 	@Override
-	public void setValue(final int value) {
+	public void setValue(int value) {
 		this.target.setStart(value);
 		super.setValue(value);
+		setCurrentArcValue(value);
+		updateAngle();
+		repaint();
 	}
 
 	/**
