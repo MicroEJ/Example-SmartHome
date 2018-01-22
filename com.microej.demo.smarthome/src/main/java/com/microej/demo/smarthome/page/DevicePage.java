@@ -1,7 +1,7 @@
 /*
  * Java
  *
- * Copyright 2016-2017 IS2T. All rights reserved.
+ * Copyright 2016-2018 IS2T. All rights reserved.
  * For demonstration purpose only.
  * IS2T PROPRIETARY. Use is subject to license terms.
  */
@@ -78,8 +78,8 @@ public abstract class DevicePage<D extends Device<?>> extends MenuPage {
 
 			if (this.devices.getChildrenCount() == 0) {
 				this.devices.add(this.noDeviceWidget);
-				revalidate();
 			}
+			revalidate();
 		}
 	}
 
