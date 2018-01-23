@@ -1,7 +1,7 @@
 /*
  * Java
  *
- * Copyright 2016-2017 IS2T. All rights reserved.
+ * Copyright 2016-2018 IS2T. All rights reserved.
  * For demonstration purpose only.
  * IS2T PROPRIETARY. Use is subject to license terms.
  */
@@ -104,12 +104,11 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 		shapes.setFade(this.fadeFull);
 		shapes.setThickness(this.thicknessFull);
 		shapes.drawCircleArc(g, getCircleX(), getCircleY(), getDiameter(), this.startAngle, this.arcAngle);
+		g.setColor(getColor(style));
+		shapes.setFade(this.fade);
+		shapes.setThickness(this.thickness);
 
 		if (isEnabled() && getCurrentArcAngle() != 0) {
-			g.setColor(getColor(style));
-
-			shapes.setFade(this.fade);
-			shapes.setThickness(this.thickness);
 			shapes.drawCircleArc(g, getCircleOffset() + getCircleX(), getCircleOffset() + getCircleY(),
 					(getDiameter() - (getCircleOffset() << 1)), this.startAngle, getCurrentArcAngle());
 		}
@@ -327,6 +326,13 @@ public class CircularProgressWidget extends BoundedRange implements Animation {
 		this.currentArcAngle = computeAngle(getValueAnimation().getCurrentValue());
 		repaint();
 		return true;
+	}
+	
+	protected void setCurrentArcValue(int value){
+		this.currentArcAngle = computeAngle(value);
+		ValueAnimation animation = getValueAnimation();
+		animation.setTargetValue(value);
+		animation.stop();
 	}
 
 	/**
