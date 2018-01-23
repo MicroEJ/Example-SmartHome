@@ -5,7 +5,7 @@
 
 ## 1.2.3 (2018-01-22)
 Bugfixes:
-	J0004DSMH-63 Updated temperature.
+  - J0004DSMH-63 Updated temperature.
 	
 ## 1.2.2 (2017-12-26)
 Features:
