@@ -1,8 +1,7 @@
-[//]: # (Markdown)
-[//]: # (Copyright 2017-2018 IS2T. All rights reserved.)
-[//]: # (For demonstration purpose only.)
-[//]: # (IS2T PROPRIETARY. Use is subject to license terms.)
-
+## 1.2.4 (2018-02-16)
+Bugfixes:
+  - J0004DSMH-64 Updated dashboard values.
+  
 ## 1.2.3 (2018-01-22)
 Bugfixes:
   - J0004DSMH-63 Updated temperature.
@@ -31,3 +30,7 @@ Features:
 Features:
   - Initial revision.
 
+[//]: # (Markdown)
+[//]: # (Copyright 2017-2018 IS2T. All rights reserved.)
+[//]: # (For demonstration purpose only.)
+[//]: # (IS2T PROPRIETARY. Use is subject to license terms.)

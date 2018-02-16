@@ -25,7 +25,7 @@ import ej.widget.animation.AnimationListenerRegistry;
 import ej.widget.listener.OnValueChangeListener;
 
 /**
- * A circulat progress for a thermostat.
+ * A circular progress for a thermostat.
  */
 public class ThermostatCircularProgress extends CircularProgressWidget {
 
@@ -154,6 +154,7 @@ public class ThermostatCircularProgress extends CircularProgressWidget {
 
 	@Override
 	public void showNotify() {
+		setCurrentArcValue(super.getValue());
 		if(this.isOddShow){
 			setLocalTarget(this.model.getTargetValue());
 			startAnimation();

@@ -1,7 +1,7 @@
 /*
  * Java
  *
- * Copyright 2016-2017 IS2T. All rights reserved.
+ * Copyright 2016-2018 IS2T. All rights reserved.
  * For demonstration purpose only.
  * IS2T PROPRIETARY. Use is subject to license terms.
  */
@@ -14,7 +14,9 @@ import com.microej.demo.smarthome.data.Device;
 
 /**
  * An abstraction of a device.
- * @param <EL> the type of device listener.
+ *
+ * @param <EL>
+ *            the type of device listener.
  */
 public abstract class AbstractDevice<EL extends Object> implements Device<EL> {
 
@@ -26,7 +28,9 @@ public abstract class AbstractDevice<EL extends Object> implements Device<EL> {
 
 	/**
 	 * Instantiates a device.
-	 * @param name the name of the device.
+	 *
+	 * @param name
+	 *            the name of the device.
 	 */
 	public AbstractDevice(final String name) {
 		super();
@@ -41,13 +45,16 @@ public abstract class AbstractDevice<EL extends Object> implements Device<EL> {
 
 	@Override
 	public void addListener(final EL listener) {
-		this.listeners.add(listener);
+		synchronized (this.listeners) {
+			this.listeners.add(listener);
+		}
 
 	}
 
 	@Override
 	public void removeListener(final EL listener) {
-		this.listeners.remove(listener);
-
+		synchronized (this.listeners) {
+			this.listeners.remove(listener);
+		}
 	}
 }
