@@ -1,6 +1,7 @@
 ## 1.2.4 (2018-02-16)
 Bugfixes:
   - J0004DSMH-64 Updated dashboard values.
+  - Typos fixes.
   
 ## 1.2.3 (2018-01-22)
 Bugfixes:
