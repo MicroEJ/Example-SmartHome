@@ -31,7 +31,7 @@ public class Main {
 	private static final int ANIMATION_DURATION = 200;
 	public static final boolean USE_ANIMATION = true;
 
-	// The time use at boot time.
+	// The time used at boot time (realistic dummy value).
 	private static final long START_TIME = 1467324061000l;
 
 
@@ -93,7 +93,7 @@ public class Main {
 		panel.showFullScreen(desktop);
 		desktop.show();
 
-		// Creates and arm the robot.
+		// Create and launch the automaton
 		AUTOMATON = new HomeRobot();
 		AUTOMATON.arm();
 	}
@@ -109,7 +109,7 @@ public class Main {
 	}
 
 	/**
-	 * Stops the robot and its timer.
+	 * Stop the robot and its timer.
 	 */
 	public static void stopRobot() {
 		AUTOMATON.stop();

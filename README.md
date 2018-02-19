@@ -7,17 +7,17 @@
 This repository contains the smarthome demo.
 
 # Usage
-The project `com.microej.demo.smarthome` depends on the two other projects, to run it ivy must find its dependencies.
+The project `com.microej.demo.smarthome` depends on two other projects. To run it, Ivy must find its dependencies.
 
 There are two ways to do it:
-1. Resolve dependencies in workspace, this solution dosen't work if you want to wrap smarthome into a sandboxed application
+1. Resolve dependencies in workspace, this solution does not work if you want to wrap smarthome into a sandboxed application
 	1. Go to `Windows -> Preferences -> Ivy -> Classpath container`
 	2. Make sure that **Resolve dependencies in workspace** is checked
 2. Build the projects
-	1. Build the project [com.microej.demo.smarthome.data](com.microej.demo.smarthome.data) with easy Ant
-	2. Build the project [com.microej.demo.smarthome.data.default](com.microej.demo.smarthome.data.default) with easy Ant
+	1. Build the project [com.microej.demo.smarthome.data](com.microej.demo.smarthome.data) with EasyAnt
+	2. Build the project [com.microej.demo.smarthome.data.default](com.microej.demo.smarthome.data.default) with EasyAnt
 
-Now you can follow com.microej.demo.smarthome [README](com.microej.demo.smarthome/README.md).
+Now you can follow the com.microej.demo.smarthome [README](com.microej.demo.smarthome/README.md).
 
 # Requirements
 * MicroEJ Studio or SDK 4.1 or later

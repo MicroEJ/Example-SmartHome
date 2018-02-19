@@ -1,7 +1,6 @@
-[//]: # (Markdown)
-[//]: # (Copyright 2017-2018 IS2T. All rights reserved.)
-[//]: # (For demonstration purpose only.)
-[//]: # (IS2T PROPRIETARY. Use is subject to license terms.)
+## 2.0.2 (2018-02-19)
+Bugfixes:
+  - J0004DSMH-64 Updated dashboard values.
 
 ## 2.0.2 (2018-01-22)
 Features:
@@ -20,3 +19,8 @@ Features:
 ## 1.0.0 (2017-08-29)
 Features:
   - Initial revision.
+
+[//]: # (Markdown)
+[//]: # (Copyright 2017-2018 IS2T. All rights reserved.)
+[//]: # (For demonstration purpose only.)
+[//]: # (IS2T PROPRIETARY. Use is subject to license terms.)

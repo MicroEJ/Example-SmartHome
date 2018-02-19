@@ -8,7 +8,7 @@
 package com.microej.demo.smarthome.data;
 
 /**
- * A device as a name and can have some listeners.
+ * A device has a name and can have some listeners.
  * @param <EL> The listener
  */
 public interface Device<EL extends Object> {
@@ -20,7 +20,7 @@ public interface Device<EL extends Object> {
 	String getName();
 
 	/**
-	 * Adds a listener to be notify when an events occurs.
+	 * Adds a listener to be notified when an events occurs.
 	 * @param listener the listener to add.
 	 */
 	void addListener(EL listener);
