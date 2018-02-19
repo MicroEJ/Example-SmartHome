@@ -1,7 +1,7 @@
 /*
  * Java
  *
- * Copyright 2016-2017 IS2T. All rights reserved.
+ * Copyright 2016-2018 IS2T. All rights reserved.
  * For demonstration purpose only.
  * IS2T PROPRIETARY. Use is subject to license terms.
  */
@@ -85,7 +85,7 @@ public abstract class BasicChart extends Chart implements Animation {
 	@Override
 	public void showNotify() {
 		super.showNotify();
-		if (isEnabled()) {
+		if (isEnabled() && Main.USE_ANIMATION) {
 			resetAnimation();
 		} else {
 			this.currentApparitionStep = APPARITION_STEPS;

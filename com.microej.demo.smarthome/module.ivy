@@ -6,7 +6,7 @@
 	IS2T PROPRIETARY. Use is subject to license terms.
 -->
 <ivy-module version="2.0" xmlns:ea="http://www.easyant.org"> 
-	<info organisation="com.microej.demo" module="smarthome" status="integration" revision="1.2.3">
+	<info organisation="com.microej.demo" module="smarthome" status="integration" revision="1.2.4">
 		<ea:build organisation="com.is2t.easyant.buildtypes" module="build-microej-javalib" revision="4.+">
 		</ea:build>
 	</info>
@@ -33,7 +33,6 @@
 		<dependency org="ej.api" name="edc" rev="[1.2.0-RC0,2.0.0-RC0[" conf="provided->*" />
 		<dependency org="ej.api" name="bon" rev="[1.2.0-RC0,2.0.0-RC0[" conf="provided->*" />
 		<dependency org="ej.api" name="microui" rev="[2.0.0-RC0,3.0.0-RC0[" conf="provided->*" />		
-		<dependency org="ej.api" name="microui" rev="[2.0.0-RC0,3.0.0-RC0[" conf="provided->*" />
 		
 		<dependency org="ej.library.ui" name="automaton" rev="[3.0.0-RC0,4.0.0-RC0["/>
 		<dependency org="ej.library.ui" name="motion" rev="[3.1.0-RC0,4.0.0-RC0["/>
