@@ -1,12 +1,14 @@
 /*
  * Java
  *
- * Copyright 2016-2017 IS2T. All rights reserved.
+ * Copyright 2016-2018 IS2T. All rights reserved.
  * For demonstration purpose only.
  * IS2T PROPRIETARY. Use is subject to license terms.
  */
 package com.microej.demo.smarthome;
 
+import com.microej.demo.smarthome.page.MenuNavigatorPage;
+import com.microej.demo.smarthome.page.MenuPage;
 import com.microej.demo.smarthome.page.SmartHomePage;
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.style.StylePopulator;
@@ -94,8 +96,20 @@ public class Main {
 		desktop.show();
 
 		// Create and launch the automaton
-		AUTOMATON = new HomeRobot();
-		AUTOMATON.arm();
+		// AUTOMATON = new HomeRobot();
+		// AUTOMATON.arm();
+	}
+
+	public static MenuPage getPage(String pageName) {
+		return MAIN_PAGE.getPage(pageName);
+	}
+
+	public static MenuPage getGraphPage() {
+		return ((MenuNavigatorPage) MAIN_PAGE.getPage("DashBoardPage")).getPage("GraphPage");
+	}
+
+	public static MenuPage getInformationPage() {
+		return ((MenuNavigatorPage) MAIN_PAGE.getPage("DashBoardPage")).getPage("InformationPage");
 	}
 
 	/**
@@ -129,6 +143,10 @@ public class Main {
 			return MAIN_PAGE.getCurrentPage();
 		}
 		return page;
+	}
+
+	public static MenuPage getDisplayedPage() {
+		return MAIN_PAGE.getCurrentPage();
 	}
 
 	public static void SetAnchor(int sourceX, int sourceY) {
