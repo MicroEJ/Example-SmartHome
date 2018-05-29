@@ -1,7 +1,7 @@
 /*
  * Java
  *
- * Copyright 2016-2017 IS2T. All rights reserved.
+ * Copyright 2016-2018 IS2T. All rights reserved.
  * For demonstration purpose only.
  * IS2T PROPRIETARY. Use is subject to license terms.
  */
@@ -40,6 +40,8 @@ public class PowerWidget extends Wrapper implements PowerEventListener {
 		super();
 
 		this.model = model;
+
+		this.model.addListener(this);
 
 		// create chart
 		this.chart = new LineChart();
@@ -85,6 +87,11 @@ public class PowerWidget extends Wrapper implements PowerEventListener {
 		setWidget(scroll);
 	}
 
+	public void scrollTo(int index, boolean animate) {
+		Scroll scroll = (Scroll) this.getWidget(0);
+		scroll.scrollTo(index, animate);
+	}
+
 	/**
 	 * On new power data.
 	 */
@@ -123,7 +130,7 @@ public class PowerWidget extends Wrapper implements PowerEventListener {
 
 	/**
 	 * Starts the animation.
-	 * 
+	 *
 	 * @see com.microej.demo.smarthome.widget.chart.BasicChart#startAnimation()
 	 */
 	public void startAnimation() {
@@ -132,7 +139,7 @@ public class PowerWidget extends Wrapper implements PowerEventListener {
 
 	/**
 	 * Stops the animation.
-	 * 
+	 *
 	 * @see com.microej.demo.smarthome.widget.chart.BasicChart#stopAnimation()
 	 */
 	public void stopAnimation() {

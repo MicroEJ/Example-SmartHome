@@ -1,11 +1,14 @@
 /*
  * Java
  *
- * Copyright 2016-2017 IS2T. All rights reserved.
+ * Copyright 2016-2018 IS2T. All rights reserved.
  * For demonstration purpose only.
  * IS2T PROPRIETARY. Use is subject to license terms.
  */
 package com.microej.demo.smarthome.page;
+
+import static com.microej.demo.smarthome.widget.chart.BasicChart.LEFT_PADDING;
+import static com.microej.demo.smarthome.widget.chart.BasicChart.STEP_X;
 
 import com.microej.demo.smarthome.data.power.DefaultPowerMeter;
 import com.microej.demo.smarthome.data.power.PowerMeter;
@@ -23,7 +26,7 @@ import ej.widget.toggle.RadioModel;
  */
 public class GraphPage extends MenuPage {
 
-	private PowerWidget powerWidget;
+	private final PowerWidget powerWidget;
 
 	/**
 	 * Constructor.
@@ -53,13 +56,19 @@ public class GraphPage extends MenuPage {
 		this.powerWidget.reload();
 		this.powerWidget.startAnimation();
 	}
-	
+
 	/**
 	 * Select a point in the chart.
 	 * Used by the robot.
 	 * @param id the id of the point, null for none.
 	 */
 	public void selectPoint(Integer id) {
+		int idScroll = id;
+		// try to put the bubble in the middle of the chart when selected
+		if (idScroll - 5 < 14) {
+			idScroll -= 5;
+		}
+		this.powerWidget.scrollTo(LEFT_PADDING + idScroll * STEP_X, true);
 		this.powerWidget.selectPoint(id);
 	}
 }
