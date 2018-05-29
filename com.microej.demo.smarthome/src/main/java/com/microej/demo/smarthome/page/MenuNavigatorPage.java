@@ -1,7 +1,7 @@
 /*
  * Java
  *
- * Copyright 2016-2017 IS2T. All rights reserved.
+ * Copyright 2016-2018 IS2T. All rights reserved.
  * For demonstration purpose only.
  * IS2T PROPRIETARY. Use is subject to license terms.
  */
@@ -48,6 +48,15 @@ public abstract class MenuNavigatorPage extends MenuPage {
 		}
 	}
 
+	public MenuPage getPage(String pageName) {
+		for (MenuPage page : this.pages) {
+			if (pageName.equals(page.getClass().getSimpleName())) {
+				return page;
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * Initialize the menu.
 	 *
@@ -67,7 +76,7 @@ public abstract class MenuNavigatorPage extends MenuPage {
 
 	/**
 	 * Gets the navigator of the page.
-	 * 
+	 *
 	 * @return the navigator.
 	 */
 	public TransitionContainer getTransitionContainer() {
