@@ -23,6 +23,7 @@ public class ThermostatDashboard extends DeviceDashboard {
 
 	private final Thermostat thermostat;
 	private final ThermostatEventListener listener;
+	private final TemperatureLabel thermostatLabel;
 
 	/**
 	 * Instantiates a ThermostatDashboard.
@@ -52,6 +53,15 @@ public class ThermostatDashboard extends DeviceDashboard {
 
 			}
 		};
+		this.thermostatLabel = thermostatLabel;
+	}
+
+	public void switchTemperaturesForm(boolean celsius) {
+		if (!this.thermostatLabel.isCelsius() && celsius) {
+			this.thermostatLabel.onClick();
+		} else if (this.thermostatLabel.isCelsius() && !celsius) {
+			this.thermostatLabel.onClick();
+		}
 	}
 
 	@Override
