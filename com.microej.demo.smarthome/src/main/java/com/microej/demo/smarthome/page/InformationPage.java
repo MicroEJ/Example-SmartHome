@@ -58,8 +58,15 @@ public class InformationPage extends MenuPage {
 		return menuButton;
 	}
 
-	public void switchTemperaturesForm(boolean celsius) {
-		this.thermostatDashboard.switchTemperaturesForm(celsius);
+	/**
+	 * Sets the temperature scale of the thermostat dashboard
+	 *
+	 * @param celsius
+	 *            true if the temperature scale must be changed as celsius,
+	 *            false if the temperature scale must be changed as fahrenheit
+	 */
+	public void setTemperatureScale(boolean celsius) {
+		this.thermostatDashboard.setTemperatureScale(celsius);
 	}
 
 }

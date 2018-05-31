@@ -48,9 +48,17 @@ public abstract class MenuNavigatorPage extends MenuPage {
 		}
 	}
 
+	/**
+	 * Gets a page using its simple class name
+	 *
+	 * @param pageName
+	 *            the simple class name of the page
+	 *
+	 * @return the corresponding page
+	 */
 	public MenuPage getPage(String pageName) {
 		for (MenuPage page : this.pages) {
-			if (pageName.equals(page.getClass().getSimpleName())) {
+			if (pageName.equals(page.getCurrentURL())) {
 				return page;
 			}
 		}

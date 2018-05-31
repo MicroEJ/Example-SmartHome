@@ -7,6 +7,9 @@
  */
 package com.microej.demo.smarthome;
 
+import com.microej.demo.smarthome.page.DashBoardPage;
+import com.microej.demo.smarthome.page.GraphPage;
+import com.microej.demo.smarthome.page.InformationPage;
 import com.microej.demo.smarthome.page.MenuNavigatorPage;
 import com.microej.demo.smarthome.page.MenuPage;
 import com.microej.demo.smarthome.page.SmartHomePage;
@@ -100,16 +103,52 @@ public class Main {
 		// AUTOMATON.arm();
 	}
 
+	/**
+	 * Gets a page using its simple class name from the main page
+	 *
+	 * @param pageName
+	 *            the simple class name of the page
+	 *
+	 * @return the corresponding page
+	 */
 	public static MenuPage getPage(String pageName) {
 		return MAIN_PAGE.getPage(pageName);
 	}
 
-	public static MenuPage getGraphPage() {
-		return ((MenuNavigatorPage) MAIN_PAGE.getPage("DashBoardPage")).getPage("GraphPage");
+	/**
+	 * Gets the graph page
+	 *
+	 * @return the graph page
+	 */
+	public static GraphPage getGraphPage() {
+		GraphPage graphPage = null;
+		MenuPage mpDashboard = MAIN_PAGE.getPage(DashBoardPage.class.getName());
+		if (mpDashboard instanceof MenuNavigatorPage) {
+			MenuNavigatorPage mnpDashboard = (MenuNavigatorPage) mpDashboard;
+			MenuPage page = mnpDashboard.getPage(GraphPage.class.getName());
+			if (page instanceof InformationPage) {
+				graphPage = (GraphPage) page;
+			}
+		}
+		return graphPage;
 	}
 
-	public static MenuPage getInformationPage() {
-		return ((MenuNavigatorPage) MAIN_PAGE.getPage("DashBoardPage")).getPage("InformationPage");
+	/**
+	 * Gets the information page
+	 *
+	 * @return the information page
+	 */
+	public static InformationPage getInformationPage() {
+		InformationPage informationPage = null;
+		MenuPage mpDashboard = MAIN_PAGE.getPage(DashBoardPage.class.getName());
+		if (mpDashboard instanceof MenuNavigatorPage) {
+			MenuNavigatorPage mnpDashboard = (MenuNavigatorPage) mpDashboard;
+			MenuPage page = mnpDashboard.getPage(InformationPage.class.getName());
+			if (page instanceof InformationPage) {
+				informationPage = (InformationPage) page;
+			}
+		}
+		return informationPage;
 	}
 
 	/**

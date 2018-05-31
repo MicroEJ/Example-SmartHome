@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.microej.demo.smarthome.data.ProviderListener;
+import com.microej.demo.smarthome.data.light.DefaultLightProvider;
 import com.microej.demo.smarthome.data.light.Light;
 import com.microej.demo.smarthome.data.light.LightProvider;
 import com.microej.demo.smarthome.style.ClassSelectors;
@@ -39,7 +40,8 @@ public class LightPage extends DevicePage<Light> implements ProviderListener<Lig
 	 */
 	public LightPage() {
 		this.lights = new ArrayList<>();
-		final LightProvider provider = ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class);
+		final LightProvider provider = ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class,
+				DefaultLightProvider.class);
 		provider.addListener(this);
 		final Light[] list = provider.list();
 		for (final Light light : list) {
