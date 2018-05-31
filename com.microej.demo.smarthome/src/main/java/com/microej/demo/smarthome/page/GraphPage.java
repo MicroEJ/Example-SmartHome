@@ -9,6 +9,7 @@ package com.microej.demo.smarthome.page;
 
 import static com.microej.demo.smarthome.widget.chart.BasicChart.LEFT_PADDING;
 import static com.microej.demo.smarthome.widget.chart.BasicChart.STEP_X;
+import static com.microej.demo.smarthome.widget.chart.PowerWidget.HOUR_IN_DAY;
 
 import com.microej.demo.smarthome.data.power.DefaultPowerMeter;
 import com.microej.demo.smarthome.data.power.PowerMeter;
@@ -17,6 +18,7 @@ import com.microej.demo.smarthome.util.Strings;
 import com.microej.demo.smarthome.widget.chart.PowerWidget;
 
 import ej.components.dependencyinjection.ServiceLoaderFactory;
+import ej.microui.display.Display;
 import ej.widget.basic.Label;
 import ej.widget.composed.ToggleWrapper;
 import ej.widget.toggle.RadioModel;
@@ -63,10 +65,14 @@ public class GraphPage extends MenuPage {
 	 * @param id the id of the point, null for none.
 	 */
 	public void selectPoint(Integer id) {
+		int screenWidth = Display.getDefaultDisplay().getWidth();
 		int idScroll = id;
+		int numberOfDisplayedXScale = (screenWidth - LEFT_PADDING) / STEP_X;
+		int lastScrollabeX = HOUR_IN_DAY - numberOfDisplayedXScale;
+
 		// try to put the bubble in the middle of the chart when selected
-		if (idScroll - 5 < 14) {
-			idScroll -= 5;
+		if (idScroll - numberOfDisplayedXScale / 2 <= lastScrollabeX) {
+			idScroll -= numberOfDisplayedXScale / 2;
 		}
 		this.powerWidget.scrollTo(LEFT_PADDING + idScroll * STEP_X, true);
 		this.powerWidget.selectPoint(id);
