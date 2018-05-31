@@ -158,17 +158,16 @@ public class ThermostatWidget extends Grid {
 		}
 	}
 
-	public void switchTemperaturesForm(boolean celsius) {
-		if (!this.desiredTemperature.isCelsius() && celsius) {
-			this.desiredTemperature.onClick();
-		} else if (this.desiredTemperature.isCelsius() && !celsius) {
-			this.desiredTemperature.onClick();
-		}
-		if (!this.currentTemperature.isCelsius() && celsius) {
-			this.currentTemperature.onClick();
-		} else if (this.currentTemperature.isCelsius() && !celsius) {
-			this.currentTemperature.onClick();
-		}
+	/**
+	 * Sets the temperature scale of the desired and current temperature labels
+	 *
+	 * @param celsius
+	 *            true if the temperature scale must be changed as celsius,
+	 *            false if the temperature scale must be changed as fahrenheit
+	 */
+	public void setTemperatureScale(boolean celsius) {
+		this.desiredTemperature.setCelsius(celsius);
+		this.currentTemperature.setCelsius(celsius);
 	}
 
 	private class ThermostatValueChangeListener implements OnValueChangeListener {

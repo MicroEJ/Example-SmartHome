@@ -117,6 +117,11 @@ public class TemperatureLabel extends ButtonWrapper {
 		return this.celsius;
 	}
 
+	public void setCelsius(boolean celsius) {
+		this.celsius = celsius;
+		updateText();
+	}
+
 	@Override
 	public void onClick() {
 		this.celsius = !this.celsius;

@@ -56,12 +56,15 @@ public class ThermostatDashboard extends DeviceDashboard {
 		this.thermostatLabel = thermostatLabel;
 	}
 
-	public void switchTemperaturesForm(boolean celsius) {
-		if (!this.thermostatLabel.isCelsius() && celsius) {
-			this.thermostatLabel.onClick();
-		} else if (this.thermostatLabel.isCelsius() && !celsius) {
-			this.thermostatLabel.onClick();
-		}
+	/**
+	 * Sets the temperature scale of the temperature label
+	 *
+	 * @param celsius
+	 *            true if the temperature scale must be changed as celsius,
+	 *            false if the temperature scale must be changed as fahrenheit
+	 */
+	public void setTemperatureScale(boolean celsius) {
+		this.thermostatLabel.setCelsius(celsius);
 	}
 
 	@Override

@@ -53,8 +53,15 @@ public class ThermostatPage extends DevicePage<Thermostat> {
 		this.thermostatWidget.setTargetTemperature(temperaturePercent);
 	}
 
-	public void switchTemperatureForm(boolean celsius) {
-		this.thermostatWidget.switchTemperaturesForm(celsius);
+	/**
+	 * Sets the temperature scale of the desired and current temperature labels
+	 *
+	 * @param celsius
+	 *            true if the temperature scale must be changed as celsius,
+	 *            false if the temperature scale must be changed as fahrenheit
+	 */
+	public void setTemperatureScale(boolean celsius) {
+		this.thermostatWidget.setTemperatureScale(celsius);
 	}
 
 	/**
