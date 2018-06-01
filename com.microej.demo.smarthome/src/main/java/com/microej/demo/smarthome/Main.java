@@ -126,7 +126,7 @@ public class Main {
 		if (mpDashboard instanceof MenuNavigatorPage) {
 			MenuNavigatorPage mnpDashboard = (MenuNavigatorPage) mpDashboard;
 			MenuPage page = mnpDashboard.getPage(GraphPage.class.getName());
-			if (page instanceof InformationPage) {
+			if (page instanceof GraphPage) {
 				graphPage = (GraphPage) page;
 			}
 		}
