@@ -23,7 +23,7 @@ import ej.widget.container.Scroll;
  */
 public class PowerWidget extends Wrapper implements PowerEventListener {
 
-	private static final int HOUR_IN_DAY = 24;
+	public static final int HOUR_IN_DAY = 24;
 
 	private static final int NUM_SCALE_VALUES = 3;
 
@@ -41,7 +41,7 @@ public class PowerWidget extends Wrapper implements PowerEventListener {
 
 		this.model = model;
 
-		this.model.addListener(this);
+		// this.model.addListener(this);
 
 		// create chart
 		this.chart = new LineChart();
