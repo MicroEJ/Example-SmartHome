@@ -37,7 +37,7 @@ public class Main {
 	public static final boolean USE_ANIMATION = true;
 
 	// The time used at boot time (realistic dummy value).
-	private static final long START_TIME = 1467324061000l;
+	private static final long START_TIME = 1467324067060l;
 
 
 	private static OnClickListener ON_CLICK_LISTENER;
