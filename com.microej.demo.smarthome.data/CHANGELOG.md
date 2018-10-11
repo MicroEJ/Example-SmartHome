@@ -1,8 +1,7 @@
-[//]: # (Markdown)
-[//]: # (Copyright 2017 IS2T. All rights reserved.)
-[//]: # (For demonstration purpose only.)
-[//]: # (IS2T PROPRIETARY. Use is subject to license terms.)
-
+## 2.0.2 (2018-10-11)
+Features:
+  - Fix APIs version.
+  
 ## 2.0.1 (2017-12-26)
 Features:
   - J0004DSMH-62 Fix metadata for publication.
@@ -17,3 +16,10 @@ Features:
 Features:
   - Initial revision.
 
+<!--
+   Markdown
+   
+   Copyright 2017-2018 IS2T. All rights reserved.
+   For demonstration purpose only.
+   IS2T PROPRIETARY. Use is subject to license terms.
+-->

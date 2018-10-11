@@ -99,8 +99,8 @@ public class Main {
 		desktop.show();
 
 		// Create and launch the automaton
-		// AUTOMATON = new HomeRobot();
-		// AUTOMATON.arm();
+		AUTOMATON = new HomeRobot();
+		AUTOMATON.arm();
 	}
 
 	/**
