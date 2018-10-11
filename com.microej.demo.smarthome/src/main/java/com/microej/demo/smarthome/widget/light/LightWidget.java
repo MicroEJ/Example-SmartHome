@@ -1,7 +1,7 @@
 /*
  * Java
  *
- * Copyright 2016-2017 IS2T. All rights reserved.
+ * Copyright 2016-2018 IS2T. All rights reserved.
  * For demonstration purpose only.
  * IS2T PROPRIETARY. Use is subject to license terms.
  */
@@ -38,7 +38,7 @@ public class LightWidget extends DeviceWidget<Light> implements OnStateChangeLis
 	private final LightCircularProgress progress;
 	private final ImageSwitch switchButton;
 	private boolean isChangingState;
-	private ButtonWrapper circularButton;
+	private final ButtonWrapper circularButton;
 
 	/**
 	 * Instantiates a LightWidget.
@@ -48,7 +48,7 @@ public class LightWidget extends DeviceWidget<Light> implements OnStateChangeLis
 	 */
 	public LightWidget(final Light light) {
 		super(light);
-		
+
 		addClassSelector(ClassSelectors.LIGHT_WIDGET);
 
 		final OverlapComposite overlapingComposite = new OverlapComposite();
@@ -156,7 +156,7 @@ public class LightWidget extends DeviceWidget<Light> implements OnStateChangeLis
 			notify();
 		}
 	}
-	
+
 	@Override
 	public void showNotify() {
 		this.model.addListener(this);
@@ -165,10 +165,10 @@ public class LightWidget extends DeviceWidget<Light> implements OnStateChangeLis
 		boolean on = this.model.isOn();
 		this.switchButton.setChecked(on);
 		this.model.switchOn(on);
-		
+
 		super.showNotify();
 	}
-	
+
 	@Override
 	public void hideNotify() {
 		this.model.removeListener(this);
@@ -180,7 +180,7 @@ public class LightWidget extends DeviceWidget<Light> implements OnStateChangeLis
 	@Override
 	public void onColorChange(int color) {
 		// Nothing to do.
-		
+
 	}
 
 	@Override
@@ -191,19 +191,19 @@ public class LightWidget extends DeviceWidget<Light> implements OnStateChangeLis
 	@Override
 	public void onValueChange(int newValue) {
 		this.model.setBrightness(LightWidget.this.progress.getPercentComplete());
-		
+
 	}
 
 	@Override
 	public void onMaximumValueChange(int newMaximum) {
 		// Nothing to do.
-		
+
 	}
 
 	@Override
 	public void onMinimumValueChange(int newMinimum) {
 		// Nothing to do.
-		
+
 	}
-	
+
 }

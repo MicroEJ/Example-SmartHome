@@ -1,3 +1,8 @@
+## 1.3.0 (2018-06-01)
+Features:
+  - J0059E-11 Add methods used for UI managment extention.
+  - Fix APIs version.
+
 ## 1.2.4 (2018-02-16)
 Bugfixes:
   - J0004DSMH-64 Updated dashboard values.
@@ -30,8 +35,11 @@ Features:
 ## 1.0.0 (2016-12-22)
 Features:
   - Initial revision.
-
-[//]: # (Markdown)
-[//]: # (Copyright 2017-2018 IS2T. All rights reserved.)
-[//]: # (For demonstration purpose only.)
-[//]: # (IS2T PROPRIETARY. Use is subject to license terms.)
+  
+<!--
+ Java
+ 
+ Copyright 2016-2018 IS2T. All rights reserved.
+ For demonstration purpose only.
+ IS2T PROPRIETARY. Use is subject to license terms.
+-->

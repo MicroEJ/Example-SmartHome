@@ -1,7 +1,7 @@
 /*
  * Java
  *
- * Copyright 2016-2017 IS2T. All rights reserved.
+ * Copyright 2016-2018 IS2T. All rights reserved.
  * For demonstration purpose only.
  * IS2T PROPRIETARY. Use is subject to license terms.
  */
@@ -62,7 +62,8 @@ public class TemperatureLabel extends ButtonWrapper {
 	}
 
 	private void updateText() {
-		final String temperatureString = toTemperatureString(convert(this.temperature, this.celsius));
+		final String temperatureString = toTemperatureString(
+				convert(this.temperature / TEMPERATURE_FACTOR, this.celsius));
 		this.label.setText(temperatureString);
 	}
 
@@ -84,7 +85,7 @@ public class TemperatureLabel extends ButtonWrapper {
 
 	private String toTemperatureString(final int temperature) {
 		final StringBuilder builder = new StringBuilder();
-		builder.append((temperature + 5) / TEMPERATURE_FACTOR);
+		builder.append(temperature);
 		if (this.celsius) {
 			builder.append(Strings.DEGREE_CELSIUS);
 		} else {
@@ -110,6 +111,15 @@ public class TemperatureLabel extends ButtonWrapper {
 		super.removeAllClassSelectors();
 		this.label.removeAllClassSelectors();
 
+	}
+
+	public boolean isCelsius() {
+		return this.celsius;
+	}
+
+	public void setCelsius(boolean celsius) {
+		this.celsius = celsius;
+		updateText();
 	}
 
 	@Override

@@ -7,6 +7,8 @@
  */
 package com.microej.demo.smarthome.widget.chart;
 
+import java.util.List;
+
 import com.microej.demo.smarthome.Main;
 import com.microej.demo.smarthome.style.ClassSelectors;
 
@@ -36,12 +38,12 @@ public abstract class BasicChart extends Chart implements Animation {
 	/**
 	 * The left padding of the chart.
 	 */
-	protected static final int LEFT_PADDING = 55;
+	public static final int LEFT_PADDING = 55;
 
 	/**
 	 * The distance in between points.
 	 */
-	protected static final int STEP_X = 40;
+	public static final int STEP_X = 40;
 	/**
 	 * Top position of the chart content.
 	 */
@@ -254,7 +256,8 @@ public abstract class BasicChart extends Chart implements Animation {
 
 		// render bottom values
 		int pointIndex = 0;
-		for (final ChartPoint chartPoint : getPoints()) {
+		List<ChartPoint> points = getPoints();
+		for (final ChartPoint chartPoint : points) {
 			final int currentX = LEFT_PADDING + pointIndex * STEP_X;
 
 			final String name = chartPoint.getName();
@@ -268,10 +271,13 @@ public abstract class BasicChart extends Chart implements Animation {
 	}
 
 	/**
-	 * Checks wether a point is display.
-	 * @param firstDisplay the first point display.
-	 * @param lastDisplay the last point display.
-	 * @param selectedPointIndex the point to check.
+	 * Checks whether a point is display.
+	 * @param firstDisplay
+	 *            the first point display.
+	 * @param lastDisplay
+	 *            the last point display.
+	 * @param selectedPointIndex
+	 *            the point to check.
 	 * @return True if the point is displayed.
 	 */
 	protected boolean selectIsDisplay(final int firstDisplay, final int lastDisplay, final Integer selectedPointIndex){

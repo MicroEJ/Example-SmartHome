@@ -1,12 +1,17 @@
 /*
  * Java
  *
- * Copyright 2016-2017 IS2T. All rights reserved.
+ * Copyright 2016-2018 IS2T. All rights reserved.
  * For demonstration purpose only.
  * IS2T PROPRIETARY. Use is subject to license terms.
  */
 package com.microej.demo.smarthome;
 
+import com.microej.demo.smarthome.page.DashBoardPage;
+import com.microej.demo.smarthome.page.GraphPage;
+import com.microej.demo.smarthome.page.InformationPage;
+import com.microej.demo.smarthome.page.MenuNavigatorPage;
+import com.microej.demo.smarthome.page.MenuPage;
 import com.microej.demo.smarthome.page.SmartHomePage;
 import com.microej.demo.smarthome.style.ClassSelectors;
 import com.microej.demo.smarthome.style.StylePopulator;
@@ -32,7 +37,7 @@ public class Main {
 	public static final boolean USE_ANIMATION = true;
 
 	// The time used at boot time (realistic dummy value).
-	private static final long START_TIME = 1467324061000l;
+	private static final long START_TIME = 1467324067060l;
 
 
 	private static OnClickListener ON_CLICK_LISTENER;
@@ -99,6 +104,54 @@ public class Main {
 	}
 
 	/**
+	 * Gets a page using its simple class name from the main page
+	 *
+	 * @param pageName
+	 *            the simple class name of the page
+	 *
+	 * @return the corresponding page
+	 */
+	public static MenuPage getPage(String pageName) {
+		return MAIN_PAGE.getPage(pageName);
+	}
+
+	/**
+	 * Gets the graph page
+	 *
+	 * @return the graph page
+	 */
+	public static GraphPage getGraphPage() {
+		GraphPage graphPage = null;
+		MenuPage mpDashboard = MAIN_PAGE.getPage(DashBoardPage.class.getName());
+		if (mpDashboard instanceof MenuNavigatorPage) {
+			MenuNavigatorPage mnpDashboard = (MenuNavigatorPage) mpDashboard;
+			MenuPage page = mnpDashboard.getPage(GraphPage.class.getName());
+			if (page instanceof GraphPage) {
+				graphPage = (GraphPage) page;
+			}
+		}
+		return graphPage;
+	}
+
+	/**
+	 * Gets the information page
+	 *
+	 * @return the information page
+	 */
+	public static InformationPage getInformationPage() {
+		InformationPage informationPage = null;
+		MenuPage mpDashboard = MAIN_PAGE.getPage(DashBoardPage.class.getName());
+		if (mpDashboard instanceof MenuNavigatorPage) {
+			MenuNavigatorPage mnpDashboard = (MenuNavigatorPage) mpDashboard;
+			MenuPage page = mnpDashboard.getPage(InformationPage.class.getName());
+			if (page instanceof InformationPage) {
+				informationPage = (InformationPage) page;
+			}
+		}
+		return informationPage;
+	}
+
+	/**
 	 * Sets the onClickListener for the store button. It needs to be set before the main is called.
 	 *
 	 * @param onClickListener
@@ -129,6 +182,10 @@ public class Main {
 			return MAIN_PAGE.getCurrentPage();
 		}
 		return page;
+	}
+
+	public static MenuPage getDisplayedPage() {
+		return MAIN_PAGE.getCurrentPage();
 	}
 
 	public static void SetAnchor(int sourceX, int sourceY) {

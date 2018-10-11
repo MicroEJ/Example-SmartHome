@@ -20,8 +20,6 @@ import ej.microui.display.shape.AntiAliasedShapes;
 import ej.style.Style;
 import ej.style.container.Rectangle;
 import ej.style.util.ElementAdapter;
-import ej.widget.animation.AnimationListener;
-import ej.widget.animation.AnimationListenerRegistry;
 import ej.widget.listener.OnValueChangeListener;
 
 /**
