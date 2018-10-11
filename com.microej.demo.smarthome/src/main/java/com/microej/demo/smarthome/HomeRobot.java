@@ -1,7 +1,7 @@
 /*
  * Java
  *
- * Copyright 2016-2017 IS2T. All rights reserved.
+ * Copyright 2016-2018 IS2T. All rights reserved.
  * For demonstration purpose only.
  * IS2T PROPRIETARY. Use is subject to license terms.
  */
@@ -35,7 +35,7 @@ import ej.widget.navigation.page.Page;
 public class HomeRobot implements Automaton {
 
 	private static final String TIMER_NAME = "Robot"; //$NON-NLS-1$
-	
+
 	/**
 	 * Delay before the robot starts.
 	 */
@@ -48,9 +48,9 @@ public class HomeRobot implements Automaton {
 
 	private final Random rand;
 	private Timer robotTimer;
-	private Logger logger;
+	private final Logger logger;
 	private int state;
-	private AutomatonManager manager;
+	private final AutomatonManager manager;
 	private boolean isNavigatingDashboard;
 
 	/**
@@ -112,7 +112,7 @@ public class HomeRobot implements Automaton {
 		display.waitForEvent();
 
 		display.callSerially(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				final Page lastPage = Main.getCurrentPage();
@@ -128,7 +128,7 @@ public class HomeRobot implements Automaton {
 					automate((ColorPickerPage) lastPage);
 				} else {
 					logger.warning("Robot Unsupported Page: " + lastPage); //$NON-NLS-1$
-				}				
+				}
 				state++;
 			}
 		});

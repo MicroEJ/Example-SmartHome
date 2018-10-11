@@ -1,7 +1,7 @@
 /*
  * Java
  *
- * Copyright 2016-2017 IS2T. All rights reserved.
+ * Copyright 2016-2018 IS2T. All rights reserved.
  * For demonstration purpose only.
  * IS2T PROPRIETARY. Use is subject to license terms.
  */
@@ -37,7 +37,7 @@ public class ThermostatWidget extends Grid {
 	private String lastClassSelector = null;
 	private Label desiredLabel;
 	private final OverlapComposite composite;
-	private ThermostatCircularProgress thermostatCircularProgress;
+	private final ThermostatCircularProgress thermostatCircularProgress;
 
 	/**
 	 * Instantiates a ThermostatWidget.
@@ -158,6 +158,18 @@ public class ThermostatWidget extends Grid {
 		}
 	}
 
+	/**
+	 * Sets the temperature scale of the desired and current temperature labels
+	 *
+	 * @param celsius
+	 *            true if the temperature scale must be changed as celsius,
+	 *            false if the temperature scale must be changed as fahrenheit
+	 */
+	public void setTemperatureScale(boolean celsius) {
+		this.desiredTemperature.setCelsius(celsius);
+		this.currentTemperature.setCelsius(celsius);
+	}
+
 	private class ThermostatValueChangeListener implements OnValueChangeListener {
 
 		private final ThermostatCircularProgress thermostatCircularProgress;
@@ -202,7 +214,7 @@ public class ThermostatWidget extends Grid {
 				+ this.thermostatCircularProgress.getMinimum());
 		this.thermostatCircularProgress.setLocalTarget(temperature);
 	}
-	
+
 	/**
 	 * Validate the target temperature.
 	 * Used by the robot.

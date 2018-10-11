@@ -23,6 +23,7 @@ public class ThermostatDashboard extends DeviceDashboard {
 
 	private final Thermostat thermostat;
 	private final ThermostatEventListener listener;
+	private final TemperatureLabel thermostatLabel;
 
 	/**
 	 * Instantiates a ThermostatDashboard.
@@ -52,6 +53,18 @@ public class ThermostatDashboard extends DeviceDashboard {
 
 			}
 		};
+		this.thermostatLabel = thermostatLabel;
+	}
+
+	/**
+	 * Sets the temperature scale of the temperature label
+	 *
+	 * @param celsius
+	 *            true if the temperature scale must be changed as celsius,
+	 *            false if the temperature scale must be changed as fahrenheit
+	 */
+	public void setTemperatureScale(boolean celsius) {
+		this.thermostatLabel.setCelsius(celsius);
 	}
 
 	@Override

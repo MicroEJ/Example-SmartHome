@@ -1,7 +1,7 @@
 /*
  * Java
  *
- * Copyright 2016-2017 IS2T. All rights reserved.
+ * Copyright 2016-2018 IS2T. All rights reserved.
  * For demonstration purpose only.
  * IS2T PROPRIETARY. Use is subject to license terms.
  */
@@ -24,8 +24,8 @@ import ej.widget.toggle.RadioModel;
  */
 public class ThermostatPage extends DevicePage<Thermostat> {
 
-	private Thermostat thermostat;
-	private ThermostatWidget thermostatWidget;
+	private final Thermostat thermostat;
+	private final ThermostatWidget thermostatWidget;
 
 	/**
 	 * Instantiates a ThermostatPage.
@@ -51,6 +51,17 @@ public class ThermostatPage extends DevicePage<Thermostat> {
 	 */
 	public void setTarget(float temperaturePercent) {
 		this.thermostatWidget.setTargetTemperature(temperaturePercent);
+	}
+
+	/**
+	 * Sets the temperature scale of the desired and current temperature labels
+	 *
+	 * @param celsius
+	 *            true if the temperature scale must be changed as celsius,
+	 *            false if the temperature scale must be changed as fahrenheit
+	 */
+	public void setTemperatureScale(boolean celsius) {
+		this.thermostatWidget.setTemperatureScale(celsius);
 	}
 
 	/**

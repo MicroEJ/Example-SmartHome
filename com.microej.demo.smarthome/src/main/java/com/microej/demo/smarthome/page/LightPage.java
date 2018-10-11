@@ -1,7 +1,7 @@
 /*
  * Java
  *
- * Copyright 2016-2017 IS2T. All rights reserved.
+ * Copyright 2016-2018 IS2T. All rights reserved.
  * For demonstration purpose only.
  * IS2T PROPRIETARY. Use is subject to license terms.
  */
@@ -32,7 +32,7 @@ import ej.widget.toggle.RadioModel;
 public class LightPage extends DevicePage<Light> implements ProviderListener<Light> {
 
 	private Thread animationThread;
-	private List<Light> lights;
+	private final List<Light> lights;
 	private boolean isOddShowNotify;
 
 	/**
@@ -40,13 +40,13 @@ public class LightPage extends DevicePage<Light> implements ProviderListener<Lig
 	 */
 	public LightPage() {
 		this.lights = new ArrayList<>();
-		final LightProvider provider = ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class, DefaultLightProvider.class);
+		final LightProvider provider = ServiceLoaderFactory.getServiceLoader().getService(LightProvider.class,
+				DefaultLightProvider.class);
 		provider.addListener(this);
 		final Light[] list = provider.list();
 		for (final Light light : list) {
 			newElement(light);
 		}
-
 	}
 
 	@Override

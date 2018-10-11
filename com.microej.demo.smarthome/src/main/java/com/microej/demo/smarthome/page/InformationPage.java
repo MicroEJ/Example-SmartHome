@@ -1,7 +1,7 @@
 /*
  * Java
  *
- * Copyright 2016-2017 IS2T. All rights reserved.
+ * Copyright 2016-2018 IS2T. All rights reserved.
  * For demonstration purpose only.
  * IS2T PROPRIETARY. Use is subject to license terms.
  */
@@ -25,13 +25,16 @@ import ej.widget.toggle.RadioModel;
  */
 public class InformationPage extends MenuPage {
 
+	private final ThermostatDashboard thermostatDashboard;
+
 	/**
 	 * Instantiates an Information Page.
 	 */
 	public InformationPage() {
 		final Grid grid = new Grid(false, 2);
 		final Grid devices = new Grid(true, 3);
-		devices.add(new ThermostatDashboard());
+		this.thermostatDashboard = new ThermostatDashboard();
+		devices.add(this.thermostatDashboard);
 		devices.add(new LightsDashboard());
 		devices.add(new DoorDashboard());
 
@@ -53,6 +56,17 @@ public class InformationPage extends MenuPage {
 		menuButton.setWidget(label);
 		menuButton.addClassSelector(ClassSelectors.DASHBOARD_MENU_BUTTON);
 		return menuButton;
+	}
+
+	/**
+	 * Sets the temperature scale of the thermostat dashboard
+	 *
+	 * @param celsius
+	 *            true if the temperature scale must be changed as celsius,
+	 *            false if the temperature scale must be changed as fahrenheit
+	 */
+	public void setTemperatureScale(boolean celsius) {
+		this.thermostatDashboard.setTemperatureScale(celsius);
 	}
 
 }
