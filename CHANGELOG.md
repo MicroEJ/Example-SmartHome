@@ -1,3 +1,9 @@
+## 2.0.3 (2018-10-22)
+Bugfixes:
+ - com.microej.demo.smarthome
+ - com.microej.demo.smarthome.data
+ - com.microej.demo.smarthome.data.default
+
 ## 2.0.2 (2018-02-19)
 Bugfixes:
   - J0004DSMH-64 Updated dashboard values.
